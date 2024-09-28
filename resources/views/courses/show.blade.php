@@ -1,7 +1,7 @@
 <x-layout>
 
     <x-slot:heading>
-        Event Details
+        Course Details
     </x-slot:heading>
 
     <div class="container mx-auto p-4">
