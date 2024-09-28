@@ -24,7 +24,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
@@ -37,8 +38,22 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    // Just like the preceding function,
+    // the following function is a state method that returns a new
+    // instance of the factory with the specified attributes.
+    // It effectively overrides the default attributes of the factory.
+    // Usage: App\Models\User::factory()->generic()->create();
+
+    public function generic(): static
+    {
+        return $this->state(fn(array $attributes) => [
+            'first_name' => 'Joan',
+            'last_name' => 'Marti',
         ]);
     }
 }
