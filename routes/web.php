@@ -3,6 +3,7 @@
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Job;
 use App\Http\Controllers\EventController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\EventController;
 Route::get('/', function () {
     return view('home', ['greeting' => 'It\'s another really beautiful day!']);
 });
+
+Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 
 
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');
