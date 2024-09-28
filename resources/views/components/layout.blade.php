@@ -31,8 +31,8 @@
                                     Course Registrations</x-nav-link>
                                 <x-nav-link href="/events" :active="request()->is('events')">ATB
                                     Calendar Events</x-nav-link>
-                                <x-nav-link href="/practice" :active="request()->is('practice')">Testing Page
-                                </x-nav-link>
+                                {{-- <x-nav-link href="/practice" :active="request()->is('practice')">Testing Page
+                                </x-nav-link> --}}
                             </div>
                         </div>
                     </div>
