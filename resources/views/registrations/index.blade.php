@@ -9,11 +9,15 @@
         <h1 class="text-2xl font-bold mb-6">Registrations List</h1>
 
         <!-- Wrapping the table inside a div to make it horizontally scrollable -->
-        <div class="overflow-x-auto">
+        <div class="relative overflow-x-auto">
+            <!-- Sticky horizontal scroll bar wrapper -->
             <table class="min-w-full table-auto border-collapse border border-gray-300">
                 <thead class="bg-gray-100">
                     <tr>
-                        {{-- <th class="border px-4 py-2">Actions</th> --}}
+                        <!-- Sticky "Action" Column -->
+                        <th class="sticky left-0 bg-gray-100 border px-4 py-2">
+                            Action
+                        </th>
                         <th class="border px-4 py-2">
                             <a
                                 href="{{ route('registrations.index', ['sort_by' => 'student_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
@@ -74,12 +78,13 @@
                 <tbody>
                     @foreach ($registrations as $registration)
                     <tr class="hover:bg-gray-100">
-                        {{-- <td class="border px-4 py-2 whitespace-nowrap">
+                        <!-- Sticky "View" Button -->
+                        <td class="sticky left-0 bg-gray-100 border px-4 py-2">
                             <a href="{{ route('registrations.show', $registration->id) }}"
-                                class="text-blue-600 hover:underline">
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                                 View
                             </a>
-                        </td> --}}
+                        </td>
                         <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $registration->student->first_name }} {{ $registration->student->last_name }}
                         </td>
@@ -114,5 +119,14 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make horizontal scroll sticky at the bottom
+            const table = document.getElementById('registrations-table');
+            table.parentElement.addEventListener('scroll', function() {
+                table.parentElement.scrollTop = 0; // Keep scroll locked at the top
+            });
+        });
+    </script>
 
 </x-layout>
