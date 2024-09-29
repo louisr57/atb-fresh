@@ -18,13 +18,6 @@ Route::get('/', function () {
     return view('home', ['greeting' => 'It\'s another really beautiful day!']);
 });
 
-Route::get('/test-student/{id}', function ($id) {
-    $controller = new \App\Http\Controllers\StudentController();
-    $student = \App\Models\Student::find($id);
-    return $controller->show($student);
-});
-
-
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
 
@@ -41,8 +34,6 @@ Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show'
 
 Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
 Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->name('registrations.show');
-
-Route::get('/practice', [PracticeController::class, 'index'])->name('practice');
 
 
 Route::get('/jobs', function () {
