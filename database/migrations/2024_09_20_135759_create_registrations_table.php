@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use \App\Models\Student;
+use \App\Models\Event;
 
 return new class extends Migration
 {
@@ -13,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor('student_id')->constrained('students')->cascadeOnDelete(); // Ensure cascade delete if the student is deleted
-            $table->foreignIdFor('event_id')->constrained('events')->cascadeOnDelete(); // Ensure cascade delete for events
+            $table->foreignIdFor(Student::class)->constrained('students')->cascadeOnDelete(); // Ensure cascade delete if the student is deleted
+            $table->foreignIdFor(Event::class)->constrained('events')->cascadeOnDelete(); // Ensure cascade delete for events
             $table->string('end_status');
             $table->text('comments')->nullable(); // Make comments optional
             $table->timestamps();
