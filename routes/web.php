@@ -17,6 +17,13 @@ Route::get('/', function () {
     return view('home', ['greeting' => 'It\'s another really beautiful day!']);
 });
 
+Route::get('/test-student/{id}', function ($id) {
+    $controller = new \App\Http\Controllers\StudentController();
+    $student = \App\Models\Student::find($id);
+    return $controller->show($student);
+});
+
+
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
 

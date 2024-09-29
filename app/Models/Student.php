@@ -15,4 +15,9 @@ class Student extends Model
     {
         return $this->hasMany(Registration::class, 'student_id');
     }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class); // The system suggested adding ", 'registrations'" as a second argument.
+    }
 }

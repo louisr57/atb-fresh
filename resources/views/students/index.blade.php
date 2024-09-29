@@ -36,7 +36,13 @@
             <tbody>
                 @foreach($students as $student)
                 <tr onclick="window.location='{{ route('students.show', $student->id) }}'"
-                    class="hover:bg-gray-100 cursor-pointer">
+                    class="hover:bg-gray-100 hover:underline cursor-pointer">
+                    <!-- Action column with sticky left positioning -->
+                    {{-- <td class="border px-4 py-2 sticky left-0 bg-white z-10">
+                        <a href="{{ route('students.show', $student->id) }}" class="text-blue-600 hover:underline">
+                            View
+                        </a>
+                    </td> --}}
                     <td class="border border-gray-300 px-4 py-2">{{ $student->first_name }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $student->last_name }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $student->email }}</td>

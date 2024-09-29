@@ -20,6 +20,7 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
-        return view('students.show', compact('students'));
+        dd($student);
+        return view('students.show', compact('student'));
     }
 }

@@ -5,7 +5,7 @@
     </x-slot:heading>
 
     <div class="container mx-auto p-6">
-        <h1 class="font-bold text-3xl text-blue-800 mb-6">Student Details for {{ $student->first_name }} {{
+        <h1 class="font-bold text-3xl text-blue-800 mb-6">Student Details for: {{ $student->first_name }} {{
             $student->last_name }}</h1>
 
         <table class="table-auto w-full text-left border border-collapse border-gray-300 mb-6">
@@ -69,7 +69,7 @@
 
         <a href="{{ route('students.index') }}"
             class="inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
-            &lt;&lt;&lt; Back to Students List
+            &lt;&lt;&lt; Back to students List
         </a>
     </div>
 

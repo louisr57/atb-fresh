@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->onDelete('cascade'); // Ensure cascade delete if the student is deleted
-            $table->foreignId('event_id')->constrained('events')->onDelete('cascade'); // Ensure cascade delete for events
+            $table->foreignIdFor('student_id')->constrained('students')->cascadeOnDelete(); // Ensure cascade delete if the student is deleted
+            $table->foreignIdFor('event_id')->constrained('events')->cascadeOnDelete(); // Ensure cascade delete for events
             $table->string('end_status');
             $table->text('comments')->nullable(); // Make comments optional
             $table->timestamps();
