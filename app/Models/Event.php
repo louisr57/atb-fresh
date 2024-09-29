@@ -29,6 +29,6 @@ class Event extends Model
 
     public function students()
     {
-        return $this->belongsToMany(Student::class); // The system suggested adding ", 'registrations'" as a second argument.
+        return $this->belongsToMany(Student::class, 'registrations', 'event_id', 'student_id')->withTimestamps();
     }
 }
