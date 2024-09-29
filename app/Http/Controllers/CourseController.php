@@ -18,8 +18,12 @@ class CourseController extends Controller
         return view('courses.index', compact('courses', 'sort_by', 'direction'));
     }
 
-    public function show(Course $course)
+    public function show($id)
     {
-        return view('courses.show', compact('courses'));
+        // Fetch the course along with its related events and instructors
+        $course = Course::with('events.instructor')->findOrFail($id);
+
+        // Return the course to the view
+        return view('courses.show', compact('course'));
     }
 }
