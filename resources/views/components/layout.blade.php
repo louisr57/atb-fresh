@@ -33,6 +33,8 @@
                                     Calendar Events</x-nav-link>
                                 <x-nav-link href="/courses" :active="request()->is('courses')">Courses
                                 </x-nav-link>
+                                <x-nav-link href="/instructors" :active="request()->is('instructors')">Instructors
+                                </x-nav-link>
                             </div>
                         </div>
                     </div>

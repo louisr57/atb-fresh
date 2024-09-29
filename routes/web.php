@@ -1,12 +1,13 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\CourseController;
-use Illuminate\Support\Facades\Route;
-use App\Models\Job;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\InstructorController;
+use App\Models\Job;
 
 
 // Route::get('/', function () {
@@ -26,6 +27,9 @@ Route::get('/test-student/{id}', function ($id) {
 
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+
+Route::get('/instructors', [InstructorController::class, 'index'])->name('instructors.index');
+Route::get('/instructors/{id}', [InstructorController::class, 'show'])->name('instructors.show');
 
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');

@@ -1,58 +1,54 @@
 <x-layout>
 
     <x-slot:heading>
-        Event Details
+        Instructor Details
     </x-slot:heading>
 
+
     <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold mb-4">{{ $event->course->course_title }}</h1>
+        <h1 class="text-3xl font-bold mb-4">{{ $instructor->first_name }} {{ $instructor->last_name }}</h1>
 
-        <p class="text-lg mb-2">
-            <strong>Date:</strong> {{ $event->datefrom }} to {{ $event->dateto ?? 'N/A' }}
-        </p>
-        <p class="text-lg mb-4">
-            <strong>Instructor:</strong> {{ $event->instructor->first_name }} {{ $event->instructor->last_name }}
-        </p>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold">Email</h2>
+            <p class="text-gray-700">{{ $instructor->email }}</p>
+        </div>
 
-        @if ($event->registrations->isNotEmpty())
-        <h2 class="text-2xl font-bold mb-4">Registered Participants</h2>
+        @if($instructor->events->isNotEmpty())
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold">Courses Taught</h2>
 
-        <!-- Participants table -->
-        <div class="overflow-x-auto">
             <table class="min-w-full table-auto border-collapse border border-gray-300">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="border px-4 py-2">Full Name</th>
-                        <th class="border px-4 py-2">Address</th>
-                        <th class="border px-4 py-2">Phone Number</th>
-                        <th class="border px-4 py-2">City</th>
-                        <th class="border px-4 py-2">Country</th>
-                        <th class="border px-4 py-2">Date Registered</th>
+                        <th class="border px-4 py-2">Course Title</th>
+                        <th class="border px-4 py-2">Event Title</th>
+                        <th class="border px-4 py-2">Start Date</th>
+                        <th class="border px-4 py-2">End Date</th>
+                        <th class="border px-4 py-2">Venue</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($event->registrations as $registration)
+                    @foreach($instructor->events as $event)
                     <tr class="hover:bg-gray-100">
-                        <td class="border px-4 py-2 whitespace-nowrap">
-                            {{ $registration->student->first_name }} {{ $registration->student->last_name }}
-                        </td>
-                        <td class="border px-4 py-2">{{ $registration->student->address }}</td>
-                        <td class="border px-4 py-2">{{ $registration->student->phone_number }}</td>
-                        <td class="border px-4 py-2">{{ $registration->student->city }}</td>
-                        <td class="border px-4 py-2">{{ $registration->student->country }}</td>
-                        <td class="border px-4 py-2">{{ $registration->created_at->format('Y-m-d') }}</td>
+                        <td class="border px-4 py-2">{{ $event->course->course_title }}</td>
+                        <td class="border px-4 py-2">{{ $event->title }}</td>
+                        <td class="border px-4 py-2">{{ $event->datefrom }}</td>
+                        <td class="border px-4 py-2">{{ $event->dateto }}</td>
+                        <td class="border px-4 py-2">{{ $event->venue }}</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
         @else
-        <p class="text-lg text-gray-600">No participants have registered for this event yet.</p>
+        <p>This instructor has not taught any courses yet.</p>
         @endif
 
-        <!-- Back button -->
+        <!-- Back to instructors list -->
         <div class="mt-4">
-            <a href="{{ route('events.index') }}" class="text-blue-600 hover:underline">← Back to Events List</a>
+            <a href="{{ route('instructors.index') }}" class="text-blue-600 hover:underline">
+                ← Back to Instructors List
+            </a>
         </div>
     </div>
 
