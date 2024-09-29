@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('gender');
+            $table->string('gender')->nullable();
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
             $table->string('address');
@@ -23,12 +23,12 @@ return new class extends Migration
             $table->string('state');
             $table->string('country');
             $table->string('post_code');
-            $table->string('website');
-            $table->date('dob');
-            $table->string('ident');
-            $table->string('next_of_kin');
-            $table->string('allergies');
-            $table->text('special_needs');
+            $table->string('website')->nullable();
+            $table->date('dob')->nullable();
+            $table->string('ident')->nullable();
+            $table->string('next_of_kin')->nullable();
+            $table->string('allergies')->nullable();
+            $table->text('special_needs')->nullable();
             $table->timestamps();
         });
     }

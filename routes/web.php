@@ -32,7 +32,9 @@ Route::get('/instructors', [InstructorController::class, 'index'])->name('instru
 Route::get('/instructors/{id}', [InstructorController::class, 'show'])->name('instructors.show');
 
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
 Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
+Route::post('/students', [StudentController::class, 'store'])->name('students.store');
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
@@ -61,6 +63,10 @@ Route::get('/jobs/{id}', function ($id) {
 Route::get('/contact', function () {
     return view('contact');
 });
+
+// Route::middleware([])->group(function () {
+//     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+// });
 
 // Auth::routes();
 
