@@ -18,9 +18,11 @@ class StudentController extends Controller
         return view('students.index', compact('students', 'sort_by', 'direction'));
     }
 
-    public function show(Student $student)
+    public function show($id)
     {
-        dd($student);
+        // Find the student by ID and load related registrations, events, courses, and instructors
+        $student = Student::with('registrations.event.course', 'registrations.event.instructor')->findOrFail($id);
+
         return view('students.show', compact('student'));
     }
 }

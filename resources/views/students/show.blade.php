@@ -4,74 +4,59 @@
         Student Details
     </x-slot:heading>
 
-    <div class="container mx-auto p-6">
-        <h1 class="font-bold text-3xl text-blue-800 mb-6">Student Details for: {{ $student->first_name }} {{
-            $student->last_name }}</h1>
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4">{{ $student->first_name }} {{ $student->last_name }}</h1>
 
-        <table class="table-auto w-full text-left border border-collapse border-gray-300 mb-6">
-            <tr class="bg-gray-100">
-                <th class="border px-4 py-2">First Name</th>
-                <td class="border px-4 py-2">{{ $student->first_name }}</td>
-            </tr>
-            <tr>
-                <th class="border px-4 py-2">Last Name</th>
-                <td class="border px-4 py-2">{{ $student->last_name }}</td>
-            </tr>
-            <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Email</th>
-                <td class="border px-4 py-2">{{ $student->email }}</td>
-            </tr>
-            <tr>
-                <th class="border px-4 py-2">Phone Number</th>
-                <td class="border px-4 py-2">{{ $student->phone_number }}</td>
-            </tr>
-            <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Address</th>
-                <td class="border px-4 py-2">{{ $student->address }}</td>
-            </tr>
-            <tr>
-                <th class="border px-4 py-2">City</th>
-                <td class="border px-4 py-2">{{ $student->city }}</td>
-            </tr>
-            <tr class="bg-gray-100">
-                <th class="border px-4 py-2">State</th>
-                <td class="border px-4 py-2">{{ $student->state }}</td>
-            </tr>
-            <tr>
-                <th class="border px-4 py-2">Country</th>
-                <td class="border px-4 py-2">{{ $student->country }}</td>
-            </tr>
-            <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Post Code</th>
-                <td class="border px-4 py-2">{{ $student->post_code }}</td>
-            </tr>
-            <tr>
-                <th class="border px-4 py-2">Website</th>
-                <td class="border px-4 py-2">{{ $student->website }}</td>
-            </tr>
-            <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Ident</th>
-                <td class="border px-4 py-2">{{ $student->ident }}</td>
-            </tr>
-            <tr>
-                <th class="border px-4 py-2">Next of Kin</th>
-                <td class="border px-4 py-2">{{ $student->next_of_kin }}</td>
-            </tr>
-            <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Allergies</th>
-                <td class="border px-4 py-2">{{ $student->allergies }}</td>
-            </tr>
-            <tr>
-                <th class="border px-4 py-2">Special Needs</th>
-                <td class="border px-4 py-2">{{ $student->special_needs }}</td>
-            </tr>
-        </table>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold">Student Information</h2>
+            <p><strong>Email:</strong> {{ $student->email }}</p>
+            <p><strong>Phone:</strong> {{ $student->phone_number }}</p>
+            <p><strong>Address:</strong> {{ $student->address }}, {{ $student->city }}, {{ $student->state }}, {{
+                $student->country }}</p>
+        </div>
 
-        <a href="{{ route('students.index') }}"
-            class="inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
-            &lt;&lt;&lt; Back to students List
-        </a>
+        @if($student->registrations->isNotEmpty())
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold">Course Registrations</h2>
+
+            <table class="min-w-full table-auto border-collapse border border-gray-300">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="border px-4 py-2">Course Title</th>
+                        <th class="border px-4 py-2">Event Title</th>
+                        <th class="border px-4 py-2">Start Date</th>
+                        <th class="border px-4 py-2">End Date</th>
+                        <th class="border px-4 py-2">Instructor</th>
+                        <th class="border px-4 py-2">Registration Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($student->registrations as $registration)
+                    <tr class="hover:bg-gray-100">
+                        <td class="border px-4 py-2">{{ $registration->event->course->course_title }}</td>
+                        <td class="border px-4 py-2">{{ $registration->event->title }}</td>
+                        <td class="border px-4 py-2">{{ $registration->event->datefrom }}</td>
+                        <td class="border px-4 py-2">{{ $registration->event->dateto }}</td>
+                        <td class="border px-4 py-2">
+                            {{ $registration->event->instructor->first_name }} {{
+                            $registration->event->instructor->last_name }}
+                        </td>
+                        <td class="border px-4 py-2">{{ $registration->end_status }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @else
+        <p>No registrations found for this student.</p>
+        @endif
+
+        <!-- Back to students list -->
+        <div class="mt-4">
+            <a href="{{ route('students.index') }}" class="text-blue-600 hover:underline">
+                ← Back to Students List
+            </a>
+        </div>
     </div>
-
 
 </x-layout>
