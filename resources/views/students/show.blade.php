@@ -32,7 +32,7 @@
                 </thead>
                 <tbody>
                     @foreach($student->registrations as $registration)
-                    <tr class="hover:bg-gray-100">
+                    <tr class="hover:bg-gray-100 registration-row">
                         <td class="border px-4 py-2">{{ $registration->event->course->course_title }}</td>
                         <td class="border px-4 py-2">{{ $registration->event->title }}</td>
                         <td class="border px-4 py-2">{{ $registration->event->datefrom }}</td>
