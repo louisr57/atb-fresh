@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $faker = Faker::create();
 
         // Creating fewer students will give you a better chance of having students who have completed all courses
-        Student::factory(10)->create();
+        Student::factory(15)->create();
 
         DB::table('courses')->insert([
             [
@@ -262,8 +262,8 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create 100 registrations one by one
-        // for ($i = 0; $i < 50; $i++) {
-        //     Registration::factory()->create();
+        for ($i = 0; $i < 300; $i++) {
+            Registration::factory()->create();
 
         // echo "Iteration: $i \n";
         // echo "Press the spacebar (or any key) to continue...\n";
