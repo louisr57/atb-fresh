@@ -71,7 +71,7 @@
                 </thead>
                 <tbody>
                     @foreach ($events as $event)
-                    <tr class="hover:bg-gray-100">
+                    <tr class="hover:bg-gray-100 registration-row">
                         <!-- Action column with sticky left positioning -->
                         <td class="border px-4 py-2 sticky left-0 bg-white z-10">
                             <a href="{{ route('events.show', $event->id) }}" class="text-blue-600 hover:underline">

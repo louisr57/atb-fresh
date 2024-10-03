@@ -23,7 +23,7 @@
             </thead>
             <tbody>
                 @foreach($instructors as $instructor)
-                <tr class="hover:bg-gray-100">
+                <tr class="hover:bg-gray-100 registration-row">
                     <td class="border px-4 py-2">{{ $instructor->id }}</td>
                     <td class="border px-4 py-2">{{ $instructor->first_name }}</td>
                     <td class="border px-4 py-2">{{ $instructor->last_name }}</td>

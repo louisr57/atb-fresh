@@ -5,7 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS via CDN -->
+    <style>
+        /* Custom styling if needed */
+        .highlight {
+            background-color: #acd2f1;
+            /* Tailwind yellow-100 color */
+        }
+    </style>
 </head>
 
 <body class="h-full">
@@ -137,6 +144,49 @@
             </div>
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const rows = document.querySelectorAll('.registration-row');
+            console.log(rows);
+            let currentIndex = null; // Keeps track of the currently highlighted row
+
+            // Function to highlight the selected row
+            function highlightRow(index) {
+                if (currentIndex !== null) {
+                    rows[currentIndex].classList.remove('highlight'); // Remove highlight from the previous row
+                }
+                currentIndex = index;
+                rows[currentIndex].classList.add('highlight'); // Add highlight to the new row
+            }
+
+            // Add click event listener for each row
+            rows.forEach((row, index) => {
+                row.addEventListener('click', function () {
+                    console.log('Row clicked:', index);
+                    highlightRow(index);
+                });
+            });
+
+            // Handle arrow key navigation
+            document.addEventListener('keydown', function (event) {
+                console.log('Key pressed:', event.key);
+                if (currentIndex !== null) {
+                    if (event.key === 'ArrowDown') {
+                        console.log('Arrow Down pressed');
+                        if (currentIndex < rows.length - 1) {
+                            highlightRow(currentIndex + 1);
+                        }
+                    } else if (event.key === 'ArrowUp') {
+                        console.log('Arrow Up pressed');
+                        if (currentIndex > 0) {
+                            highlightRow(currentIndex - 1);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 
 </body>
 

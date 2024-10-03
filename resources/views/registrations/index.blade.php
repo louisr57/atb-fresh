@@ -95,7 +95,7 @@
                     </thead>
                     <tbody>
                         @foreach ($registrations as $registration)
-                        <tr class="hover:bg-gray-100">
+                        <tr class="hover:bg-gray-100 registration-row">
                             <!-- Debug Information -->
                             {{-- <td>
                                 Registration ID: {{ $registration->id }} <br>
