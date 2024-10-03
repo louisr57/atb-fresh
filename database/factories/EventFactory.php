@@ -18,7 +18,7 @@ class EventFactory extends Factory
         $course = Course::inRandomOrder()->first();
 
         // Generate a random start date (datefrom)
-        $datefrom = $this->faker->dateTimeBetween('-1 years', '+1 years');
+        $datefrom = $this->faker->dateTimeBetween('-2 years', '+2 years');
 
         // Calculate dateto by adding the course's duration in days to the datefrom value
         // Assuming the course's duration is stored as an integer or a string like "3 days", we extract the number of days

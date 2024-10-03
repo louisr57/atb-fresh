@@ -20,22 +20,23 @@ class DatabaseSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        Student::factory(100)->create();
+        // Creating fewer students will give you a better chance of having students who have completed all courses
+        Student::factory(10)->create();
 
         DB::table('courses')->insert([
+            [
+                'course_code' => 'ATB K-BT',
+                'course_title' => 'Kindergarten/Basic Tools Module',
+                'description' => 'Kindergarten/Basic Tools Module',
+                'prerequisites' => 'none',
+                'duration' => '1.0'
+            ],
             [
                 'course_code' => 'ATB 1',
                 'course_title' => 'Introductory Basic Module',
                 'description' => 'Introductory Basic Module',
                 'prerequisites' => 'none',
                 'duration' => '2.0'
-            ],
-            [
-                'course_code' => 'ATB K-BT',
-                'course_title' => 'Kindergarten/Basic Tools Module',
-                'description' => 'Kindergarten/Basic Tools Module',
-                'prerequisites' => 'ATB 1',
-                'duration' => '1.0'
             ],
             [
                 'course_code' => 'ATB 2',
@@ -48,7 +49,7 @@ class DatabaseSeeder extends Seeder
                 'course_code' => 'ATB 3',
                 'course_title' => 'Basic Module 3',
                 'description' => 'Basic Module 3',
-                'prerequisites' => 'ATB 1',
+                'prerequisites' => 'ATB 2',
                 'duration' => '3.0'
             ],
             [
@@ -245,14 +246,13 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        Event::factory(200)->create();
+        // Registration::factory(200)->create();
+        Event::factory(500)->create();
 
-        // Seed 200 registrations
-        Registration::factory(500)->create();
-
-        // Update participant count for each Event (event)
+        // Fetch all events
         $events = Event::all();
 
+        // Update participant count for each Event (event)
         foreach ($events as $event) {
             // Count how many registrations this event has
             $participantCount = Registration::where('event_id', $event->id)->count();
@@ -260,5 +260,18 @@ class DatabaseSeeder extends Seeder
             // Update the participant_count column in the events table
             $event->update(['participant_count' => $participantCount]);
         }
+
+        // Create 100 registrations one by one
+        // for ($i = 0; $i < 50; $i++) {
+        //     Registration::factory()->create();
+
+        // echo "Iteration: $i \n";
+        // echo "Press the spacebar (or any key) to continue...\n";
+
+        // // Wait for any keyboard input (requires hitting enter afterward in most terminals)
+        // fgets(STDIN);
+
+        // Proceed with the next iteration
+
     }
 }

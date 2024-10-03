@@ -13,7 +13,7 @@ class Student extends Model
 
     public function registrations()
     {
-        return $this->hasMany(Registration::class, 'student_id');
+        return $this->hasMany(Registration::class);
     }
 
     public function events()

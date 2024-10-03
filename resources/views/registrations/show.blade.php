@@ -9,6 +9,18 @@
 
         <table class="min-w-full table-auto border-collapse border border-gray-300 mb-4">
             <tr class="bg-gray-100">
+                <th class="border px-4 py-2">Student ID</th>
+                <td class="border px-4 py-2">
+                    {{ $registration->student->id }}
+                </td>
+            </tr>
+            <tr class="bg-gray-100">
+                <th class="border px-4 py-2">Registration ID</th>
+                <td class="border px-4 py-2">
+                    {{ $registration->id }}
+                </td>
+            </tr>
+            <tr class="bg-gray-100">
                 <th class="border px-4 py-2">Student Name</th>
                 <td class="border px-4 py-2">
                     {{ $registration->student->first_name }} {{ $registration->student->last_name }}
