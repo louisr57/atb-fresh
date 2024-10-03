@@ -168,6 +168,18 @@
                 });
             });
 
+             // Add mouseover event listener for hover
+        row.addEventListener('mouseover', function () {
+            row.classList.add('highlight'); // Highlight row on hover
+        });
+
+        // Add mouseout event listener to remove hover effect
+        row.addEventListener('mouseout', function () {
+            if (index !== currentIndex) {
+                row.classList.remove('highlight'); // Remove highlight when the mouse leaves the row, unless it's the currently selected row
+            }
+        });
+
             // Handle arrow key navigation
             document.addEventListener('keydown', function (event) {
                 console.log('Key pressed:', event.key);
