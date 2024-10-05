@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Rinvex\Country\CountryLoader; // If you're using the Laravel package for countries
+
 
 class StudentController extends Controller
 {
@@ -29,7 +31,12 @@ class StudentController extends Controller
     // Show the form for creating a new student
     public function create()
     {
-        return view('students.create');
+        // If using the Rinvex package to fetch countries
+        $countries = CountryLoader::countries(); // Fetch all countries
+
+        // If using a static list, you can also define the $countries array manually here
+
+        return view('students.create', compact('countries'));
     }
 
     // Store a new student in the database
