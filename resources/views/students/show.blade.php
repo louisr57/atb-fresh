@@ -26,7 +26,7 @@
                         <th class="border px-4 py-2">Event Title</th>
                         <th class="border px-4 py-2">Start Date</th>
                         <th class="border px-4 py-2">End Date</th>
-                        <th class="border px-4 py-2">facilitator</th>
+                        <th class="border px-4 py-2">Facilitator</th>
                         <th class="border px-4 py-2">Registration Status</th>
                     </tr>
                 </thead>
