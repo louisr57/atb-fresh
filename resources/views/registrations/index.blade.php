@@ -75,7 +75,7 @@
                             <th class="border px-4 py-2">
                                 <a
                                     href="{{ route('registrations.index', ['sort_by' => 'facilitator_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
-                                    Facilitator Name
+                                    facilitator Name
                                     @if ($sort_by === 'facilitator_name')
                                     <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
                                     @endif
