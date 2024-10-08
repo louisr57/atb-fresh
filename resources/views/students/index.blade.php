@@ -17,32 +17,32 @@
         @if($students->isEmpty())
         <h1>No students available.</h1>
         @else
-        <table class="min-w-full table-auto border-collapse border border-gray-300">
-            <thead class="bg-gray-100">
+        <table class="min-w-full table-auto border-collapse border border-gray-500">
+            <thead class="bg-gray-200">
                 <tr>
-                    <th class="border border-gray-300 px-4 py-2 text-left">
+                    <th class="border border-gray-500 px-4 py-2 text-left">
                         <a href="{{ route('students.index', ['sort_by' => 'first_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}"
                             class="text-blue-500 hover:underline">First Name</a>
                     </th>
-                    <th class="border border-gray-300 px-4 py-2 text-left">
+                    <th class="border border-gray-500 px-4 py-2 text-left">
                         <a href="{{ route('students.index', ['sort_by' => 'last_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}"
                             class="text-blue-500 hover:underline">Last Name</a>
                     </th>
-                    <th class="border border-gray-300 px-4 py-2 text-left">
+                    <th class="border border-gray-500 px-4 py-2 text-left">
                         <a href="{{ route('students.index', ['sort_by' => 'email', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}"
                             class="text-blue-500 hover:underline">Email</a>
                     </th>
-                    <th class="border border-gray-300 px-4 py-2 text-left">
+                    <th class="border border-gray-500 px-4 py-2 text-left">
                         <a href="{{ route('students.index', ['sort_by' => 'phone_number', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}"
                             class="text-blue-500 hover:underline">Phone Number</a>
                     </th>
-                    <th class="border border-gray-300 px-4 py-2 text-left">
+                    <th class="border border-gray-500 px-4 py-2 text-left">
                         <a href="{{ route('students.index', ['sort_by' => 'city', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}"
                             class="text-blue-500 hover:underline">City</a>
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white">
                 @foreach($students as $student)
                 <tr data-student-id="{{ $student->id }}"
                     onclick="window.location='{{ route('students.show', $student->id) }}'"
@@ -53,11 +53,11 @@
                             View
                         </a>
                     </td> --}}
-                    <td class="border border-gray-300 px-4 py-2">{{ $student->first_name }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $student->last_name }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $student->email }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $student->phone_number }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $student->city }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $student->first_name }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $student->last_name }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $student->email }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $student->phone_number }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $student->city }}</td>
                 </tr>
                 <script>
                     console.log('Rendered student row with ID: {{ $student->id }}');
@@ -85,16 +85,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const row = document.querySelector(`tr[data-student-id="${highlightId}"]`);
         if (row) {
             // Add a highlight class to the row
-            row.classList.add('bg-yellow-300');
+            row.classList.add('bg-yellow-500');
 
             // Scroll the row into view smoothly after a small delay to ensure full rendering
             setTimeout(() => {
                 row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
+            }, 500);
 
             // Remove the highlight when the user clicks anywhere on the page
             document.addEventListener('click', function() {
-                row.classList.remove('bg-yellow-300');
+                row.classList.remove('bg-yellow-500');
             }, { once: true });
         }
     }

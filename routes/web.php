@@ -19,7 +19,10 @@ Route::get('/', function () {
 });
 
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
 
 Route::get('/instructors', [InstructorController::class, 'index'])->name('instructors.index');
 Route::get('/instructors/{id}', [InstructorController::class, 'show'])->name('instructors.show');

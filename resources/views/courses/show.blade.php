@@ -4,8 +4,24 @@
         Course Details
     </x-slot:heading>
 
-    <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold mb-4">{{ $course->course_title }}</h1>
+    <div class="container mx-auto p-6 shadow-lg rounded-lg bg-slate-50">
+        <!-- Flex container for title and delete button -->
+        <div class="flex justify-between items-center mb-4">
+            <!-- Course Title -->
+            <h1 class="text-3xl font-bold mb-4">{{ $course->course_title }}</h1>
+
+            <!-- Delete Button ... will only show if there are no registrations for this course-->
+            @if($course->events->isEmpty())
+            <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="top-0 right-0">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
+                    onclick="return confirm('Are you sure you want to delete this course?');">
+                    Delete Course
+                </button>
+            </form>
+            @endif
+        </div>
 
         <div class="mb-6">
             <h2 class="text-xl font-semibold">Course Description</h2>

@@ -95,16 +95,6 @@
                             <option value="{{ $country['iso_3166_1_alpha2'] }}">{{ $country['name'] }}</option>
                             @endforeach
                         </select>
-
-                        {{-- <select name="country" id="country"
-                            class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 value="
-                            {{ old('country') }}" required">
-                            <option value="">Loading countries...</option>
-                        </select> --}}
-
-                        {{-- <input type="text" id="country" name="country"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            value="{{ old('country') }}" required> --}}
                     </div>
 
                     <!-- Post Code -->
