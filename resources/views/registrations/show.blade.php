@@ -39,7 +39,7 @@
                 <td class="border px-4 py-2">{{ $registration->event->dateto ?? 'N/A' }}</td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="border px-4 py-2">f
+                <th class="border px-4 py-2">
                     Facilitator Name</th>
                 <td class="border px-4 py-2">
                     {{ $registration->event->facilitator->first_name }} {{

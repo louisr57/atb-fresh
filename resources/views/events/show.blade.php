@@ -11,7 +11,7 @@
             <strong>Date:</strong> {{ $event->datefrom }} to {{ $event->dateto ?? 'N/A' }}
         </p>
         <p class="text-lg mb-4">
-            <strong>facilitator:</strong> {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
+            <strong>Facilitator:</strong> {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
         </p>
 
         @if ($event->registrations->isNotEmpty())
