@@ -27,8 +27,8 @@ class RegistrationFactory extends Factory
     {
         // Select a random student
         $student = Student::inRandomOrder()->first();
-        echo "Student ID: " . $student->id . "\n\n";
-        echo "Student name: " . $student->first_name . " " . $student->last_name . "\n\n";
+        // echo "Student ID: " . $student->id . "\n\n";
+        // echo "Student name: " . $student->first_name . " " . $student->last_name . "\n\n";
 
         // Get the list of course codes for courses the student has already completed
         $completedCourseCodes = Registration::where('student_id', $student->id)
@@ -41,14 +41,14 @@ class RegistrationFactory extends Factory
             // ->pluck('event.course.course_code') // Pluck the course_code from the related course model
             ->flatten() // Flatten the collection to a single level
             ->toArray(); // Convert the collection to an array
-        echo "\$completedCourseCodes: " . json_encode($completedCourseCodes, JSON_PRETTY_PRINT) . "\n\n";
+        // echo "\$completedCourseCodes: " . json_encode($completedCourseCodes, JSON_PRETTY_PRINT) . "\n\n";
 
         // Check if the student has completed all courses except the one with ID 0
         $allCoursesCompleted = count(array_diff($this->courseSequence, $completedCourseCodes)) === 1
             && in_array('ATB K-BT', $this->courseSequence); // both sides of the && must be true. If the student has completed all courses except for one (1) course (ATB K-BT), then all courses are completed.
-        echo "\$allCoursesCompleted: is ";
-        echo $allCoursesCompleted ? 'true' : 'false'; // This is a boolean value
-        echo "\n\n";
+        // echo "\$allCoursesCompleted: is ";
+        // echo $allCoursesCompleted ? 'true' : 'false'; // This is a boolean value
+        // echo "\n\n";
 
         // Get the full details of the student's last completed registration
         $lastCompletedRegistration = Registration::where('student_id', $student->id)
@@ -62,18 +62,18 @@ class RegistrationFactory extends Factory
         // var_dump($lastCompletedRegistration);
         // dd($lastCompletedRegistration);
 
-        echo "\$lastCompletedRegistration: " . $lastCompletedRegistration . " which is of type " . gettype($lastCompletedRegistration) . "\n\n";
+        // echo "\$lastCompletedRegistration: " . $lastCompletedRegistration . " which is of type " . gettype($lastCompletedRegistration) . "\n\n";
 
         // Debug to check the result
         if (!$lastCompletedRegistration) {
-            echo "No completed registrations found.\n\n";
+            // echo "No completed registrations found.\n\n";
         } else {
             // Check if event and course are properly loaded
             if ($lastCompletedRegistration->event && $lastCompletedRegistration->event->course) {
                 $lastCompletedCourseCode = $lastCompletedRegistration->event->course->course_code;
-                echo "\$lastCompletedCourseCode: " . $lastCompletedCourseCode . "\n\n";
+                // echo "\$lastCompletedCourseCode: " . $lastCompletedCourseCode . "\n\n";
             } else {
-                echo "Event or course information missing.\n\n";
+                // echo "Event or course information missing.\n\n";
             }
         }
 
@@ -82,12 +82,12 @@ class RegistrationFactory extends Factory
         $lastCompletedCourseCode = $lastCompletedRegistration
             ? $lastCompletedRegistration->event->course->course_code
             : null; // If no course completed, this will result in starting with the first course
-        echo "\$lastCompletedCourseCode: " . $lastCompletedCourseCode . " is of type " . gettype($lastCompletedCourseCode) . "\n\n";
+        // echo "\$lastCompletedCourseCode: " . $lastCompletedCourseCode . " is of type " . gettype($lastCompletedCourseCode) . "\n\n";
 
         $currentCourseIndex = $lastCompletedCourseCode
             ? array_search($lastCompletedCourseCode, $this->courseSequence)
             : 0; // If no course completed, start with the first course
-        echo "\$currentCourseIndex: " . $currentCourseIndex . "\n\n"; // This is an array number, NOT a course code!
+        // echo "\$currentCourseIndex: " . $currentCourseIndex . "\n\n"; // This is an array number, NOT a course code!
 
 
         // Determine the next course in sequence or allow repeating if all are completed
@@ -108,7 +108,7 @@ class RegistrationFactory extends Factory
                 }
             }
         }
-        echo "\$nextCourseCode: " . $nextCourseCode . "\n\n";
+        // echo "\$nextCourseCode: " . $nextCourseCode . "\n\n";
 
 
         // If no further courses are available, return empty array (no registration)
@@ -118,11 +118,11 @@ class RegistrationFactory extends Factory
 
         // Find the next event with this course in the Event table
         $nextCourse = Course::where('course_code', $nextCourseCode)->first();
-        echo "\$nextCourse: " . $nextCourse . "\n\n";
+        // echo "\$nextCourse: " . $nextCourse . "\n\n";
         // Seems a bit early in the code for this check, but let's keep it here for now.
 
         if (!$nextCourse) {
-            echo "No course found for code: $nextCourseCode\n\n";
+            // echo "No course found for code: $nextCourseCode\n\n";
             return [];
         }
 
@@ -135,7 +135,7 @@ class RegistrationFactory extends Factory
             ->orderByDesc('events.datefrom')  // Order by the datefrom of the event
             ->select('registrations.*')  // Ensure we're selecting from the registrations table
             ->first();
-        echo "\$lastAttemptOnSameCourse: " . $lastAttemptOnSameCourse . "\n\n";
+        // echo "\$lastAttemptOnSameCourse: " . $lastAttemptOnSameCourse . "\n\n";
 
         // Get the baseline date as the most recent 'dateto' from all the student's registrations
         $baselineDate = Registration::where('student_id', $student->id)
@@ -143,11 +143,11 @@ class RegistrationFactory extends Factory
             ->orderByDesc('events.dateto') // Sort by 'dateto' in descending order
             ->value('events.dateto'); // Get the most recent 'dateto'
 
-        echo "\$baselineDate: " . ($baselineDate ?? 'No baseline date available') . "\n\n";
+        // echo "\$baselineDate: " . ($baselineDate ?? 'No baseline date available') . "\n\n";
 
         // If no baseline date is found (i.e., student has no registrations), default to null or another strategy.
         if (!$baselineDate) {
-            echo "No previous registrations found. Defaulting to no baseline date.\n";
+            // echo "No previous registrations found. Defaulting to no baseline date.\n";
         }
 
 
@@ -157,7 +157,7 @@ class RegistrationFactory extends Factory
             ->limit(5)
             ->pluck('event_id')
             ->toArray();
-        echo "\$registeredEventIds: " . json_encode($registeredEventIds, JSON_PRETTY_PRINT) . "\n\n";
+        // echo "\$registeredEventIds: " . json_encode($registeredEventIds, JSON_PRETTY_PRINT) . "\n\n";
 
         // Find the next available event for the course
         $events = Event::where('course_id', $nextCourse->id)
@@ -171,29 +171,29 @@ class RegistrationFactory extends Factory
             ->get();
 
 
-        echo "\$events: " . json_encode($events, JSON_PRETTY_PRINT) . "\n\n";
+        // echo "\$events: " . json_encode($events, JSON_PRETTY_PRINT) . "\n\n";
 
-        echo "Available Events for the same course:\n";
+        // echo "Available Events for the same course:\n";
         foreach ($events as $event) {
-            echo "Event ID: {$event->id}, Date: {$event->datefrom}, Participants: {$event->participant_count}\n";
+            //    echo "Event ID: {$event->id}, Date: {$event->datefrom}, Participants: {$event->participant_count}\n";
         }
 
         // Pick the first available event
         $nextEvent = $events->first(function ($event) {
             return $event->participant_count < 30; // Ensure it has available space and assigns to the $nextEvent variable, the first event that meets the condition
         });
-        echo "\$nextEvent: " . json_encode($nextEvent, JSON_PRETTY_PRINT) . "\n\n";
+        // echo "\$nextEvent: " . json_encode($nextEvent, JSON_PRETTY_PRINT) . "\n\n";
 
         // If no event is available, return no registration
         if (!$nextEvent) {
-            echo "No available events found for the course '{$nextCourse->course_title}' after {$baselineDate}\n\n";
+            // echo "No available events found for the course '{$nextCourse->course_title}' after {$baselineDate}\n\n";
             return []; // Exit early if no event is available
         }
 
         // Increment participant count for the selected event
         $nextEvent->increment('participant_count');
-        echo "Next event selected: Event ID {$nextEvent->id}, {$nextEvent->title} starting on {$nextEvent->datefrom}\n";
-        echo "=========================================================================\n\n";
+        // echo "Next event selected: Event ID {$nextEvent->id}, {$nextEvent->title} starting on {$nextEvent->datefrom}\n";
+        // echo "=========================================================================\n\n";
 
         // Return the registration details for the next event
         return [

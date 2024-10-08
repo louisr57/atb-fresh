@@ -59,9 +59,9 @@
                         <th class="border px-4 py-2">Country</th>
                         <th class="border px-4 py-2">
                             <a
-                                href="{{ route('events.index', ['sort_by' => 'instructor_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
-                                Instructor Name
-                                @if ($sort_by === 'instructor_name')
+                                href="{{ route('events.index', ['sort_by' => 'facilitator_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
+                                facilitator Name
+                                @if ($sort_by === 'facilitator_name')
                                 <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
                             </a>
@@ -95,7 +95,7 @@
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->state }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->country }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">
-                            {{ $event->instructor->first_name }} {{ $event->instructor->last_name }}
+                            {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
                         </td>
                         <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $event->remarks ?? 'No remarks' }}

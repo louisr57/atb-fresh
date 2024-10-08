@@ -17,9 +17,9 @@ class Event extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function instructor()
+    public function facilitator()
     {
-        return $this->belongsTo(Instructor::class);
+        return $this->belongsTo(facilitator::class);
     }
 
     public function registrations()

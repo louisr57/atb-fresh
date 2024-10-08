@@ -39,10 +39,10 @@
                 <td class="border px-4 py-2">{{ $registration->event->dateto ?? 'N/A' }}</td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Instructor Name</th>
+                <th class="border px-4 py-2">facilitator Name</th>
                 <td class="border px-4 py-2">
-                    {{ $registration->event->instructor->first_name }} {{
-                    $registration->event->instructor->last_name }}
+                    {{ $registration->event->facilitator->first_name }} {{
+                    $registration->event->facilitator->last_name }}
                 </td>
             </tr>
             <tr>

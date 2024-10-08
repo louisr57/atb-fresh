@@ -75,7 +75,7 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        DB::table('instructors')->insert([
+        DB::table('facilitators')->insert([
             [
                 'first_name' => 'Aloka',
                 'last_name' => 'Marti',

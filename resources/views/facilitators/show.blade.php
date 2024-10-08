@@ -1,19 +1,19 @@
 <x-layout>
 
     <x-slot:heading>
-        Instructor Details
+        Facilitator Details
     </x-slot:heading>
 
 
     <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold mb-4">{{ $instructor->first_name }} {{ $instructor->last_name }}</h1>
+        <h1 class="text-3xl font-bold mb-4">{{ $facilitator->first_name }} {{ $facilitator->last_name }}</h1>
 
         <div class="mb-6">
             <h2 class="text-xl font-semibold">Email</h2>
-            <p class="text-gray-700">{{ $instructor->email }}</p>
+            <p class="text-gray-700">{{ $facilitator->email }}</p>
         </div>
 
-        @if($instructor->events->isNotEmpty())
+        @if($facilitator->events->isNotEmpty())
         <div class="mb-6">
             <h2 class="text-xl font-semibold">Courses Taught</h2>
 
@@ -28,7 +28,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($instructor->events as $event)
+                    @foreach($facilitator->events as $event)
                     <tr class="hover:bg-gray-100">
                         <td class="border px-4 py-2">{{ $event->course->course_title }}</td>
                         <td class="border px-4 py-2">{{ $event->title }}</td>
@@ -41,13 +41,13 @@
             </table>
         </div>
         @else
-        <p>This instructor has not taught any courses yet.</p>
+        <p>This Facilitator has not taught any courses yet.</p>
         @endif
 
-        <!-- Back to instructors list -->
+        <!-- Back to facilitators list -->
         <div class="mt-4">
-            <a href="{{ route('instructors.index') }}" class="text-blue-600 hover:underline">
-                ← Back to Instructors List
+            <a href="{{ route('facilitators.index') }}" class="text-blue-600 hover:underline">
+                ← Back to Facilitators List
             </a>
         </div>
     </div>

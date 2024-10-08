@@ -24,14 +24,14 @@ return new class extends Migration {
             $table->string('postcode');
             $table->string('location_geocode')->nullable();
             $table->unsignedBigInteger('course_id');
-            $table->unsignedBigInteger('instructor_id');
+            $table->unsignedBigInteger('facilitator_id');
             $table->text('remarks')->nullable();
             $table->integer('participant_count')->default(0);
             $table->timestamps();
 
             // Add foreign key constraints
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
-            $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('cascade');
+            $table->foreign('facilitator_id')->references('id')->on('facilitators')->onDelete('cascade');
         });
     }
 

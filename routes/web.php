@@ -6,7 +6,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\facilitatorController;
 use App\Models\Job;
 
 
@@ -24,8 +24,8 @@ Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.sh
 Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
 Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
 
-Route::get('/instructors', [InstructorController::class, 'index'])->name('instructors.index');
-Route::get('/instructors/{id}', [InstructorController::class, 'show'])->name('instructors.show');
+Route::get('/facilitators', [facilitatorController::class, 'index'])->name('facilitators.index');
+Route::get('/facilitators/{id}', [facilitatorController::class, 'show'])->name('facilitators.show');
 
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');

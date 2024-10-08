@@ -26,7 +26,7 @@
                         <th class="border px-4 py-2">Event Title</th>
                         <th class="border px-4 py-2">Start Date</th>
                         <th class="border px-4 py-2">End Date</th>
-                        <th class="border px-4 py-2">Instructor</th>
+                        <th class="border px-4 py-2">facilitator</th>
                         <th class="border px-4 py-2">Registration Status</th>
                     </tr>
                 </thead>
@@ -38,8 +38,8 @@
                         <td class="border px-4 py-2">{{ $registration->event->datefrom }}</td>
                         <td class="border px-4 py-2">{{ $registration->event->dateto }}</td>
                         <td class="border px-4 py-2">
-                            {{ $registration->event->instructor->first_name }} {{
-                            $registration->event->instructor->last_name }}
+                            {{ $registration->event->facilitator->first_name }} {{
+                            $registration->event->facilitator->last_name }}
                         </td>
                         <td class="border px-4 py-2">{{ $registration->end_status }}</td>
                     </tr>

@@ -74,9 +74,9 @@
                             </th>
                             <th class="border px-4 py-2">
                                 <a
-                                    href="{{ route('registrations.index', ['sort_by' => 'instructor_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
-                                    Instructor Name
-                                    @if ($sort_by === 'instructor_name')
+                                    href="{{ route('registrations.index', ['sort_by' => 'facilitator_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
+                                    facilitator Name
+                                    @if ($sort_by === 'facilitator_name')
                                     <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
                                     @endif
                                 </a>
@@ -105,9 +105,9 @@
                                 }}<br>
                                 Course ID: {{ $registration->event->course->id }} <br>
                                 Course Name: {{ $registration->event->course->course_title }} <br>
-                                Instructor ID: {{ $registration->event->instructor->id }} <br>
-                                Instructor Name: {{ $registration->event->instructor->first_name }} {{
-                                $registration->event->instructor->last_name }} <br>
+                                facilitator ID: {{ $registration->event->facilitator->id }} <br>
+                                facilitator Name: {{ $registration->event->facilitator->first_name }} {{
+                                $registration->event->facilitator->last_name }} <br>
                             </td> --}}
                             <!-- Sticky "View" Button -->
                             <td class="sticky left-0 bg-gray-100 border px-4 py-2">
@@ -133,8 +133,8 @@
                                 {{ $registration->event->dateto ?? 'N/A' }}
                             </td>
                             <td class="border px-4 py-2 whitespace-nowrap">
-                                {{ $registration->event->instructor->first_name ?? 'N/A' }} {{
-                                $registration->event->instructor->last_name ?? 'N/A' }}
+                                {{ $registration->event->facilitator->first_name ?? 'N/A' }} {{
+                                $registration->event->facilitator->last_name ?? 'N/A' }}
                             </td>
                             <td class="border px-4 py-2 whitespace-nowrap">
                                 {{ ucfirst($registration->end_status) }}

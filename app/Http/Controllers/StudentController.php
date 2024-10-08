@@ -22,8 +22,8 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        // Find the student by ID and load related registrations, events, courses, and instructors
-        $student = Student::with('registrations.event.course', 'registrations.event.instructor')->findOrFail($id);
+        // Find the student by ID and load related registrations, events, courses, and facilitators
+        $student = Student::with('registrations.event.course', 'registrations.event.facilitator')->findOrFail($id);
 
         return view('students.show', compact('student'));
     }

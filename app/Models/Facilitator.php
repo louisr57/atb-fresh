@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Instructor extends Model
+class facilitator extends Model
 {
     use HasFactory;
 
@@ -13,6 +13,6 @@ class Instructor extends Model
 
     public function events()
     {
-        return $this->hasMany(Event::class, 'instructor_id');
+        return $this->hasMany(Event::class, 'facilitator_id');
     }
 }

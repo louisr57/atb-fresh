@@ -21,8 +21,8 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        // Fetch the course along with its related events and instructors
-        $course = Course::with('events.instructor')->findOrFail($id);
+        // Fetch the course along with its related events and facilitators
+        $course = Course::with('events.facilitator')->findOrFail($id);
 
         // Return the course to the view
         return view('courses.show', compact('course'));

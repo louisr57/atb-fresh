@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Event;
 use App\Models\Course;
-use App\Models\Instructor;
+use App\Models\facilitator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
@@ -40,7 +40,7 @@ class EventFactory extends Factory
             'postcode' => $this->faker->postcode(),
             'location_geocode' => $this->faker->latitude() . ', ' . $this->faker->longitude(),
             'course_id' => $course->id,
-            'instructor_id' => Instructor::inRandomOrder()->first()->id,
+            'facilitator_id' => facilitator::inRandomOrder()->first()->id,
             'remarks' => $this->faker->optional()->sentence(),
             'participant_count' => 0,
         ];

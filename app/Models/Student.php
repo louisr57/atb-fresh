@@ -21,11 +21,11 @@ class Student extends Model
         return $this->belongsToMany(Event::class, 'registrations', 'event_id', 'student_id')->withTimestamps(); // The system suggested adding ", 'registrations'" as a second argument.
     }
 
-    public function instructors()
+    public function facilitators()
     {
         return $this->belongsToMany(Event::class, 'registrations', 'student_id', 'event_id')
-            ->join('instructors as event_instructors', 'events.instructor_id', '=', 'event_instructors.id')
-            ->select('event_instructors.*')
+            ->join('facilitators as event_facilitators', 'events.facilitator_id', '=', 'event_facilitators.id')
+            ->select('event_facilitators.*')
             ->distinct()
             ->withTimestamps();
     }
