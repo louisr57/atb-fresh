@@ -40,7 +40,7 @@ class EventFactory extends Factory
             'postcode' => $this->faker->postcode(),
             'location_geocode' => $this->faker->latitude() . ', ' . $this->faker->longitude(),
             'course_id' => $course->id,
-            'facilitator_id' => facilitator::inRandomOrder()->first()->id,
+            'facilitator_id' => Facilitator::inRandomOrder()->first()->id,
             'remarks' => $this->faker->optional()->sentence(),
             'participant_count' => 0,
         ];

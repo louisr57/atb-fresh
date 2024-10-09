@@ -11,7 +11,7 @@ class facilitatorController extends Controller
     public function index()
     {
         // Get all facilitators
-        $facilitators = facilitator::all();
+        $facilitators = Facilitator::all();
 
         // Return view with facilitators
         return view('facilitators.index', compact('facilitators'));
@@ -21,7 +21,7 @@ class facilitatorController extends Controller
     public function show($id)
     {
         // Find the facilitator by ID and load related events and courses
-        $facilitator = facilitator::with('events.course')->findOrFail($id);
+        $facilitator = Facilitator::with('events.course')->findOrFail($id);
 
         // Return view with facilitator data
         return view('facilitators.show', compact('facilitator'));
@@ -43,7 +43,7 @@ class facilitatorController extends Controller
         ]);
 
         // Create a new facilitator record
-        facilitator::create($validatedData);
+        Facilitator::create($validatedData);
 
         // Redirect back to a page (e.g., facilitator index) with a success message
         return redirect()->route('facilitators.index')->with('success', 'facilitator created successfully.');

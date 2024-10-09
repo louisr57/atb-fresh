@@ -19,7 +19,7 @@ class Event extends Model
 
     public function facilitator()
     {
-        return $this->belongsTo(facilitator::class);
+        return $this->belongsTo(Facilitator::class);
     }
 
     public function registrations()
