@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class TruncateTable extends Command
 {
@@ -20,7 +21,7 @@ class TruncateTable extends Command
         $table = $this->argument('table');
 
         // Check if the table exists before truncating
-        if (!\Schema::hasTable($table)) {
+        if (!Schema::hasTable($table)) {
             $this->error("Table '{$table}' does not exist.");
             return;
         }
