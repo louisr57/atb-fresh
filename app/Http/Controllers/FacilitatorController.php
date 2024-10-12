@@ -22,7 +22,9 @@ class facilitatorController extends Controller
     public function show($id)
     {
         // Find the facilitator by ID and load related events and courses
-        $facilitator = Facilitator::with('events.course')->findOrFail($id);
+        $facilitator = Facilitator::with(['events' => function ($query) {
+            $query->orderBy('datefrom', 'asc'); // Adjust 'start_date' to your actual date column name
+        }])->findOrFail($id);
 
         // Return view with facilitator data
         return view('facilitators.show', compact('facilitator'));
