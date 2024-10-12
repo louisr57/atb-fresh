@@ -26,20 +26,15 @@
         <table class="min-w-full table-auto border-collapse border border-gray-300">
             <thead class="bg-gray-100">
                 <tr>
-                    {{-- TODO: remove ID --}}
-                    <th class="border px-4 py-2">ID</th>
-                    <th class="border px-4 py-2">First Name</th>
-                    <th class="border px-4 py-2">Last Name</th>
-                    <th class="border px-4 py-2">Email</th>
-                    <th class="border px-4 py-2">View</th>
+                    <th class="text-left border px-4 py-2">First Name</th>
+                    <th class="text-left border px-4 py-2">Last Name</th>
+                    <th class="text-left border px-4 py-2">Email</th>
+                    <th class="text-left border px-4 py-2">View</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($facilitators as $facilitator)
                 <tr class="hover:bg-gray-100 registration-row">
-
-                    {{-- TODO: remove ID --}}
-                    <td class="border px-4 py-2">{{ $facilitator->id }}</td>
                     <td class="border px-4 py-2">{{ $facilitator->first_name }}</td>
                     <td class="border px-4 py-2">{{ $facilitator->last_name }}</td>
                     <td class="border px-4 py-2">{{ $facilitator->email }}</td>
