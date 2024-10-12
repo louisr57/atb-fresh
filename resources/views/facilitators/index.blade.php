@@ -37,6 +37,7 @@
             <tbody>
                 @foreach($facilitators as $facilitator)
                 <tr class="hover:bg-gray-100 registration-row">
+
                     {{-- TODO: remove ID --}}
                     <td class="border px-4 py-2">{{ $facilitator->id }}</td>
                     <td class="border px-4 py-2">{{ $facilitator->first_name }}</td>
