@@ -110,7 +110,7 @@
         </form>
 
         <!-- Back to facilitators list -->
-        <div class="mt-4">
+        <div class="mt-5">
             <a href="{{ route('facilitators.index') }}" class="text-blue-600 hover:underline">
                 ← Back to Facilitators List
             </a>
