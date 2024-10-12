@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\facilitator;
+use App\Models\Facilitator;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class facilitatorController extends Controller
+class FacilitatorController extends Controller
 {
     // Display a listing of facilitators
     public function index()

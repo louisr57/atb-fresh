@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Event;
 use App\Models\Course;
-use App\Models\facilitator;
+use App\Models\Facilitator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 

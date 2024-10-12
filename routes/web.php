@@ -6,7 +6,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\facilitatorController;
+use App\Http\Controllers\FacilitatorController;
 use App\Models\Job;
 
 
@@ -24,10 +24,10 @@ Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.sh
 Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
 Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
 
-Route::get('/facilitators', [facilitatorController::class, 'index'])->name('facilitators.index');
+Route::get('/facilitators', [FacilitatorController::class, 'index'])->name('facilitators.index');
 Route::get('/facilitators/create', [FacilitatorController::class, 'create'])->name('facilitators.create');
 Route::get('/facilitators/{facilitator}/edit', [FacilitatorController::class, 'edit'])->name('facilitators.edit');
-Route::get('/facilitators/{id}', [facilitatorController::class, 'show'])->name('facilitators.show');
+Route::get('/facilitators/{id}', [FacilitatorController::class, 'show'])->name('facilitators.show');
 Route::post('/facilitators', [FacilitatorController::class, 'store'])->name('facilitators.store');
 Route::put('/facilitators/{facilitator}', [FacilitatorController::class, 'update'])->name('facilitators.update');
 Route::delete('/facilitators/{id}', [FacilitatorController::class, 'destroy'])->name('facilitators.destroy');
