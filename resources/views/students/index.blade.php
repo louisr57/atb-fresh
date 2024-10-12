@@ -10,7 +10,7 @@
             <h1 class="text-2xl font-semibold mb-6">Students List</h1>
             <a href="{{ route('students.create') }}"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                New
+                Create New Student
             </a>
         </div>
 

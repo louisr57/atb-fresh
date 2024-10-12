@@ -10,7 +10,7 @@
             <h1 class="text-2xl font-semibold mb-6">Courses List</h1>
             <a href="{{ route('courses.create') }}"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                New
+                Create New Course
             </a>
         </div>
         {{-- <h1 class="text-2xl font-bold mb-6">Courses List</h1> --}}

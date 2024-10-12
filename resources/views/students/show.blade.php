@@ -4,6 +4,9 @@
         Student Details
     </x-slot:heading>
 
+    {{-- TODO: Will need an Edit button and an edit.blade file, route updates, etc
+    as well as a CSS facelift to include all the fields --}}
+
     <div class="container mx-auto p-4">
         <h1 class="text-3xl font-bold mb-4">{{ $student->first_name }} {{ $student->last_name }}</h1>
 

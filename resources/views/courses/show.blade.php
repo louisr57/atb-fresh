@@ -4,6 +4,8 @@
         Course Details
     </x-slot:heading>
 
+    {{-- TODO: Will need an Edit button and an edit.blade file, route updates, etc --}}
+
     <div class="container mx-auto p-6 shadow-lg rounded-lg bg-slate-50">
         <!-- Flex container for title and delete button -->
         <div class="flex justify-between items-center mb-4">

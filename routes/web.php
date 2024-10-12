@@ -25,7 +25,13 @@ Route::post('/courses', [CourseController::class, 'store'])->name('courses.store
 Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
 
 Route::get('/facilitators', [facilitatorController::class, 'index'])->name('facilitators.index');
+Route::get('/facilitators/create', [FacilitatorController::class, 'create'])->name('facilitators.create');
+Route::get('/facilitators/{facilitator}/edit', [FacilitatorController::class, 'edit'])->name('facilitators.edit');
 Route::get('/facilitators/{id}', [facilitatorController::class, 'show'])->name('facilitators.show');
+Route::post('/facilitators', [FacilitatorController::class, 'store'])->name('facilitators.store');
+Route::put('/facilitators/{facilitator}', [FacilitatorController::class, 'update'])->name('facilitators.update');
+Route::delete('/facilitators/{id}', [FacilitatorController::class, 'destroy'])->name('facilitators.destroy');
+
 
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
@@ -34,7 +40,6 @@ Route::post('/students', [StudentController::class, 'store'])->name('students.st
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
-
 Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
 Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->name('registrations.show');
 

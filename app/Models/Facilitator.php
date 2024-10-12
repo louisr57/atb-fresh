@@ -11,6 +11,10 @@ class facilitator extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'dob' => 'date:Y-m-d',
+    ];
+
     public function events()
     {
         return $this->hasMany(Event::class, 'facilitator_id');

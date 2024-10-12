@@ -3,6 +3,8 @@
         Create New Student
     </x-slot:heading>
 
+    {{-- TODO: Need to add the missing fields including dob javascript --}}
+
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-6">Create New Student</h1>
 
@@ -108,7 +110,8 @@
 
                 <!-- Submit Button -->
                 <div>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button type="submit"
+                        class="mt-7 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Submit
                     </button>
                 </div>
