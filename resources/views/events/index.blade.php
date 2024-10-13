@@ -28,6 +28,15 @@
                         </th>
                         <th class="border px-4 py-2">
                             <a
+                                href="{{ route('events.index', ['sort_by' => 'facilitator_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
+                                Facilitator Name
+                                @if ($sort_by === 'facilitator_name')
+                                <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        <th class="border px-4 py-2">
+                            <a
                                 href="{{ route('events.index', ['sort_by' => 'participant_count', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
                                 Participant Count
                                 @if ($sort_by === 'participant_count')
@@ -57,15 +66,6 @@
                         <th class="border px-4 py-2">City</th>
                         <th class="border px-4 py-2">State</th>
                         <th class="border px-4 py-2">Country</th>
-                        <th class="border px-4 py-2">
-                            <a
-                                href="{{ route('events.index', ['sort_by' => 'facilitator_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
-                                facilitator Name
-                                @if ($sort_by === 'facilitator_name')
-                                <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
-                                @endif
-                            </a>
-                        </th>
                         <th class="border px-4 py-2">Remarks</th>
                     </tr>
                 </thead>
@@ -82,6 +82,9 @@
                             {{ $event->course->course_title }}
                         </td>
                         <td class="border px-4 py-2 whitespace-nowrap">
+                            {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
+                        </td>
+                        <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $event->participant_count }}
                         </td>
                         <td class="border px-4 py-2 whitespace-nowrap">
@@ -94,9 +97,6 @@
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->city }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->state }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->country }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">
-                            {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
-                        </td>
                         <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $event->remarks ?? 'No remarks' }}
                         </td>
