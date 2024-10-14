@@ -246,7 +246,7 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        // Registration::factory(200)->create();
+        // Registration::factory(500)->create();
         Event::factory(500)->create();
 
         // Fetch all events
@@ -261,7 +261,7 @@ class DatabaseSeeder extends Seeder
             $event->update(['participant_count' => $participantCount]);
         }
 
-        // Create 100 registrations one by one
+        // Create 300 registrations one by one
         for ($i = 0; $i < 300; $i++) {
             Registration::factory()->create();
         }

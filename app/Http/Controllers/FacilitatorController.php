@@ -45,6 +45,7 @@ class FacilitatorController extends Controller
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'gender' => 'nullable|string|max:10',
             'email' => 'required|email|unique:facilitators,email',
             'phone_number' => 'nullable|string|max:20',
             'dob' => [
@@ -90,6 +91,7 @@ class FacilitatorController extends Controller
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'gender' => 'nullable|string|max:10',
             'email' => 'required|email|unique:facilitators,email,' . $facilitator->id,
             'phone_number' => 'nullable|string|max:20',
             'dob' => [
