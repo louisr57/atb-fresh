@@ -47,11 +47,6 @@ class FacilitatorController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:facilitators,email',
             'phone_number' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
-            'post_code' => 'nullable|string|max:20',
             'dob' => [
                 'nullable',
                 'date',
@@ -64,6 +59,12 @@ class FacilitatorController extends Controller
                     }
                 },
             ],
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'post_code' => 'nullable|string|max:20',
+            'website' => 'nullable|url|max:255'
         ]);
 
 
@@ -91,11 +92,6 @@ class FacilitatorController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:facilitators,email,' . $facilitator->id,
             'phone_number' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
-            'post_code' => 'nullable|string|max:20',
             'dob' => [
                 'nullable',
                 'date',
@@ -108,6 +104,12 @@ class FacilitatorController extends Controller
                     }
                 },
             ],
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'post_code' => 'nullable|string|max:20',
+            'website' => 'nullable|url|max:255'
         ]);
 
         $facilitator->update($validatedData);
