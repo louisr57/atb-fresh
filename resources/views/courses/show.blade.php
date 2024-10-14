@@ -9,10 +9,6 @@
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ $course->course_title }}</h1>
-            <a href="{{ route('courses.edit', $course->id) }}"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Edit Course
-            </a>
             @if($course->events->isEmpty())
             <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="inline">
                 @csrf
@@ -23,6 +19,10 @@
                 </button>
             </form>
             @endif
+            <a href="{{ route('courses.edit', $course->id) }}"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Edit Course
+            </a>
         </div>
 
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
