@@ -54,7 +54,9 @@
             <!-- Date of Birth -->
             <div class="mb-6">
                 <label for="dob" class="block text-gray-700 font-medium mb-2">Date of Birth</label>
-                <input type="text" name="dob" id="dob"
+                <input type="text" name="dob" id="dob" {{--
+                    value="{{ old('dob', $facilitator->dob ? \Carbon\Carbon::parse($facilitator->dob)->format('Y-m-d') : '') }}"
+                    --}}
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required>
             </div>
@@ -123,19 +125,25 @@
                 field: document.getElementById('dob'),
                 format: 'YYYY-MM-DD',yearRange: [minBirthYear, maxBirthYear],
                 yearRange: [minBirthYear, maxBirthYear],
-            maxDate: new Date(maxBirthYear, 11, 31),
-            minDate: new Date(minBirthYear, 0, 1),
-            defaultDate: new Date(maxBirthYear, 0, 1),
-            showYearDropdown: true,
-            showMonthDropdown: true,
-            // Allow the field to be cleared
-            setDefaultDate: false,
-            toString(date, format) {
-                return date ? date.toISOString().split('T')[0] : '';
-            },
-            parse(dateString, format) {
-                return dateString ? new Date(dateString) : null;
-            }
+                maxDate: new Date(maxBirthYear, 11, 31),
+                minDate: new Date(minBirthYear, 0, 1),
+                defaultDate: new Date(maxBirthYear, 0, 1),
+                showYearDropdown: true,
+                showMonthDropdown: true,
+                // Allow the field to be cleared
+                setDefaultDate: false,
+                toString(date, format) {
+                    date.setHours(12, 0, 0, 0);
+                    return date ? date.toISOString().split('T')[0] : '';
+                },
+                parse(dateString, format) {
+                    const parts = dateString.split('-');
+                    return dateString ? new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0) : null;
+                },
+                onSelect: function(date) {
+                    date.setHours(12, 0, 0, 0);
+                    this._field.value = date.toISOString().split('T')[0];
+                },
             });
         });
     </script>
