@@ -9,8 +9,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "blade-ui-kit/blade-ui-kit": "^0.6.2",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "livewire/livewire": "^3.5",
         "rinvex/countries": "^9.0"
     },
     "require-dev": {

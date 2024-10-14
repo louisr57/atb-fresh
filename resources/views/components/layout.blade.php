@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS via CDN -->
+    {{-- <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS via CDN --> --}}
+    <script src="//unpkg.com/alpinejs" defer></script> <!-- Alpine.js via CDN as suggested by ChatGPT -->
+
     <style>
         /* Custom styling if needed */
         .highlight {
@@ -13,9 +15,12 @@
             /* Tailwind yellow-100 color */
         }
     </style>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
-<body class="h-full">
+<body class="h-full antialiased">
     <div class="min-h-full bg-slate-200">
         <nav class="bg-gray-800">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
