@@ -63,6 +63,29 @@ class CourseController extends Controller
             ->with('success', 'Course created successfully!');
     }
 
+    public function edit($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('courses.edit', compact('course'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $course = Course::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'course_code' => 'required|string|max:255|unique:courses,course_code,' . $id,
+            'course_title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'prerequisites' => 'required|string',
+            'duration' => 'required|numeric|min:1',
+        ]);
+
+        $course->update($validatedData);
+
+        return redirect()->route('courses.show', $course->id)->with('success', 'Course updated successfully.');
+    }
+
     public function destroy($id)
     {
         // Find the course by ID

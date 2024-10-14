@@ -7,7 +7,7 @@
 
     <div class="container overflow-x-auto mx-auto p-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-semibold mb-6">Courses List</h1>
+            <h1 class="text-2xl font-semibold mb-0">Courses List</h1>
             <a href="{{ route('courses.create') }}"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Create New Course
