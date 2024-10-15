@@ -59,14 +59,25 @@
                     </div>
                 </div>
 
-                <!-- Address -->
-                <div class="mb-4">
-                    <label for="address" class="block text-gray-700 font-bold mb-2">Address</label>
-                    <input type="text" id="address" name="address"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                        value="{{ old('address') }}" required>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="mb-6">
+                        <label for="dob" class="block text-gray-700 font-bold mb-2">Date of Birth</label>
+                        <input type="text" name="dob" id="dob" {{--
+                            value="{{ old('dob', $facilitator->dob ? \Carbon\Carbon::parse($facilitator->dob)->format('Y-m-d') : '') }}"
+                            --}}
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 focus:outline-none focus:shadow-outline"
+                            required>
+                    </div>
 
+                    <!-- Address -->
+                    <div class="mb-4">
+                        <label for="address" class="block text-gray-700 font-bold mb-2">Address</label>
+                        <input type="text" id="address" name="address"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                            value="{{ old('address') }}" required>
+                    </div>
+
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- City -->
                     <div class="mb-4">
@@ -86,6 +97,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
                     <!-- Country -->
                     <div class="mb-4">
                         <label for="country" class="block text-gray-700 font-bold mb-2">Country</label>
@@ -118,33 +130,42 @@
             </form>
         </div>
     </div>
-    {{-- <script>
-        // Fetch the countries from the API
-        async function fetchCountries() {
-            const response = await fetch('https://restcountries.com/v3.1/all');
-            const countries = await response.json();
 
-            const countrySelect = document.getElementById('country');
-            countrySelect.innerHTML = ''; // Clear existing options
+    <!-- Include Pikaday CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
 
-            // Populate the dropdown with country options
-            countries.forEach(country => {
-                const option = document.createElement('option');
-                option.value = country.cca2; // ISO 3166-1 alpha-2 country code
-                option.textContent = country.name.common; // Country name
-                countrySelect.appendChild(option);
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var currentYear = new Date().getFullYear();
+            var minBirthYear = currentYear - 100; // Assuming a maximum age of 100 years
+            var maxBirthYear = currentYear - 18;  // Assuming a minimum age of 18 years
+
+            var picker = new Pikaday({
+                field: document.getElementById('dob'),
+                format: 'YYYY-MM-DD',yearRange: [minBirthYear, maxBirthYear],
+                yearRange: [minBirthYear, maxBirthYear],
+                maxDate: new Date(maxBirthYear, 11, 31),
+                minDate: new Date(minBirthYear, 0, 1),
+                defaultDate: new Date(maxBirthYear, 0, 1),
+                showYearDropdown: true,
+                showMonthDropdown: true,
+                // Allow the field to be cleared
+                setDefaultDate: false,
+                toString(date, format) {
+                    date.setHours(12, 0, 0, 0);
+                    return date ? date.toISOString().split('T')[0] : '';
+                },
+                parse(dateString, format) {
+                    const parts = dateString.split('-');
+                    return dateString ? new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0) : null;
+                },
+                onSelect: function(date) {
+                    date.setHours(12, 0, 0, 0);
+                    this._field.value = date.toISOString().split('T')[0];
+                },
             });
+        });
+    </script>
 
-            // Add a placeholder option
-            const placeholderOption = document.createElement('option');
-            placeholderOption.value = '';
-            placeholderOption.textContent = 'Select a country';
-            placeholderOption.selected = true;
-            placeholderOption.disabled = true;
-            countrySelect.prepend(placeholderOption);
-        }
-
-        // Call the function when the page loads
-        document.addEventListener('DOMContentLoaded', fetchCountries);
-    </script> --}}
 </x-layout>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Facilitator;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Rinvex\Country\CountryLoader; // If you're using the Laravel package for countries
 
 class FacilitatorController extends Controller
 {
@@ -32,7 +33,10 @@ class FacilitatorController extends Controller
 
     public function create()
     {
-        return view('facilitators.create');
+        // If using the Rinvex package to fetch countries
+        $countries = CountryLoader::countries(); // Fetch all countries
+
+        return view('facilitators.create', compact('countries'));
     }
 
     public function store(Request $request)

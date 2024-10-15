@@ -23,25 +23,25 @@
         @if($facilitators->isEmpty())
         <p>No Facilitators available.</p>
         @else
-        <table class="min-w-full table-auto border-collapse border border-gray-300">
-            <thead class="bg-gray-100">
+        <table class="min-w-full table-auto border-collapse border border-gray-500">
+            <thead class="bg-gray-200">
                 <tr>
-                    <th class="text-left border px-4 py-2">View</th>
-                    <th class="text-left border px-4 py-2">First Name</th>
-                    <th class="text-left border px-4 py-2">Last Name</th>
-                    <th class="text-left border px-4 py-2">Email</th>
+                    <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">View</th>
+                    <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">First Name</th>
+                    <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">Last Name</th>
+                    <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">Email</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white">
                 @foreach($facilitators as $facilitator)
-                <tr class="hover:bg-gray-100 registration-row">
-                    <td class="border px-4 py-2">
+                <tr class="hover:bg-sky-100 registration-row">
+                    <td class="border border-gray-500 px-4 py-2">
                         <a href="{{ route('facilitators.show', $facilitator->id) }}"
                             class="text-blue-600 hover:underline">View</a>
                     </td>
-                    <td class="border px-4 py-2">{{ $facilitator->first_name }}</td>
-                    <td class="border px-4 py-2">{{ $facilitator->last_name }}</td>
-                    <td class="border px-4 py-2">{{ $facilitator->email }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $facilitator->first_name }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $facilitator->last_name }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $facilitator->email }}</td>
                 </tr>
                 @endforeach
             </tbody>
