@@ -82,7 +82,9 @@ class FacilitatorController extends Controller
 
     public function edit(Facilitator $facilitator)
     {
-        return view('facilitators.edit', compact('facilitator'));
+        // If using the Rinvex package to fetch countries
+        $countries = CountryLoader::countries(); // Fetch all countries
+        return view('facilitators.edit', compact('facilitator', 'countries'));
     }
 
     public function update(Request $request, Facilitator $facilitator)
