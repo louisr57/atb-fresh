@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Rinvex\Country\CountryLoader; // If you're using the Laravel package for countries
-
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -33,8 +33,6 @@ class StudentController extends Controller
     {
         // If using the Rinvex package to fetch countries
         $countries = CountryLoader::countries(); // Fetch all countries
-
-        // If using a static list, you can also define the $countries array manually here
 
         return view('students.create', compact('countries'));
     }
@@ -78,5 +76,58 @@ class StudentController extends Controller
         // Redirect to the calculated page, with the newly created student's ID in the query string
         return redirect()->route('students.index', ['page' => $page, 'highlight' => $student->id, 'sort_by' => $sort_by, 'direction' => $direction])
             ->with('success', 'Student created successfully.');
+    }
+
+
+    public function edit(Student $student)
+    {
+        // If using the Rinvex package to fetch countries
+        $countries = CountryLoader::countries(); // Fetch all countries
+
+        return view('students.edit', compact('student', 'countries'));
+    }
+
+    public function update(Request $request, Student $student)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:students,email,' . $student->id,
+            'phone_number' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'post_code' => 'required|string|max:20',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->route('students.edit', $student->id)
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $student->update($validator->validated());
+
+        return redirect()
+            ->route('students.show', $student->id)
+            ->with('success', 'Student updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $student = Student::findOrFail($id);
+
+        // The if will never run because the delete button is disabled in the view
+        if ($student->events->isNotEmpty()) {
+            return redirect()->route('facilitators.show', $student->id)
+                ->with('error', 'Cannot delete facilitator with associated events.');
+        }
+
+        $student->delete();
+
+        return redirect()->route('students.index')
+            ->with('success', 'Student deleted successfully.');
     }
 }

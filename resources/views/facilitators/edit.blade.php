@@ -80,8 +80,14 @@
 
                 <div class="mb-4">
                     <label for="country" class="block text-gray-700 font-bold mb-2">Country</label>
-                    <input type="text" name="country" id="country" value="{{ old('country', $facilitator->country) }}"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <select name="country" id="country"
+                        class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                        value="{{ old('country') }} required">
+                        <option value="">Select a country</option>
+                        @foreach($countries as $country)
+                        <option value="{{ $country['iso_3166_1_alpha2'] }}">{{ $country['name'] }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="mb-4">

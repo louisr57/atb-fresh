@@ -23,11 +23,11 @@ return new class extends Migration
             $table->string('state');
             $table->string('country');
             $table->string('post_code');
-            $table->string('website')->nullable();
+            $table->string('website')->default('N/A')->nullable();
             $table->date('dob')->nullable();
             $table->string('ident')->nullable();
             $table->string('next_of_kin')->nullable();
-            $table->string('allergies')->nullable();
+            $table->string('allergies')->default('N/A')->nullable();
             $table->text('special_needs')->nullable();
             $table->timestamps();
         });
