@@ -65,12 +65,15 @@
                     </div>
                 </div>
 
-                <!-- Submit Button -->
-                <div>
-                    <button type="submit"
-                        class="mt-7 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <!-- Submit and Cancel buttons -->
+                <div class="flex justify-between items-center mt-3">
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
                         Create Course
                     </button>
+                    <a href="{{ route('courses.index') }}"
+                        class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+                        Cancel
+                    </a>
                 </div>
             </form>
         </div>
