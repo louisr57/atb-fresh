@@ -7,9 +7,9 @@
 
     <div class="container overflow-x-auto mx-auto p-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-semibold mb-0">Courses List</h1>
+            <h1 class="text-2xl font-bold mb-0 mt-1">Courses List</h1>
             <a href="{{ route('courses.create') }}"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                class="mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Create New Course
             </a>
         </div>
@@ -62,7 +62,7 @@
             </thead>
             <tbody class="bg-gray-50">
                 @foreach($courses as $course)
-                <tr class="hover:bg-sky-200 registration-row">
+                <tr class="hover:bg-sky-100 registration-row">
                     <!-- Action column with sticky left positioning -->
                     <td class="text-center border border-gray-500 px-4 py-2 sticky left-0 z-10">
                         <a href="{{ route('courses.show', $course->id) }}" class="text-blue-600 hover:underline">
