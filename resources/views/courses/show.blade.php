@@ -6,7 +6,6 @@
 
     <div class="container mx-auto p-4">
 
-
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ $course->course_title }}</h1>
             @if($course->events->isEmpty())
@@ -80,7 +79,7 @@
             </thead>
             <tbody class="bg-gray-50">
                 @foreach($course->events as $event)
-                <tr class="hover:bg-sky-100 border-gray-500 ">
+                <tr class="hover:bg-sky-100 border-gray-500">
                     <td class="border border-gray-500 px-4 py-2">{{ $event->title }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $event->datefrom }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $event->dateto }}</td>
