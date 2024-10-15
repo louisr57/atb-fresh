@@ -7,7 +7,7 @@
 
     <div class="container mx-auto p-4">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-semibold mb-6">Students List</h1>
+            <h1 class="text-2xl font-bold mb-0">Students List</h1>
             <a href="{{ route('students.create') }}"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Create New Student
