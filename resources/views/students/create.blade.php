@@ -106,7 +106,7 @@
                             value="{{ old('country') }} required">
                             <option value="">Select a country</option>
                             @foreach($countries as $country)
-                            <option value="{{ $country['iso_3166_1_alpha2'] }}">{{ $country['name'] }}</option>
+                            <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
                             @endforeach
                         </select>
                     </div>
