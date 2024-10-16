@@ -60,6 +60,7 @@
                     </div>
                 </div>
 
+                <!-- Date of birth -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="mb-6">
                         <label for="dob" class="block text-gray-700 font-bold mb-2">Date of Birth</label>
