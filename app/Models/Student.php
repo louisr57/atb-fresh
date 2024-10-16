@@ -11,6 +11,10 @@ class Student extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'dob' => 'date:Y-m-d',
+    ];
+
     public function registrations()
     {
         return $this->hasMany(Registration::class);

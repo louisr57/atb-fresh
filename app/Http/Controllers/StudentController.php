@@ -25,6 +25,7 @@ class StudentController extends Controller
         // Find the student by ID and load related registrations, events, courses, and facilitators
         $student = Student::with('registrations.event.course', 'registrations.event.facilitator')->findOrFail($id);
 
+        // dd($student->dob);
         return view('students.show', compact('student'));
     }
 
@@ -94,6 +95,7 @@ class StudentController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:students,email,' . $student->id,
             'phone_number' => 'required|string|max:20',
+            'dob' => 'required|date',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
