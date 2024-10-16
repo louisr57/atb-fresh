@@ -72,11 +72,7 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Date of Birth</label>
                     <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
-                        @if($facilitator->dob)
-                        {{ \Carbon\Carbon::parse($facilitator->dob)->format('Y-m-d') }}
-                        @else
-                        N/A
-                        @endif
+                        {{ \Carbon\Carbon::parse($facilitator->dob)->format('Y-m-d') ?? 'N/A' }}
                     </p>
                 </div>
 

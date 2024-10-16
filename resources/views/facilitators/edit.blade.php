@@ -130,8 +130,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var currentYear = new Date().getFullYear();
-            var minBirthYear = currentYear - 100;
-            var maxBirthYear = currentYear - 18;
+            var minBirthYear = currentYear - 100; // Assuming a maximum age of 100 years
+            var maxBirthYear = currentYear - 18; // Assuming a minimum age of 18 years
 
             var picker = new Pikaday({
                 field: document.getElementById('dob'),
@@ -156,7 +156,7 @@
 
                 onSelect: function(date) {
                     // Set the time to noon in local time
-                    // date.setHours(12, 0, 0, 0);
+                    date.setHours(12, 0, 0, 0);
                     this._field.value = date.toISOString().split('T')[0];
                 },
             });

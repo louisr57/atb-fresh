@@ -5,6 +5,14 @@
     </x-slot:heading>
 
     <div class="container mx-auto p-4">
+
+        <!-- Flash Message Section -->
+        @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+            {{ session('success') }}
+        </div>
+        @endif
+
         <!-- Flex container for student name and delete button -->
         <div class="flex justify-between items-center mb-4">
 
@@ -72,11 +80,7 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Date of Birth</label>
                     <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
-                        @if($student->dob)
-                        {{ \Carbon\Carbon::parse($student->dob)->format('Y-m-d') }}
-                        @else
-                        N/A
-                        @endif
+                        {{ \Carbon\Carbon::parse($student->dob)->format('Y-m-d') ?? 'N/A' }}
                     </p>
                 </div>
 

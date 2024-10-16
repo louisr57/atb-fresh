@@ -6,6 +6,14 @@
     </x-slot:heading>
 
     <div class="container mx-auto p-4">
+
+        <!-- Flash Message Section -->
+        @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+            {{ session('success') }}
+        </div>
+        @endif
+
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold mb-0">Students List</h1>
             <a href="{{ route('students.create') }}"
