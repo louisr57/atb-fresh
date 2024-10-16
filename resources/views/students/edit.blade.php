@@ -103,10 +103,12 @@
                         <label for="country" class="block text-gray-700 font-bold mb-2">Country</label>
                         <select name="country" id="country"
                             class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
-                            value="{{ old('country', $student->country) }} required">
-                            <option value="">{{ old('country', $student->country) }}</option>
+                            required>
                             @foreach($countries as $country)
-                            <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
+                                <option value="{{ $country['name'] }}" 
+                                    {{ old('country', $student->country) == $country['name'] ? 'selected' : '' }}>
+                                    {{ $country['name'] }}
+                                </option>
                             @endforeach
                         </select>
                     </div>

@@ -3,10 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\facilitatorController;
+use App\Http\Controllers\FacilitatorController;
 use App\Models\Job;
 
 
