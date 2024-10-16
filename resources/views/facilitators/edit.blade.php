@@ -57,7 +57,8 @@
                     <label for="dob" class="block text-gray-700 font-bold mb-2">Date of Birth</label>
                     <input type="text" name="dob" id="dob"
                         value="{{ old('dob', \Carbon\Carbon::parse($facilitator->dob)->format('Y-m-d')) }}"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
                 </div>
 
                 <div class="mb-4">
@@ -81,11 +82,13 @@
                 <div class="mb-4">
                     <label for="country" class="block text-gray-700 font-bold mb-2">Country</label>
                     <select name="country" id="country"
-                        class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                        value="{{ old('country') }} required">
-                        <option value="">Select a country</option>
+                        class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
+                        required>
                         @foreach($countries as $country)
-                        <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
+                        <option value="{{ $country['name'] }}" {{ old('country', $facilitator->country) ==
+                            $country['name'] ? 'selected' : '' }}>
+                            {{ $country['name'] }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
