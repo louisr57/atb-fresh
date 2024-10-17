@@ -106,7 +106,7 @@ class StudentController extends Controller
             'next_of_kin' => 'nullable|string|max:255',
             'allergies' => 'nullable|string|max:255',
             'special_needs' => 'nullable|string|max:1020',
-        ]);
+        ]); // Very important to include all fields here that we want to validate and send to the view and database.
 
         if ($validator->fails()) {
             return redirect()
