@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Course;
+use App\Models\Facilitator;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -48,5 +50,35 @@ class EventController extends Controller
 
         // Return the view with the event data
         return view('events.show', compact('event'));
+    }
+
+    public function create()
+    {
+        $courses = Course::all();
+        $facilitators = Facilitator::all();
+
+        return view('events.create', compact('courses', 'facilitators'));
+    }
+
+    // Store the event data
+    public function store(Request $request)
+    {
+        // Validate the form input
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'datefrom' => 'required|date',
+            'dateto' => 'required|date|after_or_equal:datefrom',
+            'course_id' => 'required|exists:courses,id',
+            'facilitator_id' => 'required|exists:facilitators,id',
+            'venue' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'country' => 'required|string|max:255',
+        ]);
+
+        // Create and store the new event
+        Event::create($validatedData);
+
+        return redirect()->route('events.create')->with('success', 'Event created successfully.');
     }
 }
