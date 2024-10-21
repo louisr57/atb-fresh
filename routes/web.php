@@ -44,7 +44,11 @@ Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('st
 
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+Route::post('/events', [EventController::class, 'store'])->name('events.store');
+
+
 Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
 Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->name('registrations.show');
 
