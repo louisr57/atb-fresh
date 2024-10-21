@@ -6,7 +6,13 @@
     </x-slot:heading>
 
     <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-6">Events (Calendar) List</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold mb-0 mt-1">Events (Calendar) List</h1>
+            <a href="{{ route('events.create') }}"
+                class="mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Create New Event
+            </a>
+        </div>
 
         <!-- Wrapping the table inside a div to make it horizontally scrollable -->
         <div class="relative overflow-x-auto">
