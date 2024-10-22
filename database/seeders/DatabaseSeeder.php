@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Student;
 use App\Models\Event;
+use App\Models\Venue;
 use App\Models\Registration;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -245,6 +246,9 @@ class DatabaseSeeder extends Seeder
                 'dob' => $faker->dateTimeBetween($startDate = '-70 years', $endDate = '-20 years', $timezone = null),
             ]
         ]);
+
+        // Create 100 venues
+        Venue::factory(100)->create();
 
         // Registration::factory(500)->create();
         Event::factory(500)->create();
