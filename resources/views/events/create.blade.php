@@ -21,14 +21,23 @@
             </div>
 
             <div class="mb-4">
-                <label for="datefrom" class="block text-gray-700">Start Date:</label>
-                <input type="date" id="datefrom" name="datefrom" class="w-full p-2 border rounded" required>
+                <label for="datefrom" class="block text-gray-700 font-medium mb-2">Start Date</label>
+                <input type="text" name="datefrom" id="datepicker"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    required>
             </div>
 
             <div class="mb-4">
-                <label for="dateto" class="block text-gray-700">End Date:</label>
-                <input type="date" id="dateto" name="dateto" class="w-full p-2 border rounded" required>
+                <label for="dateto" class="block text-gray-700 font-medium mb-2">End Date</label>
+                <input type="text" name="dateto" id="datepicker"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    required>
             </div>
+
+            {{-- <div class="mb-4">
+                <label for="datefrom" class="block text-gray-700">Start Date:</label>
+                <input type="date" id="datefrom" name="datefrom" class="w-full p-2 border rounded" required>
+            </div> --}}
 
             <!-- Course Selection Modal -->
             <div class="mb-4">
@@ -53,7 +62,7 @@
     </div>
 
     <!-- Course Modal -->
-    <div id="courseModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 hidden z-50">
+    <div id="courseModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
         <div class="bg-white rounded-lg p-6 max-w-lg w-full">
             <h2 class="text-xl mb-4">Select a Course</h2>
             <ul>
@@ -68,8 +77,7 @@
     </div>
 
     <!-- Facilitator Modal -->
-    <div id="facilitatorModal"
-        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 hidden z-50">
+    <div id="facilitatorModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
         <div class="bg-white rounded-lg p-6 max-w-lg w-full">
             <h2 class="text-xl mb-4">Select a Facilitator</h2>
             <ul>
@@ -117,6 +125,39 @@
         function closeFacilitatorModal() {
             document.getElementById('facilitatorModal').classList.add('hidden');
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var currentYear = new Date().getFullYear();
+        var minBirthYear = currentYear - 100; // Assuming a maximum age of 100 years
+        var maxBirthYear = currentYear - 18;  // Assuming a minimum age of 18 years
+
+        var picker = new Pikaday({
+            field: document.getElementById('datepicker'),
+            format: 'YYYY-MM-DD',yearRange: [minBirthYear, maxBirthYear],
+            yearRange: [minBirthYear, maxBirthYear],
+            maxDate: new Date(maxBirthYear, 11, 31),
+            minDate: new Date(minBirthYear, 0, 1),
+            defaultDate: new Date(maxBirthYear, 0, 1),
+            showYearDropdown: true,
+            showMonthDropdown: true,
+            // Allow the field to be cleared
+            setDefaultDate: false,
+            toString(date, format) {
+                date.setHours(12, 0, 0, 0);
+                return date ? date.toISOString().split('T')[0] : '';
+            },
+            parse(dateString, format) {
+                const parts = dateString.split('-');
+                return dateString ? new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0) : null;
+            },
+            onSelect: function(date) {
+                date.setHours(12, 0, 0, 0);
+                this._field.value = date.toISOString().split('T')[0];
+            },
+        });
+    });
     </script>
 
 </x-layout>

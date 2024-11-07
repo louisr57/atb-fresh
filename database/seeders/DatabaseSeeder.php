@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Student;
 use App\Models\Event;
+use App\Models\Venue;
 use App\Models\Registration;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -246,11 +247,19 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        // Registration::factory(500)->create();
+        // Create 500 events first
         Event::factory(500)->create();
+
+        // Now create 100 venues
+        Venue::factory(100)->create();
 
         // Fetch all events
         $events = Event::all();
+
+        // Create 300 registrations one by one
+        for ($i = 0; $i < 300; $i++) {
+            Registration::factory()->create();
+        }
 
         // Update participant count for each Event (event)
         foreach ($events as $event) {
@@ -260,19 +269,5 @@ class DatabaseSeeder extends Seeder
             // Update the participant_count column in the events table
             $event->update(['participant_count' => $participantCount]);
         }
-
-        // Create 300 registrations one by one
-        for ($i = 0; $i < 300; $i++) {
-            Registration::factory()->create();
-        }
-
-        // echo "Iteration: $i \n";
-        // echo "Press the spacebar (or any key) to continue...\n";
-
-        // // Wait for any keyboard input (requires hitting enter afterward in most terminals)
-        // fgets(STDIN);
-
-        // Proceed with the next iteration
-
     }
 }
