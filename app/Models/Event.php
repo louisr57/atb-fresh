@@ -22,6 +22,11 @@ class Event extends Model
         return $this->belongsTo(Facilitator::class);
     }
 
+    public function venue()
+    {
+        return $this->belongsTo(Venue::class);
+    }
+
     public function registrations()
     {
         return $this->hasMany(Registration::class, 'event_id');
