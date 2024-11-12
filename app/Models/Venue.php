@@ -9,12 +9,20 @@ class Venue extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'venue_name',
+        'address',
+        'city',
+        'state',
+        'country',
+        'postcode',
+        'location_geocode',
+        'remarks'
+    ];
 
     // Define relationship with the Event model
-
     public function events()
     {
-        return $this->hasMany(Event::class, 'event_id');
+        return $this->hasMany(Event::class);
     }
 }
