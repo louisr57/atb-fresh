@@ -3,18 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Event;
+use App\Models\Venue;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
- */
 class VenueFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Venue::class;
+
     public function definition(): array
     {
         return [
@@ -25,7 +19,6 @@ class VenueFactory extends Factory
             'country' => $this->faker->country(),
             'postcode' => $this->faker->postcode(),
             'location_geocode' => $this->faker->latitude() . ', ' . $this->faker->longitude(),
-            'event_id' => Event::inRandomOrder()->first()->id,
             'remarks' => $this->faker->optional()->sentence(),
         ];
     }
