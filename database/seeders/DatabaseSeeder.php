@@ -247,11 +247,11 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        // Create 500 events first
-        Event::factory(500)->create();
-
-        // Now create 100 venues
+        // Create venues first since events depend on them
         Venue::factory(100)->create();
+
+        // Then create events that reference the venues
+        Event::factory(500)->create();
 
         // Fetch all events
         $events = Event::all();
