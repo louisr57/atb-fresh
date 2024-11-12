@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Event;
 use App\Models\Course;
 use App\Models\Facilitator;
+use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
@@ -33,12 +34,7 @@ class EventFactory extends Factory
             'dateto' => $dateto->format('Y-m-d'),
             'timefrom' => $this->faker->time(),
             'timeto' => $this->faker->time(),
-            'venue' => $this->faker->address(),
-            'city' => $this->faker->city(),
-            'state' => $this->faker->state(),
-            'country' => $this->faker->country(),
-            'postcode' => $this->faker->postcode(),
-            'location_geocode' => $this->faker->latitude() . ', ' . $this->faker->longitude(),
+            'venue_id' => Venue::inRandomOrder()->first()->id,
             'course_id' => $course->id,
             'facilitator_id' => Facilitator::inRandomOrder()->first()->id,
             'remarks' => $this->faker->optional()->sentence(),
