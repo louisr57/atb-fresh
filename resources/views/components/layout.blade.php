@@ -44,6 +44,8 @@
                                     Course Registrations</x-nav-link>
                                 <x-nav-link href="/events" :active="request()->is('events')">ATB
                                     Calendar Events</x-nav-link>
+                                <x-nav-link href="/venues" :active="request()->is('venues')">ATB Venues
+                                </x-nav-link>
                                 <x-nav-link href="/courses" :active="request()->is('courses')">Courses
                                 </x-nav-link>
                                 <x-nav-link href="/facilitators" :active="request()->is('facilitators')">Facilitators
@@ -152,56 +154,56 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Only run this code if there are registration rows on the page
             const rows = document.querySelectorAll('.registration-row');
-            console.log(rows);
-            let currentIndex = null; // Keeps track of the currently highlighted row
+            if (rows.length > 0) {
+                console.log(rows);
+                let currentIndex = null; // Keeps track of the currently highlighted row
 
-            // Function to highlight the selected row
-            function highlightRow(index) {
-                if (currentIndex !== null) {
-                    rows[currentIndex].classList.remove('highlight'); // Remove highlight from the previous row
+                // Function to highlight the selected row
+                function highlightRow(index) {
+                    if (currentIndex !== null) {
+                        rows[currentIndex].classList.remove('highlight'); // Remove highlight from the previous row
+                    }
+                    currentIndex = index;
+                    rows[currentIndex].classList.add('highlight'); // Add highlight to the new row
                 }
-                currentIndex = index;
-                rows[currentIndex].classList.add('highlight'); // Add highlight to the new row
-            }
 
-            // Add click event listener for each row
-            rows.forEach((row, index) => {
-                row.addEventListener('click', function () {
-                    console.log('Row clicked:', index);
-                    highlightRow(index);
-                });
-            });
+                // Add click event listener for each row
+                rows.forEach((row, index) => {
+                    row.addEventListener('click', function () {
+                        console.log('Row clicked:', index);
+                        highlightRow(index);
+                    });
 
-             // Add mouseover event listener for hover
-        row.addEventListener('mouseover', function () {
-            row.classList.add('highlight'); // Highlight row on hover
-        });
+                    // Add mouseover event listener for hover
+                    row.addEventListener('mouseover', function () {
+                        row.classList.add('highlight'); // Highlight row on hover
+                    });
 
-        // Add mouseout event listener to remove hover effect
-        row.addEventListener('mouseout', function () {
-            if (index !== currentIndex) {
-                row.classList.remove('highlight'); // Remove highlight when the mouse leaves the row, unless it's the currently selected row
-            }
-        });
-
-            // Handle arrow key navigation
-            document.addEventListener('keydown', function (event) {
-                console.log('Key pressed:', event.key);
-                if (currentIndex !== null) {
-                    if (event.key === 'ArrowDown') {
-                        console.log('Arrow Down pressed');
-                        if (currentIndex < rows.length - 1) {
-                            highlightRow(currentIndex + 1);
+                    // Add mouseout event listener to remove hover effect
+                    row.addEventListener('mouseout', function () {
+                        if (index !== currentIndex) {
+                            row.classList.remove('highlight'); // Remove highlight when the mouse leaves the row, unless it's the currently selected row
                         }
-                    } else if (event.key === 'ArrowUp') {
-                        console.log('Arrow Up pressed');
-                        if (currentIndex > 0) {
-                            highlightRow(currentIndex - 1);
+                    });
+                });
+
+                // Handle arrow key navigation
+                document.addEventListener('keydown', function (event) {
+                    if (currentIndex !== null) {
+                        if (event.key === 'ArrowDown') {
+                            if (currentIndex < rows.length - 1) {
+                                highlightRow(currentIndex + 1);
+                            }
+                        } else if (event.key === 'ArrowUp') {
+                            if (currentIndex > 0) {
+                                highlightRow(currentIndex - 1);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         });
     </script>
 
