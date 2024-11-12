@@ -6,6 +6,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FacilitatorController;
+use App\Http\Controllers\VenueController;
 use App\Models\Job;
 
 
@@ -47,6 +48,15 @@ Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
+
+
+Route::get('/venues', [VenueController::class, 'index'])->name('venues.index');
+Route::get('/venues/create', [VenueController::class, 'create'])->name('venues.create');
+Route::get('/venues/{venue}/edit', [VenueController::class, 'edit'])->name('venues.edit');
+Route::get('/venues/{id}', [VenueController::class, 'show'])->name('venues.show');
+Route::post('/venues', [VenueController::class, 'store'])->name('venues.store');
+Route::put('/venues/{venue}', [VenueController::class, 'update'])->name('venues.update');
+Route::delete('/venues/{id}', [VenueController::class, 'destroy'])->name('venues.destroy');
 
 
 Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
