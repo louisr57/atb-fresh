@@ -37,6 +37,7 @@
         </div>
     </div>
 
+    <livewire:hello-world />
 
     {{-- {{ phpinfo(); }} --}}
 
