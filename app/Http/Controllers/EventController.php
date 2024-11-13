@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Course;
 use App\Models\Facilitator;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -56,29 +57,56 @@ class EventController extends Controller
     {
         $courses = Course::all();
         $facilitators = Facilitator::all();
+        $venues = Venue::all();
 
-        return view('events.create', compact('courses', 'facilitators'));
+        return view('events.create', compact('courses', 'facilitators', 'venues'));
     }
 
     // Store the event data
     public function store(Request $request)
     {
-        // Validate the form input
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'datefrom' => 'required|date',
-            'dateto' => 'required|date|after_or_equal:datefrom',
             'course_id' => 'required|exists:courses,id',
             'facilitator_id' => 'required|exists:facilitators,id',
-            'venue' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'country' => 'required|string|max:255',
+            'venue_id' => 'required|exists:venues,id',
+            'datefrom' => 'required|date',
+            'dateto' => 'required|date|after_or_equal:datefrom',
+            'timefrom' => 'required',
+            'timeto' => 'required',
+            'remarks' => 'nullable|string'
         ]);
 
-        // Create and store the new event
-        Event::create($validatedData);
+        $event = Event::create($validatedData);
 
-        return redirect()->route('events.create')->with('success', 'Event created successfully.');
+        return redirect()->route('events.show', $event->id)
+            ->with('success', 'Event created successfully.');
+    }
+
+    public function edit(Event $event)
+    {
+        $courses = Course::all();
+        $facilitators = Facilitator::all();
+        $venues = Venue::all();
+        return view('events.edit', compact('event', 'courses', 'facilitators', 'venues'));
+    }
+
+    public function update(Request $request, Event $event)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'course_id' => 'required|exists:courses,id',
+            'facilitator_id' => 'required|exists:facilitators,id',
+            'venue_id' => 'required|exists:venues,id',
+            'datefrom' => 'required|date',
+            'dateto' => 'required|date|after_or_equal:datefrom',
+            'timefrom' => 'required',
+            'timeto' => 'required',
+            'remarks' => 'nullable|string'
+        ]);
+
+        $event->update($validatedData);
+        return redirect()->route('events.show', $event->id)
+            ->with('success', 'Event updated successfully.');
     }
 }

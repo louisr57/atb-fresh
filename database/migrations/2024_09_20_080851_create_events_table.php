@@ -17,12 +17,7 @@ return new class extends Migration {
             $table->date('dateto')->nullable();
             $table->time('timefrom');
             $table->time('timeto');
-            $table->string('venue');
-            $table->string('city');
-            $table->string('state');
-            $table->string('country');
-            $table->string('postcode');
-            $table->string('location_geocode')->nullable();
+            $table->unsignedBigInteger('venue_id');
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('facilitator_id');
             $table->text('remarks')->nullable();
@@ -30,6 +25,7 @@ return new class extends Migration {
             $table->timestamps();
 
             // Add foreign key constraints
+            $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreign('facilitator_id')->references('id')->on('facilitators')->onDelete('cascade');
         });

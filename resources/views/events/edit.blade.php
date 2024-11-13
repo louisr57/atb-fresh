@@ -1,10 +1,10 @@
 <x-layout>
     <x-slot:heading>
-        Create New Event
+        Edit Event
     </x-slot:heading>
 
     <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-6">Create New Event</h1>
+        <h1 class="text-2xl font-bold mb-6">Edit Event</h1>
 
         @if ($errors->any())
         <div class="bg-red-100 text-red-800 p-4 mb-4 rounded">
@@ -17,30 +17,29 @@
         @endif
 
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form action="{{ route('events.store') }}" method="POST">
+            <form action="{{ route('events.update', $event->id) }}" method="POST">
                 @csrf
+                @method('PUT')
 
                 <!-- First row - Course, Facilitator, Venue selections -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Course Selection -->
-                    <div class="mb-4" x-data="{ open: false, selectedId: '', selectedText: '', eventTitle: '' }">
+                    <div class="mb-4"
+                        x-data="{ open: false, selectedId: '{{ $event->course_id }}', selectedText: '{{ $event->course->course_title }}', eventTitle: '{{ $event->title }}' }">
                         <label for="course_id" class="block text-gray-700 font-bold mb-2">Course Title</label>
                         <div class="relative">
-                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true" class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
-                                      @error('course_id') border-red-500 @enderror" placeholder="Select Course"
+                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                                 readonly>
                             <input type="hidden" name="course_id" :value="selectedId">
                             <input type="hidden" name="title" :value="eventTitle">
-                            @error('course_id')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                            @enderror
                             <div x-show="open" @click.away="open = false"
                                 class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
                                 @foreach($courses as $course)
                                 <div class="cursor-pointer p-2 hover:bg-gray-100" @click="selectedId = '{{ $course->id }}';
-                                           selectedText = '{{ $course->course_title }}';
-                                           eventTitle = '{{ $course->course_title }}';
-                                           open = false">
+                                            selectedText = '{{ $course->course_title }}';
+                                            eventTitle = '{{ $course->course_title }}';
+                                            open = false">
                                     {{ $course->course_title }}
                                 </div>
                                 @endforeach
@@ -49,22 +48,20 @@
                     </div>
 
                     <!-- Facilitator Selection -->
-                    <div class="mb-4" x-data="{ open: false, selectedId: '', selectedText: '' }">
+                    <div class="mb-4"
+                        x-data="{ open: false, selectedId: '{{ $event->facilitator_id }}', selectedText: '{{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}' }">
                         <label for="facilitator_id" class="block text-gray-700 font-bold mb-2">Facilitator</label>
                         <div class="relative">
-                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true" class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
-                                      @error('facilitator_id') border-red-500 @enderror"
-                                placeholder="Select Facilitator" readonly>
+                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                                readonly>
                             <input type="hidden" name="facilitator_id" :value="selectedId">
-                            @error('facilitator_id')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                            @enderror
                             <div x-show="open" @click.away="open = false"
                                 class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
                                 @foreach($facilitators as $facilitator)
                                 <div class="cursor-pointer p-2 hover:bg-gray-100" @click="selectedId = '{{ $facilitator->id }}';
-                                           selectedText = '{{ $facilitator->first_name }} {{ $facilitator->last_name }}';
-                                           open = false">
+                                            selectedText = '{{ $facilitator->first_name }} {{ $facilitator->last_name }}';
+                                            open = false">
                                     {{ $facilitator->first_name }} {{ $facilitator->last_name }}
                                 </div>
                                 @endforeach
@@ -73,21 +70,20 @@
                     </div>
 
                     <!-- Venue Selection -->
-                    <div class="mb-4" x-data="{ open: false, selectedId: '', selectedText: '' }">
+                    <div class="mb-4"
+                        x-data="{ open: false, selectedId: '{{ $event->venue_id }}', selectedText: '{{ $event->venue->venue_name }}' }">
                         <label for="venue_id" class="block text-gray-700 font-bold mb-2">Venue</label>
                         <div class="relative">
-                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true" class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
-                                      @error('venue_id') border-red-500 @enderror" placeholder="Select Venue" readonly>
+                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                                readonly>
                             <input type="hidden" name="venue_id" :value="selectedId">
-                            @error('venue_id')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                            @enderror
                             <div x-show="open" @click.away="open = false"
                                 class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
                                 @foreach($venues as $venue)
                                 <div class="cursor-pointer p-2 hover:bg-gray-100" @click="selectedId = '{{ $venue->id }}';
-                                           selectedText = '{{ $venue->venue_name }}';
-                                           open = false">
+                                            selectedText = '{{ $venue->venue_name }}';
+                                            open = false">
                                     {{ $venue->venue_name }}
                                 </div>
                                 @endforeach
@@ -101,7 +97,7 @@
                     <!-- Date From -->
                     <div class="mb-4">
                         <label for="datefrom" class="block text-gray-700 font-bold mb-2">Date From</label>
-                        <input type="text" id="datefrom" name="datefrom"
+                        <input type="text" id="datefrom" name="datefrom" value="{{ $event->datefrom }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                             required>
                     </div>
@@ -109,7 +105,7 @@
                     <!-- Date To -->
                     <div class="mb-4">
                         <label for="dateto" class="block text-gray-700 font-bold mb-2">Date To</label>
-                        <input type="text" id="dateto" name="dateto"
+                        <input type="text" id="dateto" name="dateto" value="{{ $event->dateto }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                             required>
                     </div>
@@ -118,7 +114,7 @@
                 <!-- Third row - Time fields -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Time From -->
-                    <div class="mb-4" x-data="{ open: false, selectedTime: '' }">
+                    <div class="mb-4" x-data="{ open: false, selectedTime: '{{ $event->timefrom }}' }">
                         <label for="timefrom" class="block text-gray-700 font-bold mb-2">Time From</label>
                         <div class="relative">
                             <input type="text" x-model="selectedTime" @click="open = true"
@@ -138,7 +134,7 @@
                 </div>
 
                 <!-- Time To -->
-                <div class="mb-4" x-data="{ open: false, selectedTime: '' }">
+                <div class="mb-4" x-data="{ open: false, selectedTime: '{{ $event->timeto }}' }">
                     <label for="timeto" class="block text-gray-700 font-bold mb-2">Time To</label>
                     <div class="relative">
                         <input type="text" x-model="selectedTime" @click="open = true"
@@ -158,19 +154,20 @@
         </div>
     </div>
 
-    <!-- Remarks - Full width -->
+    <!-- Remarks -->
     <div class="mb-4">
         <label for="remarks" class="block text-gray-700 font-bold mb-2">Remarks</label>
         <textarea id="remarks" name="remarks"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 h-32">{{ old('remarks') }}</textarea>
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 h-32">{{ $event->remarks }}</textarea>
     </div>
 
     <!-- Submit and Cancel buttons -->
     <div class="flex justify-between items-center mt-6">
         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-            Create Event
+            Update Event
         </button>
-        <a href="{{ route('events.index') }}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+        <a href="{{ route('events.show', $event->id) }}"
+            class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
             Cancel
         </a>
     </div>

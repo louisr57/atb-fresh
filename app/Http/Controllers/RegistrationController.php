@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Student;
 use App\Models\Registration;
 use Illuminate\Http\Request;
 
@@ -76,6 +78,26 @@ class RegistrationController extends Controller
         $registration->load('student'); // Eager load student relationship
 
         return view('registrations.show', compact('registration', 'student'));
+    }
+
+    public function create(Event $event)
+    {
+        $students = Student::orderBy('first_name')->get();
+        return view('registrations.create', compact('event', 'students'));
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'event_id' => 'required|exists:events,id',
+            'student_id' => 'required|exists:students,id',
+            'end_status' => 'required|string'
+        ]);
+
+        Registration::create($validatedData);
+
+        return redirect()->route('events.show', $request->event_id)
+            ->with('success', 'Participant added successfully');
     }
 }
 
