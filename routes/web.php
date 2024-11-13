@@ -10,6 +10,7 @@ use App\Http\Controllers\FacilitatorController;
 use App\Http\Controllers\VenueController;
 use App\Models\Job;
 
+
 // Public routes
 Route::get('/contact', function () {
     return view('contact');
