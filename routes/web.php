@@ -33,13 +33,15 @@ use App\Models\Job;
 require __DIR__ . '/auth.php';
 
 
-// Home route (the only unprotected route in the main menu)
-Route::get('/', function () {
-    return view('home', ['greeting' => 'It\'s another really beautiful day!']);
-});
+
 
 // Protected routes (require authentication)
 Route::middleware(['auth'])->group(function () {
+
+    // Home route (protected)
+    Route::get('/', function () {
+        return view('home', ['greeting' => 'It\'s another really beautiful day!']);
+    });
 
     // Dashboard and Profile routes
     Route::get('/dashboard', function () {

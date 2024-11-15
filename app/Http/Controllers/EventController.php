@@ -42,14 +42,15 @@ class EventController extends Controller
 
     public function show($id)
     {
-        // Find the event by its ID, and load related registrations and student details
-        $event = Event::with(['course', 'facilitator', 'registrations' => function ($query) {
-            $query->join('students', 'students.id', '=', 'registrations.student_id')
-                ->orderBy('students.last_name');
-        }])
+        $event = Event::with(['course', 'facilitator'])
+            ->with(['registrations' => function ($query) {
+                $query->select('registrations.*')
+                    ->join('students', 'students.id', '=', 'registrations.student_id')
+                    ->orderBy('students.last_name')
+                    ->orderBy('registrations.id');
+            }])
             ->findOrFail($id);
 
-        // Return the view with the event data
         return view('events.show', compact('event'));
     }
 
