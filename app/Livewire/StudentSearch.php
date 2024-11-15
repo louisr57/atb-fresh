@@ -23,7 +23,7 @@ class StudentSearch extends Component
         $student = Student::find($studentId);
         $this->selectedStudentId = $studentId;
         $this->selectedStudentName = $student->first_name . ' ' . $student->last_name;
-        $this->search = $this->selectedStudentName;
+        $this->search = $student->first_name . ' ' . $student->last_name;
     }
 
     public function addParticipant()
@@ -41,7 +41,7 @@ class StudentSearch extends Component
     public function render()
     {
         $students = [];
-        if (strlen($this->search) >= 1 && !$this->selectedStudentId) {
+        if (strlen($this->search) >= 2 && !$this->selectedStudentId) {
             $students = Student::where('first_name', 'like', "%{$this->search}%")
                 ->orWhere('last_name', 'like', "%{$this->search}%")
                 ->orderBy('first_name')
