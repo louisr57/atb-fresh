@@ -11,33 +11,35 @@ use App\Http\Controllers\VenueController;
 use App\Models\Job;
 
 
-// Public routes
-Route::get('/contact', function () {
-    return view('contact');
-});
+// // Public routes
+// Route::get('/contact', function () {
+//     return view('contact');
+// });
 
-Route::get('/jobs', function () {
-    return view('jobs', [
-        'jobs' => Job::all()
-    ]);
-});
+// Route::get('/jobs', function () {
+//     return view('jobs', [
+//         'jobs' => Job::all()
+//     ]);
+// });
 
-Route::get('/jobs/{id}', function ($id) {
-    $job = Job::find($id);
-    return view('job', [
-        'job' => $job
-    ]);
-});
+// Route::get('/jobs/{id}', function ($id) {
+//     $job = Job::find($id);
+//     return view('job', [
+//         'job' => $job
+//     ]);
+// });
 
 // Breeze Authentication Routes
 require __DIR__ . '/auth.php';
 
+
+// Home route (the only unprotected route in the main menu)
+Route::get('/', function () {
+    return view('home', ['greeting' => 'It\'s another really beautiful day!']);
+});
+
 // Protected routes (require authentication)
 Route::middleware(['auth'])->group(function () {
-    // Home route (protected)
-    Route::get('/', function () {
-        return view('home', ['greeting' => 'It\'s another really beautiful day!']);
-    });
 
     // Dashboard and Profile routes
     Route::get('/dashboard', function () {
