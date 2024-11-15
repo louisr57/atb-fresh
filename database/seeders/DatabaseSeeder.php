@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $faker = Faker::create();
 
         // Creating fewer students will give you a better chance of having students who have completed all courses
-        Student::factory(15)->create();
+        Student::factory(100)->create();
 
         DB::table('courses')->insert([
             [
@@ -251,7 +251,7 @@ class DatabaseSeeder extends Seeder
         Venue::factory(100)->create();
 
         // Then create events that reference the venues
-        Event::factory(500)->create();
+        Event::factory(300)->create();
 
         // Fetch all events
         $events = Event::all();
