@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-100">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-100" x-data>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-    {{-- <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS via CDN --> --}}
-    <script src="//unpkg.com/alpinejs" defer></script> <!-- Alpine.js via CDN as suggested by ChatGPT -->
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    @livewireStyles
 
     <style>
-        /* Custom styling if needed */
         .highlight {
             background-color: #acd2f1;
-            /* Tailwind yellow-100 color */
         }
     </style>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body class="h-full antialiased">
@@ -50,19 +48,6 @@
                     <div class="hidden md:block">
                         <div class="ml-4 flex items-center md:ml-6">
 
-                            {{-- <button type="button"
-                                class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                <span class="absolute -inset-1.5"></span>
-                                <span class="sr-only">View notifications</span>
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                                </svg>
-                            </button> --}}
-
-                            <!-- Profile dropdown -->
-
                             @auth
                             <div class="hidden md:block">
                                 <div class="ml-4 flex items-center md:ml-6">
@@ -82,7 +67,7 @@
                                         <div x-show="open" @click.away="open = false"
                                             class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
                                             role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
-                                            tabindex="-1" style="display: none;">
+                                            tabindex="-1">
 
                                             @if(!request()->routeIs('dashboard'))
                                             <a href="{{ route('dashboard') }}"
@@ -106,19 +91,6 @@
                                 </div>
                             </div>
                             @endauth
-
-                            {{-- <div class="relative ml-3">
-                                <div>
-                                    <button type="button"
-                                        class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                        id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                                        <span class="absolute -inset-1.5"></span>
-                                        <span class="sr-only">Open user menu</span>
-                                        <img class="h-8 w-8 rounded-full"
-                                            src="https://laracasts.com/images/lary-ai-face.svg" alt="">
-                                    </button>
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
                     <div class="-mr-2 flex md:hidden">
@@ -147,7 +119,6 @@
             <!-- Mobile menu, show/hide based on menu state. -->
             <div class="md:hidden" id="mobile-menu">
                 <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                    <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                     <a href="/"
                         class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Home</a>
                     <a href="/about"
@@ -165,18 +136,6 @@
                             <div class="text-base font-medium leading-none text-white">Lary Robot</div>
                             <div class="text-sm font-medium leading-none text-gray-400">louisr57@gmail.com</div>
                         </div>
-
-                        {{-- <button type="button"
-                            class="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span class="absolute -inset-1.5"></span>
-                            <span class="sr-only">View notifications</span>
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                            </svg>
-                        </button> --}}
-
                     </div>
                 </div>
             </div>
@@ -194,44 +153,38 @@
         </main>
     </div>
 
+    @livewireScripts
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Only run this code if there are registration rows on the page
             const rows = document.querySelectorAll('.registration-row');
             if (rows.length > 0) {
-                console.log(rows);
-                let currentIndex = null; // Keeps track of the currently highlighted row
+                let currentIndex = null;
 
-                // Function to highlight the selected row
                 function highlightRow(index) {
                     if (currentIndex !== null) {
-                        rows[currentIndex].classList.remove('highlight'); // Remove highlight from the previous row
+                        rows[currentIndex].classList.remove('highlight');
                     }
                     currentIndex = index;
-                    rows[currentIndex].classList.add('highlight'); // Add highlight to the new row
+                    rows[currentIndex].classList.add('highlight');
                 }
 
-                // Add click event listener for each row
                 rows.forEach((row, index) => {
                     row.addEventListener('click', function () {
-                        console.log('Row clicked:', index);
                         highlightRow(index);
                     });
 
-                    // Add mouseover event listener for hover
                     row.addEventListener('mouseover', function () {
-                        row.classList.add('highlight'); // Highlight row on hover
+                        row.classList.add('highlight');
                     });
 
-                    // Add mouseout event listener to remove hover effect
                     row.addEventListener('mouseout', function () {
                         if (index !== currentIndex) {
-                            row.classList.remove('highlight'); // Remove highlight when the mouse leaves the row, unless it's the currently selected row
+                            row.classList.remove('highlight');
                         }
                     });
                 });
 
-                // Handle arrow key navigation
                 document.addEventListener('keydown', function (event) {
                     if (currentIndex !== null) {
                         if (event.key === 'ArrowDown') {
@@ -248,7 +201,6 @@
             }
         });
     </script>
-
 </body>
 
 </html>

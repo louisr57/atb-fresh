@@ -1,26 +1,59 @@
-{{-- resources/views/livewire/student-search.blade.php --}}
-<div class="relative" x-data="{ open: false }">
-    <label class="block text-gray-700 font-bold mb-2">Select Student</label>
-    <input type="text" wire:model.live="search" @click="open = true" @click.away="open = false"
-        class="w-full rounded border px-3 py-2" placeholder="Search student name..." value="{{ $selectedStudentName }}">
-
-    @if (strlen($search) >= 2 && !$selectedStudentId)
-    <div x-show="open" class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
-        @forelse ($students as $student)
-        <div class="cursor-pointer p-2 hover:bg-gray-100"
-            wire:click="selectStudent({{ $student->id }}); $nextTick(() => { open = false })">
-            {{ $student->first_name }} {{ $student->last_name }}
-        </div>
-        @empty
-        <div class="p-2 text-gray-500">No students found</div>
-        @endforelse
+<div class="p-6">
+    @if($message)
+    <div
+        class="mb-4 p-4 rounded {{ str_contains($message, 'successfully') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+        {{ $message }}
     </div>
     @endif
 
-    @if($selectedStudentId)
-    <button type="button" wire:click="addParticipant"
-        class="mt-3 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-        Add Participant
-    </button>
-    @endif
+    <label for="search" class="block text-gray-700 font-bold mb-2">Select Student</label>
+    <div class="relative" x-data="{ searchInput: '' }">
+        <input type="text" id="search" wire:model.live="search" x-model.debounce="searchInput"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+            placeholder="Start typing student name..." autocomplete="off">
+
+        @if($showDropdown && $students->isNotEmpty())
+        <div class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
+            @foreach($students as $student)
+            <div wire:key="student-{{ $student->id }}"
+                wire:click="selectStudent({{ $student->id }}, '{{ $student->first_name }} {{ $student->last_name }}')"
+                x-on:click="searchInput = '{{ $student->first_name }} {{ $student->last_name }}'
+                class=" cursor-pointer p-2 hover:bg-gray-100 transition duration-150">
+                {{ $student->first_name }} {{ $student->last_name }}
+            </div>
+            @endforeach
+
+
+        </div>
+        @endif
+
+        @if($selectedId)
+        value="{{ $selectedName }}"
+        <button type="button" wire:click="clearSelection"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+            ×
+        </button>
+        @endif
+
+        <!-- Debug info -->
+        @if(config('app.debug'))
+        <div class="text-xs text-gray-500 mt-1">
+            Search length: {{ strlen($search) }}<br>
+            Show dropdown: {{ $showDropdown ? 'true' : 'false' }}<br>
+            Students found: {{ isset($students) ? $students->count() : 0 }}
+        </div>
+        @endif
+    </div>
+
+    <div class="mt-4 flex items-center space-x-3">
+        <button wire:click="addParticipant"
+            class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+            @if(!$selectedId) disabled @endif>
+            Add Participant
+        </button>
+        <button type="button" @click="$dispatch('close-modal', 'add-participant')"
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition duration-150">
+            Cancel
+        </button>
+    </div>
 </div>

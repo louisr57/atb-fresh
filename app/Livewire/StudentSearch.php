@@ -2,55 +2,129 @@
 
 namespace App\Livewire;
 
-use App\Models\Student;
-use App\Models\Registration;
 use Livewire\Component;
+use App\Models\Student;
+use Illuminate\Support\Facades\Log;
 
 class StudentSearch extends Component
 {
-    public $eventId;
+    public $event;
     public $search = '';
-    public $selectedStudentId = null;
+    public $selectedName = '';
+    public $selectedId;
+    public $showDropdown = false;
+    public $message = '';
     public $selectedStudentName = '';
 
-    public function mount($eventId)
+    public function mount($event)
     {
-        $this->eventId = $eventId;
+        $this->event = $event;
     }
 
-    public function selectStudent($studentId)
+    public function getStudentsProperty()
     {
-        $student = Student::find($studentId);
-        $this->selectedStudentId = $studentId;
-        $this->selectedStudentName = $student->first_name . ' ' . $student->last_name;
-        $this->search = $student->first_name . ' ' . $student->last_name;
+        if (strlen($this->search) >= 2) {
+            $this->showDropdown = true;
+
+            $students = Student::where(function ($query) {
+                $query->where('first_name', 'like', "%{$this->search}%")
+                    ->orWhere('last_name', 'like', "%{$this->search}%");
+            })->limit(10)->get();
+
+            // Debug logging
+            Log::info('Student search results', [
+                'search' => $this->search,
+                'count' => $students->count(),
+                'students' => $students->toArray()
+            ]);
+
+            return $students;
+        }
+
+        $this->showDropdown = false;
+        return collect();
+    }
+
+    public function updatedSearch()
+    {
+        // Debug logging
+        Log::info('Search updated', [
+            'search' => $this->search,
+            'length' => strlen($this->search)
+        ]);
+
+        $this->selectedId = null;
+        $this->selectedName = '';
+        $this->showDropdown = strlen($this->search) >= 2;
+    }
+
+    public function selectStudent($id, $name)
+    {
+        // Debug logging
+        Log::info('Student selected', [
+            'id' => $id,
+            'name' => $name
+        ]);
+
+        $this->selectedId = $id;
+        $this->search = $name;
+        $this->selectedName = $name;
+        $this->showDropdown = false;
     }
 
     public function addParticipant()
     {
-        $registration = Registration::create([
-            'student_id' => $this->selectedStudentId,
-            'event_id' => $this->eventId,
+        if (!$this->selectedId) {
+            $this->message = 'Please select a student first.';
+            return;
+        }
+
+        // Check if student is already registered
+        $existingRegistration = $this->event->registrations()
+            ->where('student_id', $this->selectedId)
+            ->exists();
+
+        if ($existingRegistration) {
+            $this->message = 'This student is already registered for this event.';
+            return;
+        }
+
+        // Create the registration
+        $this->event->registrations()->create([
+            'student_id' => $this->selectedId,
             'end_status' => 'registered'
         ]);
 
-        session()->flash('success', 'Participant added successfully');
-        return redirect()->route('events.show', $this->eventId);
+        // Reset the form
+        $this->search = '';
+        $this->selectedId = null;
+        $this->selectedName = '';
+        $this->message = 'Student successfully added to the event.';
+
+        // Dispatch events
+        $this->dispatch('registration-added');
+        $this->dispatch('close-modal', 'add-participant');
+    }
+
+    public function clearSelection()
+    {
+        $this->selectedId = null;
+        $this->selectedName = '';
+        $this->search = '';
+        $this->showDropdown = false;
     }
 
     public function render()
     {
-        $students = [];
-        if (strlen($this->search) >= 2 && !$this->selectedStudentId) {
-            $students = Student::where('first_name', 'like', "%{$this->search}%")
-                ->orWhere('last_name', 'like', "%{$this->search}%")
-                ->orderBy('first_name')
-                ->limit(10)
-                ->get();
-        }
+        // Debug logging
+        Log::info('Rendering search component', [
+            'search' => $this->search,
+            'showDropdown' => $this->showDropdown,
+            'hasStudents' => isset($this->students) ? $this->students->count() : 0
+        ]);
 
         return view('livewire.student-search', [
-            'students' => $students
+            'students' => $this->students,
         ]);
     }
 }
