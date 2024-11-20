@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\Event;
 use App\Models\Venue;
 use App\Models\Registration;
+use Illuminate\Support\Facades\Hash;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,12 +18,33 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
+    protected static ?string $password;
+
     public function run(): void
     {
         $faker = Faker::create();
 
         // Creating fewer students will give you a better chance of having students who have completed all courses
         Student::factory(100)->create();
+
+        DB::table('users')->insert([
+            [
+                'name' => 'Joan',
+                'email' => 'joan@auroville.org.in',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Louisr57',
+                'email' => 'louisr57@gmail.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'create_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
 
         DB::table('courses')->insert([
             [

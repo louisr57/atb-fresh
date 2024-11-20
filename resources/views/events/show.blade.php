@@ -14,10 +14,10 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ $event->title }}</h1>
             <div class="space-x-4">
-                <a href="{{ route('registrations.create', ['event' => $event->id]) }}"
+                <button type="button" x-data @click="$dispatch('open-modal', 'add-participant')"
                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                     Add Participant
-                </a>
+                </button>
                 <a href="{{ route('events.edit', $event->id) }}"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Edit Event
@@ -71,4 +71,14 @@
         <p class="text-lg text-gray-600 mt-4">No participants registered yet.</p>
         @endif
     </div>
+
+    <!-- Add Participant Modal -->
+    <x-modal name="add-participant" :show="false" focusable>
+        <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">
+                Add Participant to Event
+            </h2>
+            @livewire('student-search', ['event' => $event])
+        </div>
+    </x-modal>
 </x-layout>
