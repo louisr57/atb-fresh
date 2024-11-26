@@ -1,4 +1,4 @@
-<div class="p-6">
+<div class="p-6 max-h-[80vh] overflow-y-auto relative">
     @if($message)
     <div
         class="mb-4 p-4 rounded {{ str_contains($message, 'successfully') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
@@ -13,40 +13,30 @@
             placeholder="Start typing student name..." autocomplete="off">
 
         @if($showDropdown && $students->isNotEmpty())
-        <div class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <div class="absolute z-[60] w-full mt-1 bg-white rounded-md shadow-lg overflow-y-auto"
+            style="max-height: calc(80vh - 250px);">
             @foreach($students as $student)
             <div wire:key="student-{{ $student->id }}"
-                wire:click="selectStudent({{ $student->id }}, '{{ $student->first_name }} {{ $student->last_name }}')"
-                x-on:click="searchInput = '{{ $student->first_name }} {{ $student->last_name }}'
-                class=" cursor-pointer p-2 hover:bg-gray-100 transition duration-150">
+                wire:click="selectStudent({{ $student->id }}, '{{ $student->first_name }}', '{{ $student->last_name }}')"
+                x-on:click="searchInput = '{{ $student->first_name }} {{ $student->last_name }}'"
+                class="cursor-pointer p-2 hover:bg-gray-100 transition duration-150">
                 {{ $student->first_name }} {{ $student->last_name }}
             </div>
             @endforeach
-
-
         </div>
         @endif
 
         @if($selectedId)
-        value="{{ $selectedName }}"
         <button type="button" wire:click="clearSelection"
             class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
             ×
         </button>
         @endif
-
-        <!-- Debug info -->
-        @if(config('app.debug'))
-        <div class="text-xs text-gray-500 mt-1">
-            Search length: {{ strlen($search) }}<br>
-            Show dropdown: {{ $showDropdown ? 'true' : 'false' }}<br>
-            Students found: {{ isset($students) ? $students->count() : 0 }}
-        </div>
-        @endif
     </div>
 
+
     <div class="mt-4 flex items-center space-x-3">
-        <button wire:click="addParticipant"
+        <button type="button" wire:click="addParticipant"
             class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
             @if(!$selectedId) disabled @endif>
             Add Participant
