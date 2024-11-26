@@ -58,17 +58,17 @@ class StudentSearch extends Component
         $this->showDropdown = strlen($this->search) >= 2;
     }
 
-    public function selectStudent($id, $name)
+    public function selectStudent($id, $fname, $lname)
     {
         // Debug logging
         Log::info('Student selected', [
             'id' => $id,
-            'name' => $name
+            'name' => $fname . ' ' . $lname
         ]);
 
         $this->selectedId = $id;
-        $this->search = $name;
-        $this->selectedName = $name;
+        $this->search = $fname . ' ' . $lname;
+        $this->selectedName = $fname . ' ' . $lname;
         $this->showDropdown = false;
     }
 
@@ -99,7 +99,13 @@ class StudentSearch extends Component
         $this->search = '';
         $this->selectedId = null;
         $this->selectedName = '';
-        $this->message = 'Student successfully added to the event.';
+
+        // Dispatch flash message
+        $this->dispatch(
+            'flash-message',
+            message: 'Student successfully added to the event.',
+            type: 'success'
+        );
 
         // Dispatch events
         $this->dispatch('registration-added');
