@@ -19,6 +19,8 @@ class StudentSearch extends Component
     public function mount($event)
     {
         $this->event = $event;
+        // Clear the search when component is mounted
+        $this->dispatch('init-search');
     }
 
     public function getStudentsProperty()
