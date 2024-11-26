@@ -7,22 +7,24 @@
     @endif
 
     <label for="search" class="block text-gray-700 font-bold mb-2">Select Student</label>
-    <div class="relative" x-data="{ searchInput: '' }">
-        <input type="text" id="search" wire:model.live="search" x-model.debounce="searchInput"
+    <div class="relative" x-data="{ searchInput: '' }" @init-search.window="searchInput = ''">
+        <input type="text" id="search" wire:model.live="search" x-model="searchInput"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
             placeholder="Start typing student name..." autocomplete="off">
 
         @if($showDropdown && $students->isNotEmpty())
-        <div class="absolute z-[60] w-full mt-1 bg-white rounded-md shadow-lg overflow-y-auto"
+        <div class="absolute w-full mt-1 bg-white rounded-md shadow-xl overflow-y-auto border border-gray-200 relative z-50"
             style="max-height: calc(80vh - 250px);">
-            @foreach($students as $student)
-            <div wire:key="student-{{ $student->id }}"
-                wire:click="selectStudent({{ $student->id }}, '{{ $student->first_name }}', '{{ $student->last_name }}')"
-                x-on:click="searchInput = '{{ $student->first_name }} {{ $student->last_name }}'"
-                class="cursor-pointer p-2 hover:bg-gray-100 transition duration-150">
-                {{ $student->first_name }} {{ $student->last_name }}
+            <div class="relative z-50 bg-white">
+                @foreach($students as $student)
+                <div wire:key="student-{{ $student->id }}"
+                    wire:click="selectStudent({{ $student->id }}, '{{ $student->first_name }}', '{{ $student->last_name }}')"
+                    x-on:click="searchInput = '{{ $student->first_name }} {{ $student->last_name }}'"
+                    class="cursor-pointer p-2 hover:bg-gray-100 transition duration-150 bg-white relative z-50">
+                    {{ $student->first_name }} {{ $student->last_name }}
+                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
         @endif
 
