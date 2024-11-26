@@ -101,6 +101,7 @@ class StudentSearch extends Component
         $this->search = '';
         $this->selectedId = null;
         $this->selectedName = '';
+        $this->dispatch('init-search');  // This will trigger the Alpine.js init
 
         // Dispatch flash message
         $this->dispatch(
