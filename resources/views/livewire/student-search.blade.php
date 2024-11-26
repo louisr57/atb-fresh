@@ -1,5 +1,5 @@
 <div class="p-6 max-h-[80vh] overflow-y-auto relative">
-    <x-data="{ searchInput: '' , resetSearch() { this.searchInput='' ; @this.message='' ; } }"
+    <x-data="{ searchInput: '' ; resetSearch() { this.searchInput='' ; @this.message='' ; } }"
         @init-search.window="resetSearch" @close-modal.window="if ($event.detail === 'add-participant') resetSearch()">
 
         @if($message)
@@ -46,9 +46,21 @@
                 @if(!$selectedId) disabled @endif>
                 Add Participant
             </button>
-            <button type="button" @click="$dispatch('close-modal', 'add-participant')"
+            {{-- @click="$dispatch('close-modal', 'add-participant')" previously used with the cancel button --}}
+            <button type="button" wire:click="cancelAction" @click="$dispatch('close-modal', 'add-participant')"
                 class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition duration-150">
                 Cancel
             </button>
         </div>
+        <script>
+            document.addEventListener('livewire:load', function () {
+            Livewire.on('clear-messages', () => {
+                // Clear flash messages or visual cues
+                const flashMessageContainer = document.querySelector('.flash-message-container');
+                if (flashMessageContainer) {
+                    flashMessageContainer.textContent = ''; // Clear the text content
+                }
+            });
+        });
+        </script>
 </div>

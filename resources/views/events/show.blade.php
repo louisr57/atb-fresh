@@ -43,7 +43,7 @@
             <h2 class="text-lg font-medium text-gray-900 mb-4">
                 Add Participant to Event
             </h2>
-            @livewire('student-search', ['event' => $event])
+            @livewire('student-search', ['event' => $event, 'searchInput' => ''])
         </div>
     </x-modal>
 </x-layout>
