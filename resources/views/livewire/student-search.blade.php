@@ -1,6 +1,6 @@
 <div class="p-6 max-h-[80vh] overflow-y-auto relative">
-    <x-data="{ searchInput: '' , resetSearch() { this.searchInput='' ; } }" @init-search.window="resetSearch"
-        @close-modal.window="if ($event.detail === 'add-participant') resetSearch()">
+    <x-data="{ searchInput: '' , resetSearch() { this.searchInput='' ; @this.message='' ; } }"
+        @init-search.window="resetSearch" @close-modal.window="if ($event.detail === 'add-participant') resetSearch()">
 
         @if($message)
         <div

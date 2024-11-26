@@ -55,6 +55,9 @@ class StudentSearch extends Component
             'length' => strlen($this->search)
         ]);
 
+        // Clear any previous messages
+        $this->message = '';  // Add this line to clear warning messages
+
         $this->selectedId = null;
         $this->selectedName = '';
         $this->showDropdown = strlen($this->search) >= 2;
@@ -121,6 +124,7 @@ class StudentSearch extends Component
         $this->selectedName = '';
         $this->search = '';
         $this->showDropdown = false;
+        $this->message = ''; // Add this line to clear any previous messages
     }
 
     public function render()
