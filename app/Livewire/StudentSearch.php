@@ -79,6 +79,8 @@ class StudentSearch extends Component
 
     public function addParticipant()
     {
+        $this->search = '';
+
         if (!$this->selectedId) {
             $this->message = 'Please select a student first.';
             return;
@@ -90,7 +92,8 @@ class StudentSearch extends Component
             ->exists();
 
         if ($existingRegistration) {
-            $this->message = 'This student is already registered for this event.';
+            $this->search = '';
+            $this->message = $this->selectedName . ' is already registered for this event.';
             return;
         }
 
@@ -126,6 +129,13 @@ class StudentSearch extends Component
         $this->showDropdown = false;
         $this->message = ''; // Add this line to clear any previous messages
     }
+
+    public function cancelAction()
+    {
+        $this->clearSelection(); // Clear any selected student or search input
+        $this->dispatch('clear-messages'); // Dispatch a custom event to clear flash messages
+    }
+
 
     public function render()
     {
