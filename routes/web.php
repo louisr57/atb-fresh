@@ -8,31 +8,10 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FacilitatorController;
 use App\Http\Controllers\VenueController;
-use App\Models\Job;
 
-
-// // Public routes
-// Route::get('/contact', function () {
-//     return view('contact');
-// });
-
-// Route::get('/jobs', function () {
-//     return view('jobs', [
-//         'jobs' => Job::all()
-//     ]);
-// });
-
-// Route::get('/jobs/{id}', function ($id) {
-//     $job = Job::find($id);
-//     return view('job', [
-//         'job' => $job
-//     ]);
-// });
 
 // Breeze Authentication Routes
 require __DIR__ . '/auth.php';
-
-
 
 
 // Protected routes (require authentication)
@@ -43,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
         return view('home', ['greeting' => 'It\'s another really beautiful day!']);
     });
 
-    // Dashboard and Profile routes
+    // Dashboard and Profile routes (all protected)
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
