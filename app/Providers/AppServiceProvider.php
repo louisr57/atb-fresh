@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Registration;
+use App\Observers\RegistrationObserver;
 use Livewire\Livewire;
 use App\Livewire\StudentSearch;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Livewire::component('student-search', StudentSearch::class);
         Blade::component('components.layout', 'layout');
+
+        Registration::observe(RegistrationObserver::class);
 
         if ($this->app->environment('local')) {
             $this->app['config']->set('cache.route', false);

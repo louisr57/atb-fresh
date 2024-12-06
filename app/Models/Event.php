@@ -11,6 +11,12 @@ class Event extends Model
 
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        // Remove the updated event observer since we're handling counts in batch
+        // This prevents potential race conditions during seeding
+    }
+
     // Define relationship with the Course model
     public function course()
     {
@@ -35,5 +41,11 @@ class Event extends Model
     public function students()
     {
         return $this->belongsToMany(Student::class, 'registrations', 'event_id', 'student_id')->withTimestamps();
+    }
+
+    public function updateParticipantCount()
+    {
+        $this->participant_count = $this->registrations()->count();
+        $this->saveQuietly(); // Use saveQuietly to prevent triggering observers
     }
 }

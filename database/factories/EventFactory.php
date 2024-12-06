@@ -13,19 +13,37 @@ class EventFactory extends Factory
 {
     protected $model = Event::class;
 
+    // Cache for IDs
+    protected static $courseIds = null;
+    protected static $facilitatorIds = null;
+    protected static $venueIds = null;
+
+    protected function initializeIds()
+    {
+        if (self::$courseIds === null) {
+            self::$courseIds = Course::pluck('id')->toArray();
+        }
+        if (self::$facilitatorIds === null) {
+            self::$facilitatorIds = Facilitator::pluck('id')->toArray();
+        }
+        if (self::$venueIds === null) {
+            self::$venueIds = Venue::pluck('id')->toArray();
+        }
+    }
+
     public function definition(): array
     {
-        // Fetch a random course from the courses table
-        $course = Course::inRandomOrder()->first();
+        $this->initializeIds();
+
+        // Get random IDs from cached arrays
+        $courseId = $this->faker->randomElement(self::$courseIds);
+        $course = Course::find($courseId);
 
         // Generate a random start date (datefrom)
         $datefrom = $this->faker->dateTimeBetween('-2 years', '+2 years');
 
-        // Calculate dateto by adding the course's duration in days to the datefrom value
-        // Assuming the course's duration is stored as an integer or a string like "3 days", we extract the number of days
+        // Calculate dateto by adding the course's duration in days
         $durationInDays = (int) filter_var($course->duration, FILTER_SANITIZE_NUMBER_INT);
-
-        // Calculate the dateto value by adding the course duration to the datefrom
         $dateto = Carbon::instance($datefrom)->addDays($durationInDays);
 
         return [
@@ -34,9 +52,9 @@ class EventFactory extends Factory
             'dateto' => $dateto->format('Y-m-d'),
             'timefrom' => $this->faker->time(),
             'timeto' => $this->faker->time(),
-            'venue_id' => Venue::inRandomOrder()->first()->id,
-            'course_id' => $course->id,
-            'facilitator_id' => Facilitator::inRandomOrder()->first()->id,
+            'venue_id' => $this->faker->randomElement(self::$venueIds),
+            'course_id' => $courseId,
+            'facilitator_id' => $this->faker->randomElement(self::$facilitatorIds),
             'remarks' => $this->faker->optional()->sentence(),
             'participant_count' => 0,
         ];
