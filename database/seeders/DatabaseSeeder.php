@@ -24,9 +24,12 @@ class DatabaseSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Creating fewer students will give you a better chance of having students who have completed all courses
+        // Create students first
+        $this->command->info('Creating students...');
         Student::factory(100)->create();
 
+        // Create users
+        $this->command->info('Creating users...');
         DB::table('users')->insert([
             [
                 'name' => 'Joan',
@@ -41,11 +44,13 @@ class DatabaseSeeder extends Seeder
                 'email' => 'louisr57@gmail.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
-                'create_at' => now(),
+                'created_at' => now(),
                 'updated_at' => now(),
             ],
         ]);
 
+        // Create courses
+        $this->command->info('Creating courses...');
         DB::table('courses')->insert([
             [
                 'course_code' => 'ATB K-BT',
@@ -98,6 +103,8 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
+        // Create facilitators
+        $this->command->info('Creating facilitators...');
         DB::table('facilitators')->insert([
             [
                 'first_name' => 'Aloka',
@@ -111,7 +118,7 @@ class DatabaseSeeder extends Seeder
                 'country' => 'India/Catalunya',
                 'post_code' => '605101',
                 'website' => $faker->url(),
-                'dob' => $faker->dateTimeBetween($startDate = '-70 years', $endDate = '-20 years', $timezone = null),
+                'dob' => $faker->dateTimeBetween('-70 years', '-20 years'),
             ],
             [
                 'first_name' => 'Joan',
@@ -272,24 +279,45 @@ class DatabaseSeeder extends Seeder
         // Create venues first since events depend on them
         Venue::factory(100)->create();
 
-        // Then create events that reference the venues
+        $this->command->info('Creating events...');
         Event::factory(300)->create();
 
-        // Fetch all events
-        $events = Event::all();
+        // Create registrations in small batches with progress tracking
+        $this->command->info('Creating registrations...');
+        $batchSize = 10;
+        $totalRegistrations = 300;
+        $batches = ceil($totalRegistrations / $batchSize);
 
-        // Create 300 registrations one by one
-        for ($i = 0; $i < 300; $i++) {
-            Registration::factory()->create();
+        $bar = $this->command->getOutput()->createProgressBar($batches);
+        $bar->start();
+
+        for ($i = 0; $i < $batches; $i++) {
+            $size = min($batchSize, $totalRegistrations - ($i * $batchSize));
+
+            try {
+                Registration::factory()->count($size)->create();
+            } catch (\Exception $e) {
+                $this->command->error("Error in batch $i: " . $e->getMessage());
+                continue;
+            }
+
+            $bar->advance();
         }
 
-        // Update participant count for each Event (event)
-        foreach ($events as $event) {
-            // Count how many registrations this event has
-            $participantCount = Registration::where('event_id', $event->id)->count();
+        $bar->finish();
+        $this->command->info("\nRegistrations created successfully");
 
-            // Update the participant_count column in the events table
-            $event->update(['participant_count' => $participantCount]);
-        }
+        // Update participant counts efficiently
+        $this->command->info('Updating participant counts...');
+        DB::statement('
+            UPDATE events e
+            SET participant_count = (
+                SELECT COUNT(*)
+                FROM registrations r
+                WHERE r.event_id = e.id
+            )
+        ');
+
+        $this->command->info('Database seeding completed successfully');
     }
 }
