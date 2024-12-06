@@ -10,6 +10,7 @@ class StudentSearch extends Component
 {
     public $event;
     public $search = '';
+    public $searchInput = '';
     public $selectedName = '';
     public $selectedId;
     public $showDropdown = false;
