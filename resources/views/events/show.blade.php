@@ -28,8 +28,11 @@
             <p class="text-lg mb-2">
                 <strong>Date:</strong> {{ $event->datefrom }} to {{ $event->dateto ?? 'N/A' }}
             </p>
-            <p class="text-lg mb-4">
+            <p class="text-lg mb-2">
                 <strong>Facilitator:</strong> {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
+            </p>
+            <p class="text-lg mb-1">
+                @livewire('participant-count', ['event' => $event])
             </p>
         </div>
 
