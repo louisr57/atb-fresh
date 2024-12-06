@@ -46,6 +46,7 @@ class ParticipantsList extends Component
                 type: 'success'
             );
 
+            $this->dispatch('registration-deleted');
             $this->event->refresh();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             $this->dispatch(
