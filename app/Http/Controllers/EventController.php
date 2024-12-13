@@ -29,15 +29,50 @@ class EventController extends Controller
         // Default to 'course_title' if the provided column is not in the sortable list
         $sortColumn = $sortableColumns[$sort_by] ?? 'courses.course_title';
 
-        // Fetch events with related data, sorted by the chosen column, and with participant count
-        $events = Event::with(['course', 'facilitator', 'venue'])
-            ->withCount('registrations') // Count the number of participants for each event
+        // Build the query
+        $query = Event::with(['course', 'facilitator', 'venue'])
+            ->withCount('registrations')
             ->join('courses', 'events.course_id', '=', 'courses.id')
             ->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
             ->join('venues', 'events.venue_id', '=', 'venues.id')
-            ->select('events.*') // Ensure we only get events fields to avoid column name conflicts
-            ->orderBy($sortColumn, $direction)
-            ->paginate(15);
+            ->select('events.*');
+
+        // Apply search filters
+        if ($request->filled('search_course')) {
+            $query->where('courses.course_title', 'like', '%' . $request->search_course . '%');
+        }
+
+        if ($request->filled('search_facilitator')) {
+            $searchTerm = $request->search_facilitator;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('facilitators.first_name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('facilitators.last_name', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        if ($request->filled('search_date')) {
+            $query->whereDate('events.datefrom', '=', $request->search_date);
+        }
+
+        if ($request->filled('search_venue')) {
+            $query->where('venues.venue_name', 'like', '%' . $request->search_venue . '%');
+        }
+
+        if ($request->filled('search_city')) {
+            $query->where('venues.city', 'like', '%' . $request->search_city . '%');
+        }
+
+        if ($request->filled('search_state')) {
+            $query->where('venues.state', 'like', '%' . $request->search_state . '%');
+        }
+
+        if ($request->filled('search_country')) {
+            $query->where('venues.country', 'like', '%' . $request->search_country . '%');
+        }
+
+        // Apply sorting
+        $events = $query->orderBy($sortColumn, $direction)
+                       ->paginate(15);
 
         // Pass the sorting parameters to the view
         return view('events.index', compact('events', 'sort_by', 'direction'));
