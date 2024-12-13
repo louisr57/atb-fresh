@@ -5,7 +5,12 @@
         ATB Calendar Events
     </x-slot:heading>
 
-    <div class="container mx-auto p-4" x-data="{ showSearch: false }">
+    <div class="container mx-auto p-4" x-data="{
+        showSearch: {{ request('show_search', 'false') }} || false,
+        resetSearch() {
+            window.location.href = '{{ route('events.index') }}?show_search=true';
+        }
+    }">
         <!-- Header section with buttons -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold mb-0 mt-1">Events (Calendar) List</h1>
@@ -32,7 +37,7 @@
              x-transition:leave-end="opacity-0 transform scale-95"
              class="bg-white p-4 rounded-lg shadow mb-6"
              style="display: none;">
-            <form action="{{ route('events.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <form action="{{ route('events.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" id="searchForm">
                 <!-- Preserve sort parameters -->
                 <input type="hidden" name="sort_by" value="{{ request('sort_by', 'course_title') }}">
                 <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
@@ -110,10 +115,11 @@
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Search
                     </button>
-                    <a href="{{ route('events.index') }}"
+                    <button type="button"
+                        @click="resetSearch()"
                         class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                         Reset
-                    </a>
+                    </button>
                 </div>
             </form>
         </div>
