@@ -20,12 +20,51 @@ class FacilitatorController extends Controller
     }
 
     // Show the details of a specific facilitator
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        // Get sort parameters from request
+        $sort = $request->get('sort', 'datefrom');
+        $direction = $request->get('direction', 'asc');
+
         // Find the facilitator by ID and load related events and courses
-        $facilitator = Facilitator::with(['events' => function ($query) {
-            $query->orderBy('datefrom', 'asc'); // Adjust 'start_date' to your actual date column name
-        }])->findOrFail($id);
+        $facilitator = Facilitator::with(['events' => function ($query) use ($sort, $direction) {
+            $query->withCount('registrations'); // Add registration count
+
+            // Handle different sort columns
+            switch ($sort) {
+                case 'course_title':
+                    $query->join('courses', 'events.course_id', '=', 'courses.id')
+                          ->orderBy('courses.course_title', $direction)
+                          ->select('events.*');
+                    break;
+                case 'participant_count':
+                    $query->withCount('registrations')
+                          ->orderBy('registrations_count', $direction);
+                    break;
+                case 'venue':
+                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
+                          ->orderBy('venues.venue_name', $direction)
+                          ->select('events.*');
+                    break;
+                case 'city':
+                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
+                          ->orderBy('venues.city', $direction)
+                          ->select('events.*');
+                    break;
+                case 'state':
+                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
+                          ->orderBy('venues.state', $direction)
+                          ->select('events.*');
+                    break;
+                case 'country':
+                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
+                          ->orderBy('venues.country', $direction)
+                          ->select('events.*');
+                    break;
+                default:
+                    $query->orderBy($sort, $direction);
+            }
+        }, 'events.course', 'events.venue'])->findOrFail($id);
 
         // Return view with facilitator data
         return view('facilitators.show', compact('facilitator'));

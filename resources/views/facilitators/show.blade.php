@@ -136,28 +136,86 @@
         <div class="mb-6 mt-10">
             <h2 class="text-2xl text-blue-700 font-semibold">Past and Future Courses</h2></br>
 
-            <table class="min-w-full table-auto border-collapse border border-gray-300">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border px-4 py-2">Course Title</th>
-                        <th class="border px-4 py-2">Event Title</th>
-                        <th class="border px-4 py-2">Start Date</th>
-                        <th class="border px-4 py-2">End Date</th>
-                        <th class="border px-4 py-2">Venue</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($facilitator->events as $event)
-                    <tr class="hover:bg-gray-100">
-                        <td class="border px-4 py-2">{{ $event->course->course_title }}</td>
-                        <td class="border px-4 py-2">{{ $event->title }}</td>
-                        <td class="border px-4 py-2">{{ $event->datefrom }}</td>
-                        <td class="border px-4 py-2">{{ $event->dateto }}</td>
-                        <td class="border px-4 py-2">{{ $event->venue }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <!-- Added relative overflow-x-auto wrapper -->
+            <div class="relative overflow-x-auto">
+                <table class="min-w-full table-auto border-collapse border border-gray-300">
+                    <thead class="bg-gray-100 text-left">
+                        <tr>
+                            <th class="border px-4 py-2">
+                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'course_title', 'direction' => request('direction') === 'asc' && request('sort') === 'course_title' ? 'desc' : 'asc']) }}" class="flex items-center">
+                                    Course Title
+                                    @if(request('sort') === 'course_title')
+                                        <span class="ml-1">{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="border px-4 py-2 text-center">
+                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'participant_count', 'direction' => request('direction') === 'asc' && request('sort') === 'participant_count' ? 'desc' : 'asc']) }}" class="flex items-center justify-center">
+                                    Participant Count
+                                    @if(request('sort') === 'participant_count')
+                                        <span class="ml-1">{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="border px-4 py-2">
+                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'datefrom', 'direction' => request('direction') === 'asc' && request('sort') === 'datefrom' ? 'desc' : 'asc']) }}" class="flex items-center">
+                                    Start Date
+                                    @if(request('sort') === 'datefrom')
+                                        <span class="ml-1">{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="border px-4 py-2">End Date</th>
+                            <th class="border px-4 py-2">
+                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'venue', 'direction' => request('direction') === 'asc' && request('sort') === 'venue' ? 'desc' : 'asc']) }}" class="flex items-center">
+                                    Venue
+                                    @if(request('sort') === 'venue')
+                                        <span class="ml-1">{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="border px-4 py-2">
+                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'city', 'direction' => request('direction') === 'asc' && request('sort') === 'city' ? 'desc' : 'asc']) }}" class="flex items-center">
+                                    City
+                                    @if(request('sort') === 'city')
+                                        <span class="ml-1">{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="border px-4 py-2">
+                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'state', 'direction' => request('direction') === 'asc' && request('sort') === 'state' ? 'desc' : 'asc']) }}" class="flex items-center">
+                                    State
+                                    @if(request('sort') === 'state')
+                                        <span class="ml-1">{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="border px-4 py-2">
+                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'country', 'direction' => request('direction') === 'asc' && request('sort') === 'country' ? 'desc' : 'asc']) }}" class="flex items-center">
+                                    Country
+                                    @if(request('sort') === 'country')
+                                        <span class="ml-1">{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                    @endif
+                                </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($facilitator->events as $event)
+                        <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location='{{ route('events.show', $event->id) }}'">
+                            <td class="border px-4 py-2 whitespace-nowrap">{{ $event->course->course_title }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap text-center">{{ $event->registrations_count ?? 0 }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap">{{ $event->datefrom }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap">{{ $event->dateto }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->venue_name ?? 'N/A' }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->city ?? 'N/A' }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->state ?? 'N/A' }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->country ?? 'N/A' }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
         @else
         <p>This Facilitator has not taught any courses yet.</p>
