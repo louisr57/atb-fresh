@@ -33,8 +33,8 @@
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <x-nav-link href="/" :active="request()->is('/')">Home</x-nav-link>
                                 <x-nav-link href="/students" :active="request()->is('students')">Students</x-nav-link>
-                                <x-nav-link href="/registrations" :active="request()->is('registrations')">Registrations
-                                </x-nav-link>
+                                {{-- <x-nav-link href="/registrations" :active="request()->is('registrations')">Registrations
+                                </x-nav-link> --}}
                                 <x-nav-link href="/events" :active="request()->is('events')">Events
                                 </x-nav-link>
                                 <x-nav-link href="/venues" :active="request()->is('venues')">Venues
