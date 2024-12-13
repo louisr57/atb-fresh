@@ -1,4 +1,4 @@
-<div class="relative" x-data="{ open: @entangle('showDropdown') }">
+<div class="relative" x-data="{ open: @entangle('showDropdown').live }">
     <input
         type="text"
         wire:model.live="search"

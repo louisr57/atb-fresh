@@ -56,7 +56,7 @@
         </button>
     </div>
     <script>
-        document.addEventListener('livewire:load', function () {
+        document.addEventListener('livewire:init', function () {
             Livewire.on('clear-messages', () => {
                 // Clear flash messages or visual cues
                 const flashMessageContainer = document.querySelector('.flash-message-container');
