@@ -4,7 +4,7 @@
         <input type="text" id="venue_search" wire:model.live="search"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
             placeholder="Search venue..." autocomplete="off">
-        <input type="hidden" name="venue_id" wire:model="selectedVenueId">
+        <input type="hidden" name="venue_id" wire:model.live="selectedVenueId">
 
         @if($showDropdown && !empty($venues))
         <div class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">

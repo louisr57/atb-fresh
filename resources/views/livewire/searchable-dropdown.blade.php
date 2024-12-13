@@ -1,14 +1,14 @@
 <div x-data="{
     open: false,
-    search: @entangle('search'),
-    items: @entangle('items'),
+    search: @entangle('search').live,
+    items: @entangle('items').live,
     filterItems() {
         return this.items.filter(item =>
             item.toLowerCase().includes(this.search.toLowerCase())
         );
     }
 }" @click.away="open = false">
-    <input type="text" placeholder="Search..." wire:model.debounce.300ms="search" @focus="open = true" x-model="search">
+    <input type="text" placeholder="Search..." wire:model.live.debounce.300ms="search" @focus="open = true" x-model="search">
 
     <ul x-show="open" class="dropdown-list">
         <template x-for="item in filterItems()" :key="item">
