@@ -11,10 +11,26 @@ class ParticipantsList extends Component
 {
     public $event;
     public $isDeleting = false;
+    public $sortField = 'first_name';
+    public $sortDirection = 'asc';
 
     public function mount(Event $event)
     {
         $this->event = $event;
+    }
+
+    public function sortBy($field)
+    {
+        if ($field === 'name') {
+            $field = 'first_name'; // Sort by first_name when clicking name header
+        }
+
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
     }
 
     #[On('registration-added')]
@@ -67,8 +83,25 @@ class ParticipantsList extends Component
 
     public function render()
     {
+        $registrations = $this->event->registrations()
+            ->with(['student' => function ($query) {
+                $query->orderBy($this->sortField, $this->sortDirection);
+            }])
+            ->when($this->sortField === 'end_status', function ($query) {
+                $query->orderBy('end_status', $this->sortDirection);
+            })
+            ->get();
+
+        // If sorting by name or email, we need to sort the collection after retrieval
+        // since these fields are in the related student model
+        if (in_array($this->sortField, ['first_name', 'email'])) {
+            $registrations = $registrations->sortBy(function ($registration) {
+                return $registration->student->{$this->sortField};
+            }, SORT_REGULAR, $this->sortDirection === 'desc');
+        }
+
         return view('livewire.participants-list', [
-            'registrations' => $this->event->registrations()->with('student')->get()
+            'registrations' => $registrations
         ]);
     }
 }
