@@ -23,16 +23,19 @@ class EventController extends Controller
             'datefrom' => 'events.datefrom',
             'dateto' => 'events.dateto',
             'facilitator_name' => 'facilitators.first_name',
+            'venue_name' => 'venues.venue_name',
         ];
 
         // Default to 'course_title' if the provided column is not in the sortable list
         $sortColumn = $sortableColumns[$sort_by] ?? 'courses.course_title';
 
         // Fetch events with related data, sorted by the chosen column, and with participant count
-        $events = Event::with(['course', 'facilitator'])
+        $events = Event::with(['course', 'facilitator', 'venue'])
             ->withCount('registrations') // Count the number of participants for each event
             ->join('courses', 'events.course_id', '=', 'courses.id')
             ->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
+            ->join('venues', 'events.venue_id', '=', 'venues.id')
+            ->select('events.*') // Ensure we only get events fields to avoid column name conflicts
             ->orderBy($sortColumn, $direction)
             ->paginate(15);
 
@@ -42,7 +45,7 @@ class EventController extends Controller
 
     public function show($id)
     {
-        $event = Event::with(['course', 'facilitator'])
+        $event = Event::with(['course', 'facilitator', 'venue'])
             ->with(['registrations' => function ($query) {
                 $query->select('registrations.*')
                     ->join('students', 'students.id', '=', 'registrations.student_id')

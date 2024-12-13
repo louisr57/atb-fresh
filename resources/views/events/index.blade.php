@@ -68,7 +68,15 @@
                                 @endif
                             </a>
                         </th>
-                        <th class="border px-4 py-2">Venue</th>
+                        <th class="border px-4 py-2">
+                            <a
+                                href="{{ route('events.index', ['sort_by' => 'venue_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}">
+                                Venue
+                                @if ($sort_by === 'venue_name')
+                                <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
                         <th class="border px-4 py-2">City</th>
                         <th class="border px-4 py-2">State</th>
                         <th class="border px-4 py-2">Country</th>
@@ -99,10 +107,10 @@
                         <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $event->dateto ?? 'N/A' }}
                         </td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->city }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->state }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->country }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->venue_name ?? 'N/A' }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->city ?? 'N/A' }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->state ?? 'N/A' }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->country ?? 'N/A' }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $event->remarks ?? 'No remarks' }}
                         </td>
