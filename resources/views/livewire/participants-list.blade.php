@@ -5,9 +5,48 @@
         <table class="min-w-full table-auto border-collapse border border-gray-500">
             <thead class="bg-gray-200 text-left">
                 <tr>
-                    <th class="border px-4 py-2">Name</th>
-                    <th class="border px-4 py-2">Email</th>
-                    <th class="border px-4 py-2">Status</th>
+                    <th wire:click="sortBy('name')" class="border px-4 py-2 cursor-pointer hover:bg-gray-300">
+                        <div class="flex items-center">
+                            Name
+                            @if($sortField === 'first_name')
+                                <span class="ml-1">
+                                    @if($sortDirection === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                </span>
+                            @endif
+                        </div>
+                    </th>
+                    <th wire:click="sortBy('email')" class="border px-4 py-2 cursor-pointer hover:bg-gray-300">
+                        <div class="flex items-center">
+                            Email
+                            @if($sortField === 'email')
+                                <span class="ml-1">
+                                    @if($sortDirection === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                </span>
+                            @endif
+                        </div>
+                    </th>
+                    <th wire:click="sortBy('end_status')" class="border px-4 py-2 cursor-pointer hover:bg-gray-300">
+                        <div class="flex items-center">
+                            Status
+                            @if($sortField === 'end_status')
+                                <span class="ml-1">
+                                    @if($sortDirection === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                </span>
+                            @endif
+                        </div>
+                    </th>
                     <th class="border px-4 py-2">Actions</th>
                 </tr>
             </thead>
