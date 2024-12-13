@@ -53,11 +53,15 @@
             <tbody>
                 @foreach($registrations as $registration)
                 <tr class="hover:bg-gray-100">
-                    <td class="border px-4 py-2">
+                    <td onclick="window.location='{{ route('students.show', $registration->student->id) }}'" class="border px-4 py-2 cursor-pointer">
                         {{ $registration->student->first_name }} {{ $registration->student->last_name }}
                     </td>
-                    <td class="border px-4 py-2">{{ $registration->student->email }}</td>
-                    <td class="border px-4 py-2">{{ $registration->end_status }}</td>
+                    <td onclick="window.location='{{ route('students.show', $registration->student->id) }}'" class="border px-4 py-2 cursor-pointer">
+                        {{ $registration->student->email }}
+                    </td>
+                    <td onclick="window.location='{{ route('students.show', $registration->student->id) }}'" class="border px-4 py-2 cursor-pointer">
+                        {{ $registration->end_status }}
+                    </td>
                     <td class="border px-4 py-2">
                         <div class="flex items-center space-x-3">
                             <a href="{{ route('registrations.show', $registration->id) }}"
