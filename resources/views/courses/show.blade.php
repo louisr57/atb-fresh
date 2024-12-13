@@ -67,30 +67,89 @@
 
         @if($course->events->isNotEmpty())
         <h2 class="text-2xl font-bold mb-5 mt-5">Events for this Course</h2>
-        <table class="min-w-full table-auto border-collapse border border-gray-500">
-            <thead class="bg-gray-200 border border-gray-500 px-4 py-2 text-left">
-                <tr>
-                    <th class="border border-gray-500 px-4 py-2">Event Title</th>
-                    <th class="border border-gray-500 px-4 py-2">Start Date</th>
-                    <th class="border border-gray-500 px-4 py-2">End Date</th>
-                    <th class="border border-gray-500 px-4 py-2">Facilitator</th>
-                    <th class="border border-gray-500 px-4 py-2">Venue</th>
-                </tr>
-            </thead>
-            <tbody class="bg-gray-50">
-                @foreach($course->events as $event)
-                <tr class="hover:bg-sky-100 border-gray-500">
-                    <td class="border border-gray-500 px-4 py-2">{{ $event->title }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $event->datefrom }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $event->dateto }}</td>
-                    <td class="border border-gray-500 px-4 py-2">
-                        {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
-                    </td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $event->venue }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="relative overflow-x-auto">
+            <table class="min-w-full table-auto border-collapse border border-gray-300">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="border px-4 py-2 text-left">Event Title</th>
+                        <th class="border px-4 py-2 text-left">
+                            <a href="{{ route('courses.show', ['id' => $course->id, 'sort_by' => 'participant_count', 'direction' => ($sort_by === 'participant_count' && $direction === 'asc') ? 'desc' : 'asc']) }}" class="flex items-center">
+                                Participant Count
+                                @if($sort_by === 'participant_count')
+                                    <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        <th class="border px-4 py-2 text-left">
+                            <a href="{{ route('courses.show', ['id' => $course->id, 'sort_by' => 'datefrom', 'direction' => ($sort_by === 'datefrom' && $direction === 'asc') ? 'desc' : 'asc']) }}" class="flex items-center">
+                                Start Date
+                                @if($sort_by === 'datefrom')
+                                    <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        <th class="border px-4 py-2 text-left">End Date</th>
+                        <th class="border px-4 py-2 text-left">
+                            <a href="{{ route('courses.show', ['id' => $course->id, 'sort_by' => 'facilitator', 'direction' => ($sort_by === 'facilitator' && $direction === 'asc') ? 'desc' : 'asc']) }}" class="flex items-center">
+                                Facilitator
+                                @if($sort_by === 'facilitator')
+                                    <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        <th class="border px-4 py-2 text-left">
+                            <a href="{{ route('courses.show', ['id' => $course->id, 'sort_by' => 'venue', 'direction' => ($sort_by === 'venue' && $direction === 'asc') ? 'desc' : 'asc']) }}" class="flex items-center">
+                                Venue
+                                @if($sort_by === 'venue')
+                                    <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        <th class="border px-4 py-2 text-left">
+                            <a href="{{ route('courses.show', ['id' => $course->id, 'sort_by' => 'city', 'direction' => ($sort_by === 'city' && $direction === 'asc') ? 'desc' : 'asc']) }}" class="flex items-center">
+                                City
+                                @if($sort_by === 'city')
+                                    <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        <th class="border px-4 py-2 text-left">
+                            <a href="{{ route('courses.show', ['id' => $course->id, 'sort_by' => 'state', 'direction' => ($sort_by === 'state' && $direction === 'asc') ? 'desc' : 'asc']) }}" class="flex items-center">
+                                State
+                                @if($sort_by === 'state')
+                                    <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        <th class="border px-4 py-2 text-left">
+                            <a href="{{ route('courses.show', ['id' => $course->id, 'sort_by' => 'country', 'direction' => ($sort_by === 'country' && $direction === 'asc') ? 'desc' : 'asc']) }}" class="flex items-center">
+                                Country
+                                @if($sort_by === 'country')
+                                    <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($course->events as $event)
+                    <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location='{{ route('events.show', $event->id) }}'">
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->title }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->participant_count }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->datefrom }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->dateto }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">
+                            {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
+                        </td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->venue_name ?? 'N/A' }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->city ?? 'N/A' }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->state ?? 'N/A' }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->country ?? 'N/A' }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         @else
         <p class="text-lg text-gray-600">No events have been scheduled for this course yet.</p>
         @endif

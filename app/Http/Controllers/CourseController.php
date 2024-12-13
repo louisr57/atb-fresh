@@ -19,16 +19,52 @@ class CourseController extends Controller
         return view('courses.index', compact('courses', 'sort_by', 'direction'));
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        // Fetch the course along with its related events and facilitators
-        $course = Course::with('events.facilitator')->findOrFail($id);
+        $sort_by = $request->get('sort_by', 'datefrom');  // Default sort by start date
+        $direction = $request->get('direction', 'asc');    // Default sort direction
 
-        // Return the course to the view
-        return view('courses.show', compact('course'));
+        // Fetch the course with its events and related models
+        $course = Course::with(['events' => function($query) use ($sort_by, $direction) {
+            // Handle different sort columns
+            switch($sort_by) {
+                case 'participant_count':
+                    $query->orderBy('participant_count', $direction);
+                    break;
+                case 'facilitator':
+                    $query->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
+                          ->orderBy('facilitators.first_name', $direction)
+                          ->orderBy('facilitators.last_name', $direction)
+                          ->select('events.*');
+                    break;
+                case 'venue':
+                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
+                          ->orderBy('venues.venue_name', $direction)
+                          ->select('events.*');
+                    break;
+                case 'city':
+                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
+                          ->orderBy('venues.city', $direction)
+                          ->select('events.*');
+                    break;
+                case 'state':
+                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
+                          ->orderBy('venues.state', $direction)
+                          ->select('events.*');
+                    break;
+                case 'country':
+                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
+                          ->orderBy('venues.country', $direction)
+                          ->select('events.*');
+                    break;
+                default:
+                    $query->orderBy($sort_by, $direction);
+            }
+        }, 'events.facilitator', 'events.venue'])->findOrFail($id);
+
+        // Return the course to the view with sorting parameters
+        return view('courses.show', compact('course', 'sort_by', 'direction'));
     }
-
-
 
     public function create()
     {
