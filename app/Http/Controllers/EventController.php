@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Facilitator;
 use App\Models\Venue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -30,12 +31,13 @@ class EventController extends Controller
         $sortColumn = $sortableColumns[$sort_by] ?? 'courses.course_title';
 
         // Build the query
-        $query = Event::with(['course', 'facilitator', 'venue'])
-            ->withCount('registrations')
+        $query = Event::query()
             ->join('courses', 'events.course_id', '=', 'courses.id')
             ->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
             ->join('venues', 'events.venue_id', '=', 'venues.id')
-            ->select('events.*');
+            ->select('events.*')
+            ->with(['course', 'facilitator', 'venue'])
+            ->withCount('registrations');
 
         // Apply search filters
         if ($request->filled('search_course')) {
@@ -45,8 +47,8 @@ class EventController extends Controller
         if ($request->filled('search_facilitator')) {
             $searchTerm = $request->search_facilitator;
             $query->where(function($q) use ($searchTerm) {
-                $q->where('facilitators.first_name', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('facilitators.last_name', 'like', '%' . $searchTerm . '%');
+                $q->where(DB::raw("CONCAT(facilitators.first_name, ' ', facilitators.last_name)"), 'like', '%' . $searchTerm . '%')
+                  ->orWhere(DB::raw("CONCAT(facilitators.last_name, ' ', facilitators.first_name)"), 'like', '%' . $searchTerm . '%');
             });
         }
 
@@ -70,7 +72,7 @@ class EventController extends Controller
             $query->where('venues.country', 'like', '%' . $request->search_country . '%');
         }
 
-        // Apply sorting
+        // Apply sorting and get paginated results
         $events = $query->orderBy($sortColumn, $direction)
                        ->paginate(15);
 
@@ -101,7 +103,6 @@ class EventController extends Controller
         return view('events.create', compact('courses', 'facilitators', 'venues'));
     }
 
-    // Store the event data
     public function store(Request $request)
     {
         $validatedData = $request->validate([
