@@ -14,7 +14,22 @@ class VenueController extends Controller
         $sort_by = $request->get('sort_by', 'venue_name');  // Default sort column
         $direction = $request->get('direction', 'asc');    // Default sort direction
 
-        $venues = Venue::orderBy($sort_by, $direction)->paginate(30);
+        $query = Venue::query();
+
+        // Apply search filters
+        if ($request->filled('search_venue')) {
+            $query->where('venue_name', 'like', '%' . $request->search_venue . '%');
+        }
+
+        if ($request->filled('search_city')) {
+            $query->where('city', 'like', '%' . $request->search_city . '%');
+        }
+
+        if ($request->filled('search_country')) {
+            $query->where('country', 'like', '%' . $request->search_country . '%');
+        }
+
+        $venues = $query->orderBy($sort_by, $direction)->paginate(30);
 
         return view('venues.index', compact('venues', 'sort_by', 'direction'));
     }
