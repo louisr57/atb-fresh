@@ -204,7 +204,7 @@
                         @foreach($facilitator->events as $event)
                         <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location='{{ route('events.show', $event->id) }}'">
                             <td class="border px-4 py-2 whitespace-nowrap">{{ $event->course->course_title }}</td>
-                            <td class="border px-4 py-2 whitespace-nowrap text-center">{{ $event->registrations_count ?? 0 }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap text-center">{{ $event->participant_count ?? 0 }}</td>
                             <td class="border px-4 py-2 whitespace-nowrap">{{ $event->datefrom }}</td>
                             <td class="border px-4 py-2 whitespace-nowrap">{{ $event->dateto }}</td>
                             <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->venue_name ?? 'N/A' }}</td>
