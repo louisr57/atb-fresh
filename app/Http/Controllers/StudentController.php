@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Rinvex\Country\CountryLoader;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Activitylog\Facades\ActivityLog;
 
 class StudentController extends Controller
 {
@@ -17,6 +19,11 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = Student::with('registrations.event.course', 'registrations.event.facilitator')->findOrFail($id);
+        activity()
+            ->performedOn($student)
+            ->causedBy(Auth::user())
+            ->log('Student profile viewed');
+
         return view('students.show', compact('student'));
     }
 
@@ -41,6 +48,15 @@ class StudentController extends Controller
         ]);
 
         $student = Student::create($validated);
+
+        activity()
+            ->performedOn($student)
+            ->causedBy(Auth::user())
+            ->withProperties([
+                'attributes' => $validated,
+                'performed_by' => Auth::user()->name
+            ])
+            ->log('New student created');
 
         $sort_by = $request->get('sort_by', 'first_name');
         $direction = $request->get('direction', 'asc');
@@ -97,7 +113,18 @@ class StudentController extends Controller
                 ->withInput();
         }
 
+        $oldData = $student->toArray();
         $student->update($validator->validated());
+
+        activity()
+            ->performedOn($student)
+            ->causedBy(Auth::user())
+            ->withProperties([
+                'old' => $oldData,
+                'new' => $student->toArray(),
+                'performed_by' => Auth::user()->name
+            ])
+            ->log('Student information updated');
 
         return redirect()
             ->route('students.show', $student->id)
@@ -112,6 +139,17 @@ class StudentController extends Controller
             return redirect()->route('facilitators.show', $student->id)
                 ->with('error', 'Cannot delete facilitator with associated events.');
         }
+
+        $studentData = $student->toArray();
+
+        activity()
+            ->performedOn($student)
+            ->causedBy(Auth::user())
+            ->withProperties([
+                'student_data' => $studentData,
+                'performed_by' => Auth::user()->name
+            ])
+            ->log('Student record deleted');
 
         $student->delete();
 
