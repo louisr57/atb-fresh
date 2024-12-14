@@ -10,36 +10,39 @@ use Rinvex\Country\CountryLoader; // If you're using the Laravel package for cou
 class FacilitatorController extends Controller
 {
     // Display a listing of facilitators
-    public function index()
+    public function index(Request $request)
     {
+        $sort_by = $request->get('sort_by', 'id');  // Default sort column
+        $direction = $request->get('direction', 'asc');    // Default sort direction
         // Get all facilitators
-        $facilitators = Facilitator::all();
+        $facilitators = Facilitator::orderBy($sort_by, $direction)->paginate(20); // Paginate for ease
 
         // Return view with facilitators
-        return view('facilitators.index', compact('facilitators'));
+        return view('facilitators.index', compact('facilitators', 'sort_by', 'direction'));
     }
 
     // Show the details of a specific facilitator
     public function show(Request $request, $id)
     {
         // Get sort parameters from request
-        $sort = $request->get('sort', 'datefrom');
+        $sort_by = $request->get('sort', 'datefrom');
         $direction = $request->get('direction', 'asc');
 
         // Find the facilitator by ID and load related events and courses
-        $facilitator = Facilitator::with(['events' => function ($query) use ($sort, $direction) {
-            $query->withCount('registrations'); // Add registration count
+        $facilitator = Facilitator::with(['events' => function ($query) use ($sort_by, $direction) {
+            // First, add the registrations count to all events
+            $query->withCount('registrations');
 
             // Handle different sort columns
-            switch ($sort) {
+            switch($sort_by) {
                 case 'course_title':
                     $query->join('courses', 'events.course_id', '=', 'courses.id')
                           ->orderBy('courses.course_title', $direction)
+                          ->withCount('registrations')
                           ->select('events.*');
                     break;
                 case 'participant_count':
-                    $query->withCount('registrations')
-                          ->orderBy('registrations_count', $direction);
+                    $query->orderBy('registrations_count', $direction);
                     break;
                 case 'venue':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
@@ -62,12 +65,12 @@ class FacilitatorController extends Controller
                           ->select('events.*');
                     break;
                 default:
-                    $query->orderBy($sort, $direction);
+                    $query->orderBy($sort_by, $direction);
             }
         }, 'events.course', 'events.venue'])->findOrFail($id);
 
         // Return view with facilitator data
-        return view('facilitators.show', compact('facilitator'));
+        return view('facilitators.show', compact('facilitator', 'sort_by', 'direction'));
     }
 
     public function create()

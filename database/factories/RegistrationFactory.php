@@ -90,10 +90,6 @@ class RegistrationFactory extends Factory
         // echo "\$currentCourseIndex: " . $currentCourseIndex . "\n\n"; // This is an array number, NOT a course code!
 
 
-        // Determine the next course in sequence or allow repeating if all are completed
-        FIXME: // There is a bug in here somewhere.The logic is flawed.
-        // It only shows up when all courses are completed. The code should allow repeating any course except the first one (ATB K-BT).
-        // The generated error was: SQLSTATE[HY000]: General error: 1364 Field 'student_id' doesn't have a default value (Connection: mysql, SQL: insert into `registrations` (`updated_at`, `created_at`) values (2024-10-03 14:26:42, 2024-10-03 14:26:42))
         if ($allCoursesCompleted) {
             // If all courses are completed, allow repeating any previous course except the one with ID 0
             $repeatableCourses = array_diff($completedCourseCodes, ['ATB K-BT']);
@@ -126,8 +122,6 @@ class RegistrationFactory extends Factory
             return [];
         }
 
-        TODO: // Get the student's last attempt for the same course
-        // Problem with allCoursesCompleted = true ... starts here
         $lastAttemptOnSameCourse = null; // Starting point for the variable value
         $lastAttemptOnSameCourse = Registration::where('student_id', $student->id)
             ->join('events', 'registrations.event_id', '=', 'events.id') // Join the events table
@@ -174,9 +168,9 @@ class RegistrationFactory extends Factory
         // echo "\$events: " . json_encode($events, JSON_PRETTY_PRINT) . "\n\n";
 
         // echo "Available Events for the same course:\n";
-        foreach ($events as $event) {
-            //    echo "Event ID: {$event->id}, Date: {$event->datefrom}, Participants: {$event->participant_count}\n";
-        }
+        // foreach ($events as $event) {
+        //     //    echo "Event ID: {$event->id}, Date: {$event->datefrom}, Participants: {$event->participant_count}\n";
+        // }
 
         // Pick the first available event
         $nextEvent = $events->first(function ($event) {
