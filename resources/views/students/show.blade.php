@@ -214,6 +214,10 @@
                 <a href="{{ route('students.index') }}" class="text-blue-600 hover:underline">
                     ← Back to Students List
                 </a>
+            </br></br>
+                <a href="{{ route('activity-logs.student', $student->id) }}" class="text-red-700 hover:underline">
+                    ← View Activity Log for this student
+                </a>
             </div>
         </div>
     </div>

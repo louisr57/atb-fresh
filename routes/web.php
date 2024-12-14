@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\VenueController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\EventController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\FacilitatorController;
-use App\Http\Controllers\VenueController;
+use App\Http\Controllers\RegistrationController;
 
 
 // Breeze Authentication Routes
@@ -80,4 +81,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->name('registrations.show');
     Route::get('/registrations/create/{event}', [RegistrationController::class, 'create'])->name('registrations.create');
     Route::post('/registrations', [RegistrationController::class, 'store'])->name('registrations.store');
+
+    // Activity Log routes (all protected)
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+    Route::get('/activity-logs/students/{student}', [ActivityLogController::class, 'studentLogs'])->name('activity-logs.student');
 });
