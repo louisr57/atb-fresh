@@ -219,6 +219,10 @@
                 <a href="{{ route('activity-logs.student', $student->id) }}" class="text-red-700 hover:underline">
                     ← View Activity Log for this student
                 </a>
+                </br>
+                <a href="{{ route('activity-logs.index') }}" class="text-red-700 hover:underline">
+                    ← View Activity Log - ALL
+                </a>
                 @endif
             </div>
         </div>
