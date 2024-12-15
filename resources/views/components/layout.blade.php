@@ -43,6 +43,12 @@
                                 </x-nav-link>
                                 <x-nav-link href="/facilitators" :active="request()->is('facilitators')">Facilitators
                                 </x-nav-link>
+                                @if(auth()->user()->name === 'Louisr57')
+                                <x-nav-link href="/registrations" :active="request()->is('registrations')">Registrations
+                                </x-nav-link>
+                                <x-nav-link href="/activity-logs" :active="request()->is('activity-logs')">Activity Logs
+                                </x-nav-link>
+                                @endif
                             </div>
                         </div>
                     </div>
