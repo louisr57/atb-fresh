@@ -24,6 +24,12 @@
         <table class="min-w-full table-auto border-collapse border border-gray-500">
             <thead class="bg-gray-200">
                 <tr>
+                    @if(auth()->user()->name === 'Louisr57')
+                    <th class="border border-gray-500 px-4 py-2 text-left">
+                        <a href="{{ route('students.index', ['sort_by' => 'reg_count', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}"
+                            class="text-blue-500 hover:underline">Reg Count</a>
+                    </th>
+                    @endif
                     <th class="border border-gray-500 px-4 py-2 text-left">
                         <a href="{{ route('students.index', ['sort_by' => 'first_name', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}"
                             class="text-blue-500 hover:underline">First Name</a>
@@ -51,6 +57,9 @@
                 <tr data-student-id="{{ $student->id }}"
                     onclick="window.location='{{ route('students.show', $student->id) }}'"
                     class="hover:bg-cyan-100 hover:underline cursor-pointer">
+                    @if(auth()->user()->name === 'Louisr57')
+                    <td class="border border-gray-500 px-4 py-2">{{ $student->reg_count }}</td>
+                    @endif
                     <td class="border border-gray-500 px-4 py-2">{{ $student->first_name }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $student->last_name }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $student->email }}</td>

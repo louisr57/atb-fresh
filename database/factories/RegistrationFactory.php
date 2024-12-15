@@ -186,6 +186,7 @@ class RegistrationFactory extends Factory
 
         // Increment participant count for the selected event
         $nextEvent->increment('participant_count');
+        $student->increment('reg_count');
         // echo "Next event selected: Event ID {$nextEvent->id}, {$nextEvent->title} starting on {$nextEvent->datefrom}\n";
         // echo "=========================================================================\n\n";
 

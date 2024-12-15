@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('next_of_kin')->nullable();
             $table->string('allergies')->default('N/A')->nullable();
             $table->text('special_needs')->nullable();
+            $table->bigInteger('reg_count')->default(0);
             $table->timestamps();
         });
     }
