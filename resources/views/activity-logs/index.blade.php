@@ -103,7 +103,8 @@
                                                 'ident',
                                                 'next_of_kin',
                                                 'allergies',
-                                                'special_needs'
+                                                'special_needs',
+                                                'reg_count'
                                             ];
 
                                             // Get the properties
@@ -177,7 +178,8 @@
                                                         'ident',
                                                         'next_of_kin',
                                                         'allergies',
-                                                        'special_needs'
+                                                        'special_needs',
+                                                        'reg_count'
                                                     ];
 
                                                     // Sort the changes array based on the field order
