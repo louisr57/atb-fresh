@@ -85,7 +85,51 @@
                                     @endif
 
                                     @if(str_contains($activity->description, 'deleted'))
-                                        <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($activity->properties, JSON_PRETTY_PRINT) }}</pre>
+                                        @php
+                                            // Define the desired field order (same as for updates)
+                                            $fieldOrder = [
+                                                'first_name',
+                                                'last_name',
+                                                'email',
+                                                'phone_number',
+                                                'dob',
+                                                'gender',
+                                                'address',
+                                                'city',
+                                                'state',
+                                                'country',
+                                                'post_code',
+                                                'website',
+                                                'ident',
+                                                'next_of_kin',
+                                                'allergies',
+                                                'special_needs'
+                                            ];
+
+                                            // Get the properties
+                                            $properties = $activity->properties;
+                                            $attributes = $properties['old'] ?? [];
+                                                // dd($attributes);
+                                            // Create ordered array for the properties we want to show
+                                            $orderedProperties = [];
+
+                                            // First add properties in our desired order
+                                            foreach ($fieldOrder as $field) {
+                                                // dd(isset($attributes[$field]));
+                                                if (isset($attributes[$field])) {
+                                                    $orderedProperties[$field] = $attributes[$field];
+                                                }
+                                            }
+
+                                            // Then add any remaining properties that weren't in our order
+                                            foreach ($attributes as $key => $value) {
+                                                if (!isset($orderedProperties[$key])) {
+                                                    $orderedProperties[$key] = $value;
+                                                }
+                                            }
+                                            // dd($orderedProperties);
+                                        @endphp
+                                        <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($orderedProperties, JSON_PRETTY_PRINT) }}</pre>
                                     @endif
 
                                     @if(str_contains($activity->description, 'updated'))
