@@ -52,6 +52,7 @@
                             @auth
                             <div class="hidden md:block">
                                 <div class="ml-4 flex items-center md:ml-6">
+                                    <span class="text-white mr-4">Welcome {{ Auth::user()->name }}</span>
                                     <!-- Profile dropdown -->
                                     <div class="relative ml-3" x-data="{ open: false }">
                                         <div>
