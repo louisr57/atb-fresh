@@ -50,7 +50,8 @@ class Student extends Model
                 'ident',
                 'next_of_kin',
                 'allergies',
-                'special_needs'
+                'special_needs',
+                'reg_count'
             ])
             ->logOnlyDirty()
             ->setDescriptionForEvent(fn(string $eventName) => "Student has been {$eventName}")
