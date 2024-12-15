@@ -215,9 +215,11 @@
                     ← Back to Students List
                 </a>
             </br></br>
+                @if(Auth::check() && Auth::user()->name === 'Louisr57')
                 <a href="{{ route('activity-logs.student', $student->id) }}" class="text-red-700 hover:underline">
                     ← View Activity Log for this student
                 </a>
+                @endif
             </div>
         </div>
     </div>

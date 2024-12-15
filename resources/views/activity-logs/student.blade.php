@@ -39,15 +39,41 @@
                                         <strong>Changed Values:</strong>
                                         <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($activity->properties['attributes'], JSON_PRETTY_PRINT) }}</pre>
                                     @endif
-                                    @if($activity->properties->has('old') && $activity->properties->has('new'))
+                                    @if($activity->properties->has('old') && $activity->properties->has('attributes'))
                                         <button onclick="toggleDiff(this)" class="text-blue-600 hover:text-blue-800 text-sm mt-1">
                                             Show Changes
                                         </button>
                                         <div class="hidden mt-2">
-                                            <strong>Before:</strong>
-                                            <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($activity->properties['old'], JSON_PRETTY_PRINT) }}</pre>
-                                            <strong>After:</strong>
-                                            <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($activity->properties['new'], JSON_PRETTY_PRINT) }}</pre>
+                                            @php
+                                                $changes = [];
+                                                $old = $activity->properties['old'];
+                                                $new = $activity->properties['attributes'];
+                                                foreach ($new as $key => $value) {
+                                                    if (isset($old[$key]) && $old[$key] !== $value) {
+                                                        $changes[$key] = [
+                                                            'old' => $old[$key],
+                                                            'new' => $value
+                                                        ];
+                                                    }
+                                                }
+                                            @endphp
+                                            @if(count($changes) > 0)
+                                                @foreach($changes as $field => $values)
+                                                    <div class="mb-2">
+                                                        <strong>{{ ucwords(str_replace('_', ' ', $field)) }}:</strong>
+                                                        <div class="grid grid-cols-2 gap-4">
+                                                            <div class="bg-red-50 p-1 rounded">
+                                                                <span class="text-red-600">- {{ $values['old'] }}</span>
+                                                            </div>
+                                                            <div class="bg-green-50 p-1 rounded">
+                                                                <span class="text-green-600">+ {{ $values['new'] }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <p class="text-gray-500">No changes detected</p>
+                                            @endif
                                         </div>
                                     @endif
                                 </td>
