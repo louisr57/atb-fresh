@@ -24,7 +24,11 @@ class Student extends Model
         'post_code',
         'dob',
         'gender',
-        'website'
+        'website',
+        'ident',
+        'next_of_kin',
+        'allergies',
+        'special_needs'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -42,7 +46,11 @@ class Student extends Model
                 'post_code',
                 'dob',
                 'gender',
-                'website'
+                'website',
+                'ident',
+                'next_of_kin',
+                'allergies',
+                'special_needs'
             ])
             ->logOnlyDirty()
             ->setDescriptionForEvent(fn(string $eventName) => "Student has been {$eventName}")

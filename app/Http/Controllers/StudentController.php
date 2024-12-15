@@ -45,6 +45,12 @@ class StudentController extends Controller
             'state' => 'required|string|max:100',
             'country' => 'required|string|max:100',
             'post_code' => 'required|string|max:20',
+            'website' => 'nullable|url|max:255',
+            'dob' => 'required|date',
+            'ident' => 'nullable|string|max:255',
+            'next_of_kin' => 'nullable|string|max:255',
+            'allergies' => 'nullable|string|max:255',
+            'special_needs' => 'nullable|string|max:1020',
         ]);
 
         $student = Student::create($validated);
