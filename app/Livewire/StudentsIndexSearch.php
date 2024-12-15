@@ -11,10 +11,28 @@ class StudentsIndexSearch extends Component
     use WithPagination;
 
     public $search = '';
+    public $sortBy = 'first_name';
+    public $direction = 'asc';
+
+    public function mount()
+    {
+        $this->sortBy = request('sort_by', 'first_name');
+        $this->direction = request('direction', 'asc');
+    }
 
     public function updatedSearch()
     {
         $this->resetPage();
+    }
+
+    public function sort($field)
+    {
+        if ($field === $this->sortBy) {
+            $this->direction = $this->direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortBy = $field;
+            $this->direction = 'asc';
+        }
     }
 
     public function getStudentsProperty()
@@ -25,7 +43,7 @@ class StudentsIndexSearch extends Component
                     ->orWhere('last_name', 'like', "%{$this->search}%");
             }
         })
-        ->orderBy(request('sort_by', 'first_name'), request('direction', 'asc'))
+        ->orderBy($this->sortBy, $this->direction)
         ->paginate(10);
     }
 

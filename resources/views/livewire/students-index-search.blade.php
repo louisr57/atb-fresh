@@ -26,29 +26,53 @@
                 <tr>
                     @if(auth()->user()->name === 'Louisr57')
                     <th class="border border-gray-500 px-4 py-2 text-left">
-                        <a href="{{ route('students.index', ['sort_by' => 'reg_count', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}"
-                            class="text-blue-500 hover:underline">Reg Count</a>
+                        <button wire:click="sort('reg_count')" class="text-blue-500 hover:underline">
+                            Reg Count
+                            @if($sortBy === 'reg_count')
+                                @if($direction === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
                     </th>
                     @endif
                     <th class="border border-gray-500 px-4 py-2 text-left">
-                        <a href="{{ route('students.index', ['sort_by' => 'first_name', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}"
-                            class="text-blue-500 hover:underline">First Name</a>
+                        <button wire:click="sort('first_name')" class="text-blue-500 hover:underline">
+                            First Name
+                            @if($sortBy === 'first_name')
+                                @if($direction === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
                     </th>
                     <th class="border border-gray-500 px-4 py-2 text-left">
-                        <a href="{{ route('students.index', ['sort_by' => 'last_name', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}"
-                            class="text-blue-500 hover:underline">Last Name</a>
+                        <button wire:click="sort('last_name')" class="text-blue-500 hover:underline">
+                            Last Name
+                            @if($sortBy === 'last_name')
+                                @if($direction === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
                     </th>
                     <th class="border border-gray-500 px-4 py-2 text-left">
-                        <a href="{{ route('students.index', ['sort_by' => 'email', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}"
-                            class="text-blue-500 hover:underline">Email</a>
+                        <button wire:click="sort('email')" class="text-blue-500 hover:underline">
+                            Email
+                            @if($sortBy === 'email')
+                                @if($direction === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
                     </th>
                     <th class="border border-gray-500 px-4 py-2 text-left">
-                        <a href="{{ route('students.index', ['sort_by' => 'phone_number', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}"
-                            class="text-blue-500 hover:underline">Phone Number</a>
+                        <button wire:click="sort('phone_number')" class="text-blue-500 hover:underline">
+                            Phone Number
+                            @if($sortBy === 'phone_number')
+                                @if($direction === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
                     </th>
                     <th class="border border-gray-500 px-4 py-2 text-left">
-                        <a href="{{ route('students.index', ['sort_by' => 'city', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}"
-                            class="text-blue-500 hover:underline">City</a>
+                        <button wire:click="sort('city')" class="text-blue-500 hover:underline">
+                            City
+                            @if($sortBy === 'city')
+                                @if($direction === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
                     </th>
                 </tr>
             </thead>
@@ -71,7 +95,7 @@
         </table>
 
         <div class="mt-4">
-            {{ $students->appends(request()->input())->links() }}
+            {{ $students->links() }}
         </div>
     @endif
 </div>
