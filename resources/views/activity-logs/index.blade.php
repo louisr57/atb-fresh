@@ -64,17 +64,18 @@
                                     {{ $activity->description }}
                                 </td>
                                 <td class="border border-gray-500 px-4 py-2">
-                                    @dump($activity->description);
+                                    {{-- @dump($activity->description); --}}
                                     @if($activity->subject_type === \App\Models\Student::class)
+
                                         <strong>Student:</strong>
                                         @if($activity->subject)
                                             <a href="{{ route('students.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
                                                 {{ $activity->subject->first_name }} {{ $activity->subject->last_name }}
                                             </a>
-                                            @dump($activity->description);
+                                            {{-- @dump($activity->description); --}}
                                             @if(str_contains($activity->description, 'viewed'))
-                                                <span class="text-gray-500 text-sm">
-                                                    (Profile viewed by {{ $activity->causer->name ?? 'System' }})
+                                                <span class="text-gray-500">
+                                                    Profile viewed by {{ $activity->causer->name ?? 'System' }}
                                                 </span>
                                             @endif
                                         @else

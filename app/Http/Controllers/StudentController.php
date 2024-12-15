@@ -19,7 +19,7 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = Student::with('registrations.event.course', 'registrations.event.facilitator')->findOrFail($id);
-        activity()
+        activity('student') // Explicitly set the log name to 'student'
             ->performedOn($student)
             ->causedBy(Auth::user())
             ->log('Student profile viewed');
@@ -48,15 +48,15 @@ class StudentController extends Controller
         ]);
 
         $student = Student::create($validated);
-
-        activity()
-            ->performedOn($student)
-            ->causedBy(Auth::user())
-            ->withProperties([
-                'attributes' => $validated,
-                'performed_by' => Auth::user()->name
-            ])
-            ->log('New student created');
+        // No need log the creation of a new student as it is already logged in the model
+        // activity()
+        //     ->performedOn($student)
+        //     ->causedBy(Auth::user())
+        //     ->withProperties([
+        //         'attributes' => $validated,
+        //         'performed_by' => Auth::user()->name
+        //     ])
+        //     ->log('New student created');
 
         $sort_by = $request->get('sort_by', 'first_name');
         $direction = $request->get('direction', 'asc');
@@ -115,16 +115,16 @@ class StudentController extends Controller
 
         $oldData = $student->toArray();
         $student->update($validator->validated());
-
-        activity()
-            ->performedOn($student)
-            ->causedBy(Auth::user())
-            ->withProperties([
-                'old' => $oldData,
-                'new' => $student->toArray(),
-                'performed_by' => Auth::user()->name
-            ])
-            ->log('Student information updated');
+        // No need log the update of a student as it is already logged in the model
+        // activity()
+        //     ->performedOn($student)
+        //     ->causedBy(Auth::user())
+        //     ->withProperties([
+        //         'old' => $oldData,
+        //         'new' => $student->toArray(),
+        //         'performed_by' => Auth::user()->name
+        //     ])
+        //     ->log('Student information updated');
 
         return redirect()
             ->route('students.show', $student->id)
@@ -141,25 +141,25 @@ class StudentController extends Controller
         }
 
         $studentData = $student->toArray();
-
-        activity()
-            ->performedOn($student)
-            ->causedBy(Auth::user())
-            ->withProperties([
-                'deleted_student' => [
-                    'id' => $student->id,
-                    'name' => $student->first_name . ' ' . $student->last_name,
-                    'email' => $student->email,
-                    'phone_number' => $student->phone_number,
-                    'address' => $student->address,
-                    'city' => $student->city,
-                    'state' => $student->state,
-                    'country' => $student->country,
-                    'post_code' => $student->post_code
-                ],
-                'performed_by' => Auth::user()->name
-            ])
-            ->log('Student record deleted: ' . $student->first_name . ' ' . $student->last_name);
+        // No need log the deletion of a student as it is already logged in the model
+        // activity()
+        //     ->performedOn($student)
+        //     ->causedBy(Auth::user())
+        //     ->withProperties([
+        //         'deleted_student' => [
+        //             'id' => $student->id,
+        //             'name' => $student->first_name . ' ' . $student->last_name,
+        //             'email' => $student->email,
+        //             'phone_number' => $student->phone_number,
+        //             'address' => $student->address,
+        //             'city' => $student->city,
+        //             'state' => $student->state,
+        //             'country' => $student->country,
+        //             'post_code' => $student->post_code
+        //         ],
+        //         'performed_by' => Auth::user()->name
+        //     ])
+        //     ->log('Student record deleted: ' . $student->first_name . ' ' . $student->last_name);
 
         $student->delete();
 

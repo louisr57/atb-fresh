@@ -10,6 +10,7 @@ use Spatie\Activitylog\LogOptions;
 class Student extends Model
 {
     use HasFactory, LogsActivity;
+    const LOG_NAME = 'student';
 
     protected $fillable = [
         'first_name',
@@ -45,7 +46,7 @@ class Student extends Model
             ])
             ->logOnlyDirty()
             ->setDescriptionForEvent(fn(string $eventName) => "Student has been {$eventName}")
-            ->useLogName('student');
+            ->useLogName(self::LOG_NAME);
     }
 
     public function registrations()
