@@ -60,28 +60,81 @@
                                     {{ $activity->description }}
                                 </td>
                                 <td class="border border-gray-500 px-4 py-2">
-                                    @if($activity->subject)
-                                        <strong>{{ class_basename($activity->subject_type) }}:</strong>
-                                        @if($activity->subject_type === \App\Models\Student::class)
+                                    @dump($activity->description);
+                                    @if($activity->subject_type === \App\Models\Student::class)
+                                        <strong>Student:</strong>
+                                        @if($activity->subject)
                                             <a href="{{ route('students.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
                                                 {{ $activity->subject->first_name }} {{ $activity->subject->last_name }}
                                             </a>
+                                            @dump($activity->description);
+                                            @if(str_contains($activity->description, 'viewed'))
+                                                <span class="text-gray-500 text-sm">
+                                                    (Profile viewed by {{ $activity->causer->name ?? 'System' }})
+                                                </span>
+                                            @endif
+                                        @else
+                                            <span class="text-gray-500">(Student no longer exists)</span>
                                         @endif
                                         <br>
                                     @endif
-                                    @if($activity->properties->has('attributes'))
-                                        <strong>Changed:</strong>
-                                        <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($activity->properties['attributes'], JSON_PRETTY_PRINT) }}</pre>
+
+                                    @if(str_contains($activity->description, 'deleted'))
+                                        <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($activity->properties, JSON_PRETTY_PRINT) }}</pre>
                                     @endif
-                                    @if($activity->properties->has('old') && $activity->properties->has('new'))
+
+                                    @if(str_contains($activity->description, 'updated'))
                                         <button onclick="toggleDiff(this)" class="text-blue-600 hover:text-blue-800 text-sm mt-1">
                                             Show Changes
                                         </button>
                                         <div class="hidden mt-2">
-                                            <strong>Before:</strong>
-                                            <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($activity->properties['old'], JSON_PRETTY_PRINT) }}</pre>
-                                            <strong>After:</strong>
-                                            <pre class="text-xs mt-1 bg-white p-2 rounded">{{ json_encode($activity->properties['new'], JSON_PRETTY_PRINT) }}</pre>
+                                            @php
+                                                $changes = [];
+                                                $properties = $activity->properties;
+
+                                                // Debug output
+                                                // echo "<pre class='text-xs bg-yellow-50 p-2 rounded mb-2'>";
+                                                // echo "Debug - Properties type: " . gettype($properties) . "\n";
+                                                // echo "Debug - Properties content: " . json_encode($properties, JSON_PRETTY_PRINT) . "\n";
+
+                                                if (isset($properties['old']) && isset($properties['attributes'])) {
+                                                    // echo "Debug - Found old and new properties\n";
+                                                    $old = $properties['old'];
+                                                    $new = $properties['attributes'];
+                                                    // echo "Debug - Old values: " . json_encode($old, JSON_PRETTY_PRINT) . "\n";
+                                                    // echo "Debug - New values: " . json_encode($new, JSON_PRETTY_PRINT) . "\n";
+
+                                                    foreach ($new as $key => $value) {
+                                                        if (isset($old[$key]) && $old[$key] !== $value) {
+                                                            // echo "Debug - Found change in field: $key\n";
+                                                            // echo "Debug - Old value: " . json_encode($old[$key]) . "\n";
+                                                            // echo "Debug - New value: " . json_encode($value) . "\n";
+                                                            $changes[$key] = [
+                                                                'old' => $old[$key],
+                                                                'new' => $value
+                                                            ];
+                                                        }
+                                                    }
+                                                }
+                                                echo "</pre>";
+                                            @endphp
+                                            @if(count($changes) > 0)
+                                                @foreach($changes as $field => $values)
+                                                    <div class="mb-2">
+                                                        <strong>{{ ucwords(str_replace('_', ' ', $field)) }}:</strong>
+                                                        <div class="grid grid-cols-2 gap-4">
+                                                            <div class="bg-red-50 p-1 rounded">
+                                                                <span class="text-red-600">- {{ $values['old'] }}</span>
+                                                            </div>
+                                                            <div class="bg-green-50 p-1 rounded">
+                                                                <span class="text-green-600">+ {{ $values['new'] }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <p class="text-gray-500">No changes detected</p>
+                                            @endif
                                         </div>
                                     @endif
                                 </td>

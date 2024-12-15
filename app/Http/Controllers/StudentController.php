@@ -135,9 +135,9 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
 
-        if ($student->events->isNotEmpty()) {
-            return redirect()->route('facilitators.show', $student->id)
-                ->with('error', 'Cannot delete facilitator with associated events.');
+        if ($student->registrations->isNotEmpty()) {
+            return redirect()->route('students.show', $student->id)
+                ->with('error', 'Cannot delete student with existing registrations.');
         }
 
         $studentData = $student->toArray();
@@ -146,10 +146,20 @@ class StudentController extends Controller
             ->performedOn($student)
             ->causedBy(Auth::user())
             ->withProperties([
-                'student_data' => $studentData,
+                'deleted_student' => [
+                    'id' => $student->id,
+                    'name' => $student->first_name . ' ' . $student->last_name,
+                    'email' => $student->email,
+                    'phone_number' => $student->phone_number,
+                    'address' => $student->address,
+                    'city' => $student->city,
+                    'state' => $student->state,
+                    'country' => $student->country,
+                    'post_code' => $student->post_code
+                ],
                 'performed_by' => Auth::user()->name
             ])
-            ->log('Student record deleted');
+            ->log('Student record deleted: ' . $student->first_name . ' ' . $student->last_name);
 
         $student->delete();
 
