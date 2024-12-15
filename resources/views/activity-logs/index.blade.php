@@ -19,6 +19,10 @@
                         </select>
                     </div>
                     <div>
+                        <label class="block text-gray-700 font-bold mb-2">User</label>
+                        <livewire:user-search-dropdown />
+                    </div>
+                    <div>
                         <label class="block text-gray-700 font-bold mb-2">From Date</label>
                         <input type="date" name="from_date" value="{{ request('from_date') }}"
                             class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -92,23 +96,12 @@
                                                 $changes = [];
                                                 $properties = $activity->properties;
 
-                                                // Debug output
-                                                // echo "<pre class='text-xs bg-yellow-50 p-2 rounded mb-2'>";
-                                                // echo "Debug - Properties type: " . gettype($properties) . "\n";
-                                                // echo "Debug - Properties content: " . json_encode($properties, JSON_PRETTY_PRINT) . "\n";
-
                                                 if (isset($properties['old']) && isset($properties['attributes'])) {
-                                                    // echo "Debug - Found old and new properties\n";
                                                     $old = $properties['old'];
                                                     $new = $properties['attributes'];
-                                                    // echo "Debug - Old values: " . json_encode($old, JSON_PRETTY_PRINT) . "\n";
-                                                    // echo "Debug - New values: " . json_encode($new, JSON_PRETTY_PRINT) . "\n";
 
                                                     foreach ($new as $key => $value) {
                                                         if (isset($old[$key]) && $old[$key] !== $value) {
-                                                            // echo "Debug - Found change in field: $key\n";
-                                                            // echo "Debug - Old value: " . json_encode($old[$key]) . "\n";
-                                                            // echo "Debug - New value: " . json_encode($value) . "\n";
                                                             $changes[$key] = [
                                                                 'old' => $old[$key],
                                                                 'new' => $value
@@ -116,7 +109,6 @@
                                                         }
                                                     }
                                                 }
-                                                echo "</pre>";
                                             @endphp
                                             @if(count($changes) > 0)
                                                 @foreach($changes as $field => $values)

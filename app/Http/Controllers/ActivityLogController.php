@@ -28,8 +28,10 @@ class ActivityLogController extends Controller
         }
 
         // Filter by user if provided
-        if ($request->filled('user_id')) {
-            $query->where('causer_id', $request->user_id);
+        if ($request->filled('user')) {
+            $query->whereHas('causer', function($q) use ($request) {
+                $q->where('name', $request->user);
+            });
         }
 
         $activities = $query->paginate(20);
