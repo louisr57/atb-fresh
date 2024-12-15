@@ -101,14 +101,55 @@
                                                     $old = $properties['old'];
                                                     $new = $properties['attributes'];
 
-                                                    foreach ($new as $key => $value) {
-                                                        if (isset($old[$key]) && $old[$key] !== $value) {
+                                                    // Track all changed fields
+                                                    $allFields = array_unique(array_merge(array_keys($old), array_keys($new)));
+                                                    foreach ($allFields as $key) {
+                                                        $oldValue = $old[$key] ?? null;
+                                                        $newValue = $new[$key] ?? null;
+
+                                                        // Include field if values are different or if one value doesn't exist
+                                                        if ($oldValue !== $newValue) {
                                                             $changes[$key] = [
-                                                                'old' => $old[$key],
-                                                                'new' => $value
+                                                                'old' => $oldValue ?? '(empty)',
+                                                                'new' => $newValue ?? '(empty)'
                                                             ];
                                                         }
                                                     }
+
+                                                    // Define the desired field order
+                                                    $fieldOrder = [
+                                                        'first_name',
+                                                        'last_name',
+                                                        'email',
+                                                        'phone_number',
+                                                        'dob',
+                                                        'gender',
+                                                        'address',
+                                                        'city',
+                                                        'state',
+                                                        'country',
+                                                        'post_code',
+                                                        'website',
+                                                        'ident',
+                                                        'next_of_kin',
+                                                        'allergies',
+                                                        'special_needs'
+                                                    ];
+
+                                                    // Sort the changes array based on the field order
+                                                    $sortedChanges = [];
+                                                    foreach ($fieldOrder as $field) {
+                                                        if (isset($changes[$field])) {
+                                                            $sortedChanges[$field] = $changes[$field];
+                                                        }
+                                                    }
+                                                    // Add any fields that weren't in the order array at the end
+                                                    foreach ($changes as $field => $value) {
+                                                        if (!isset($sortedChanges[$field])) {
+                                                            $sortedChanges[$field] = $value;
+                                                        }
+                                                    }
+                                                    $changes = $sortedChanges;
                                                 }
                                             @endphp
                                             @if(count($changes) > 0)
