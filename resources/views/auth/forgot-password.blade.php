@@ -6,7 +6,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" id="forgot-password-form">
         @csrf
 
         <!-- Email Address -->
@@ -17,13 +17,13 @@
         </div>
 
         <!-- reCAPTCHA -->
-        <div class="mt-4">
+        <div class="mt-4" id="recaptcha-container">
             <div class="g-recaptcha" data-sitekey="6LfsH58qAAAAAMCpVghEvlQtQl0hcifb-sNoQU-V"></div>
             <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
+            <x-primary-button id="submit-btn">
                 {{ __('Email Password Reset Link') }}
             </x-primary-button>
         </div>
@@ -31,4 +31,19 @@
 
     <!-- reCAPTCHA Script -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <script>
+        document.getElementById('forgot-password-form').addEventListener('submit', function(e) {
+            // Hide reCAPTCHA container after form submission
+            const recaptchaContainer = document.getElementById('recaptcha-container');
+            if (recaptchaContainer) {
+                recaptchaContainer.style.display = 'none';
+            }
+
+            // Reset reCAPTCHA
+            if (typeof grecaptcha !== 'undefined') {
+                grecaptcha.reset();
+            }
+        });
+    </script>
 </x-guest-layout>
