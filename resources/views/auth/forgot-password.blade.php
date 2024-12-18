@@ -17,7 +17,7 @@
         </div>
 
         <!-- reCAPTCHA -->
-        <div class="mt-4" id="recaptcha-container">
+        <div class="mt-4" id="recaptcha-container" style="{{ session('status') ? 'display: none;' : '' }}">
             <div class="g-recaptcha" data-sitekey="6LfsH58qAAAAAMCpVghEvlQtQl0hcifb-sNoQU-V"></div>
             <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
         </div>
@@ -33,17 +33,16 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <script>
-        document.getElementById('forgot-password-form').addEventListener('submit', function(e) {
-            // Hide reCAPTCHA container after form submission
-            const recaptchaContainer = document.getElementById('recaptcha-container');
-            if (recaptchaContainer) {
-                recaptchaContainer.style.display = 'none';
-            }
+        // Check if the form submission was successful
+        @if(session('status'))
+            document.getElementById('recaptcha-container').style.display = 'none';
+        @endif
 
-            // Reset reCAPTCHA
+        // Reset reCAPTCHA if there were validation errors
+        @if($errors->any())
             if (typeof grecaptcha !== 'undefined') {
                 grecaptcha.reset();
             }
-        });
+        @endif
     </script>
 </x-guest-layout>
