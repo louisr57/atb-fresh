@@ -62,7 +62,7 @@ return [
     ],
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'louisr57@gmail.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'noreply@attb.in'),
         'name' => env('MAIL_FROM_NAME', 'ATB_Fresh Laravel project'),
     ],
 ];
