@@ -26,20 +26,28 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validationRules = [
             'email' => ['required', 'email'],
-            'g-recaptcha-response' => ['required'],
-        ]);
+        ];
 
-        // Verify reCAPTCHA
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('RECAPTCHA_SECRET_KEY'),
-            'response' => $request->input('g-recaptcha-response'),
-            'remoteip' => $request->ip(),
-        ]);
+        // Only require reCAPTCHA validation in non-local environments
+        if (app()->environment() !== 'local') {
+            $validationRules['g-recaptcha-response'] = ['required'];
+        }
 
-        if (!$response->json('success')) {
-            return back()->withErrors(['g-recaptcha-response' => 'Please complete the CAPTCHA verification.']);
+        $request->validate($validationRules);
+
+        // Verify reCAPTCHA in non-local environments
+        if (app()->environment() !== 'local') {
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
+
+            if (!$response->json('success')) {
+                return back()->withErrors(['g-recaptcha-response' => 'Please complete the CAPTCHA verification.']);
+            }
         }
 
         // We will send the password reset link to this user. Once we have attempted
