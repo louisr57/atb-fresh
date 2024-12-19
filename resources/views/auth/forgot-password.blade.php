@@ -16,11 +16,13 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <!-- reCAPTCHA -->
-        <div class="mt-4" id="recaptcha-container" style="{{ session('status') ? 'display: none;' : '' }}">
-            <div class="g-recaptcha" data-sitekey="6LfsH58qAAAAAMCpVghEvlQtQl0hcifb-sNoQU-V"></div>
-            <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
-        </div>
+        @if(app()->environment() !== 'local')
+            <!-- reCAPTCHA -->
+            <div class="mt-4" id="recaptcha-container" style="{{ session('status') ? 'display: none;' : '' }}">
+                <div class="g-recaptcha" data-sitekey="6LfsH58qAAAAAMCpVghEvlQtQl0hcifb-sNoQU-V"></div>
+                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
+            </div>
+        @endif
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button id="submit-btn">
@@ -29,20 +31,22 @@
         </div>
     </form>
 
-    <!-- reCAPTCHA Script -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @if(app()->environment() !== 'local')
+        <!-- reCAPTCHA Script -->
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    <script>
-        // Check if the form submission was successful
-        @if(session('status'))
-            document.getElementById('recaptcha-container').style.display = 'none';
-        @endif
+        <script>
+            // Check if the form submission was successful
+            @if(session('status'))
+                document.getElementById('recaptcha-container').style.display = 'none';
+            @endif
 
-        // Reset reCAPTCHA if there were validation errors
-        @if($errors->any())
-            if (typeof grecaptcha !== 'undefined') {
-                grecaptcha.reset();
-            }
-        @endif
-    </script>
+            // Reset reCAPTCHA if there were validation errors
+            @if($errors->any())
+                if (typeof grecaptcha !== 'undefined') {
+                    grecaptcha.reset();
+                }
+            @endif
+        </script>
+    @endif
 </x-guest-layout>
