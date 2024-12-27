@@ -12,6 +12,7 @@
         }
     }">
         <!-- Header section with buttons -->
+
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold mb-0 mt-1">Events (Calendar) List</h1>
             <div class="flex space-x-4">
@@ -174,7 +175,7 @@
                                 href="{{ route('events.index', array_merge(request()->except(['sort_by', 'direction']), ['sort_by' => 'dateto', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">
                                 End Date
                                 @if ($sort_by === 'dateto')
-                                <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                    <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
                             </a>
                         </th>

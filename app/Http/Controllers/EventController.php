@@ -133,6 +133,8 @@ class EventController extends Controller
 
     public function update(Request $request, Event $event)
     {
+        // eval(\Psy\sh());
+
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'course_id' => 'required|exists:courses,id',
@@ -144,6 +146,7 @@ class EventController extends Controller
             'timeto' => 'required',
             'remarks' => 'nullable|string'
         ]);
+
 
         $event->update($validatedData);
         return redirect()->route('events.show', $event->id)

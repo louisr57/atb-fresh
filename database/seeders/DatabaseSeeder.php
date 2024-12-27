@@ -373,7 +373,7 @@ class DatabaseSeeder extends Seeder
         // Create registrations in small batches with progress tracking
         $this->command->info('Creating registrations...');
         $batchSize = 10;
-        $totalRegistrations = 300;
+        $totalRegistrations = 100;
         $batches = ceil($totalRegistrations / $batchSize);
 
         $bar = $this->command->getOutput()->createProgressBar($batches);
