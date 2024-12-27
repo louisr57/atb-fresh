@@ -30,7 +30,7 @@ class EventController extends Controller
         // Default to 'course_title' if the provided column is not in the sortable list
         $sortColumn = $sortableColumns[$sort_by] ?? 'courses.course_title';
 
-        // Build the query
+        // Build the base query with all necessary joins
         $query = Event::query()
             ->join('courses', 'events.course_id', '=', 'courses.id')
             ->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
@@ -74,6 +74,9 @@ class EventController extends Controller
 
         // Apply sorting and get paginated results
         $events = $query->orderBy($sortColumn, $direction)
+                       ->when($sortColumn !== 'events.datefrom', function($query) {
+                           $query->orderBy('events.datefrom', 'asc');
+                       })
                        ->paginate(15);
 
         // Pass the sorting parameters to the view

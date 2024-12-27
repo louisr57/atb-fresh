@@ -25,41 +25,19 @@ class RegistrationController extends Controller
             'end_status' => 'registrations.end_status',
         ];
 
-        // Default to 'student_name' if the provided column is not in the sortable list
-        $sortColumn = $sortableColumns[$sort_by] ?? 'student_name';
-
-        // Fetch registrations with relationships, sorted by the chosen column
-        // $registrations = Registration::with(['event.facilitator', 'event.course'])
-        //     ->paginate(10);
-
-        // Fetch registrations with relationships, sorted by the chosen column
-        // $registrations = Registration::join('students', 'registrations.student_id', '=', 'students.id')
-        //     ->join('events', 'registrations.event_id', '=', 'events.id')
-        //     ->join('courses', 'events.course_id', '=', 'courses.id')
-        //     ->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
-        //     ->select([
-        //         'registrations.id',
-        //         'students.id as student_id',
-        //         'students.first_name as student_first_name',
-        //         'students.last_name as student_last_name',
-        //         'courses.course_title',
-        //         'events.datefrom',
-        //         'events.dateto',
-        //         'facilitators.first_name as facilitator_first_name',
-        //         'registrations.end_status'
-        //     ])
-        //     ->whereNotNull('courses.id') // Ensure that events have valid courses
-        //     ->orderBy($sortColumn, $direction)
-        //     ->paginate(10);
+        // Get the sort column from the mapping, or use default
+        $sortColumn = $sortableColumns[$sort_by] ?? 'students.first_name';
 
         $registrations = Registration::with(['student', 'event.course', 'event.facilitator'])
             ->join('students', 'registrations.student_id', '=', 'students.id')
             ->join('events', 'registrations.event_id', '=', 'events.id')
             ->join('courses', 'events.course_id', '=', 'courses.id')
             ->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
-            ->orderBy('students.first_name', $direction) // Sort by the chosen column
-            ->orderBy('events.datefrom', $direction) // Then sort by event start date
-            ->select('registrations.*') // Select all registration fields after the join
+            ->select('registrations.*')
+            ->orderBy($sortColumn, $direction)
+            ->when($sortColumn !== 'events.datefrom', function($query) {
+                $query->orderBy('events.datefrom', 'asc');
+            })
             ->paginate(30);
 
         // $registrations = Registration::with(['student', 'event.course', 'event.facilitator'])
