@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+// Rename this file to 2024_09_20_080852_create_event_facilitator_table.php
+
 return new class extends Migration
 {
     /**

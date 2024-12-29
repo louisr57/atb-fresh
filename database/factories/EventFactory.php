@@ -54,9 +54,18 @@ class EventFactory extends Factory
             'timeto' => $this->faker->time(),
             'venue_id' => $this->faker->randomElement(self::$venueIds),
             'course_id' => $courseId,
-            'facilitator_id' => $this->faker->randomElement(self::$facilitatorIds),
             'remarks' => $this->faker->optional()->sentence(),
             'participant_count' => 0,
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Event $event) {
+            // Attach 1-2 random facilitators to each event
+            $numFacilitators = rand(1, 2);
+            $facilitatorIds = $this->faker->randomElements(self::$facilitatorIds, $numFacilitators);
+            $event->facilitators()->attach($facilitatorIds);
+        });
     }
 }
