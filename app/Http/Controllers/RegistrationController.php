@@ -34,7 +34,15 @@ class RegistrationController extends Controller
             ->join('courses', 'events.course_id', '=', 'courses.id')
             ->join('event_facilitator', 'events.id', '=', 'event_facilitator.event_id')
             ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
-            ->select('registrations.*')
+            ->select(
+                'registrations.*',
+                'students.first_name',
+                'students.last_name',
+                'events.datefrom',
+                'events.dateto',
+                'courses.course_title',
+                'facilitators.first_name as facilitator_first_name'
+            )
             ->distinct()
             ->orderBy($sortColumn, $direction)
             ->when($sortColumn !== 'events.datefrom', function($query) {
