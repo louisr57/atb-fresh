@@ -33,11 +33,13 @@ class EventController extends Controller
         // Build the base query with all necessary joins
         $query = Event::query()
             ->join('courses', 'events.course_id', '=', 'courses.id')
-            ->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
+            ->join('event_facilitator', 'events.id', '=', 'event_facilitator.event_id')
+            ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
             ->join('venues', 'events.venue_id', '=', 'venues.id')
-            ->select('events.*')
-            ->with(['course', 'facilitator', 'venue'])
-            ->withCount('registrations');
+            ->select('events.*', 'courses.course_title', 'venues.venue_name', 'venues.city', 'venues.state', 'venues.country')
+            ->with(['course', 'facilitators', 'venue'])
+            ->withCount('registrations')
+            ->distinct();
 
         // Apply search filters
         if ($request->filled('search_course')) {
@@ -85,7 +87,7 @@ class EventController extends Controller
 
     public function show($id)
     {
-        $event = Event::with(['course', 'facilitator', 'venue'])
+        $event = Event::with(['course', 'facilitators', 'venue'])
             ->with(['registrations' => function ($query) {
                 $query->select('registrations.*')
                     ->join('students', 'students.id', '=', 'registrations.student_id')
@@ -111,7 +113,8 @@ class EventController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'course_id' => 'required|exists:courses,id',
-            'facilitator_id' => 'required|exists:facilitators,id',
+            'facilitator_ids' => 'required|array',
+            'facilitator_ids.*' => 'required|exists:facilitators,id',
             'venue_id' => 'required|exists:venues,id',
             'datefrom' => 'required|date',
             'dateto' => 'required|date|after_or_equal:datefrom',
@@ -120,7 +123,13 @@ class EventController extends Controller
             'remarks' => 'nullable|string'
         ]);
 
+        // Remove facilitator_ids from validated data as it's not a column in events table
+        $facilitatorIds = $validatedData['facilitator_ids'];
+        unset($validatedData['facilitator_ids']);
+
+        // Create event and attach facilitators
         $event = Event::create($validatedData);
+        $event->facilitators()->attach($facilitatorIds);
 
         return redirect()->route('events.show', $event->id)
             ->with('success', 'Event created successfully.');
@@ -141,7 +150,8 @@ class EventController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'course_id' => 'required|exists:courses,id',
-            'facilitator_id' => 'required|exists:facilitators,id',
+            'facilitator_ids' => 'required|array',
+            'facilitator_ids.*' => 'required|exists:facilitators,id',
             'venue_id' => 'required|exists:venues,id',
             'datefrom' => 'required|date',
             'dateto' => 'required|date|after_or_equal:datefrom',
@@ -151,7 +161,13 @@ class EventController extends Controller
         ]);
 
 
+        // Remove facilitator_ids from validated data
+        $facilitatorIds = $validatedData['facilitator_ids'];
+        unset($validatedData['facilitator_ids']);
+
+        // Update event and sync facilitators
         $event->update($validatedData);
+        $event->facilitators()->sync($facilitatorIds);
         return redirect()->route('events.show', $event->id)
             ->with('success', 'Event updated successfully.');
     }

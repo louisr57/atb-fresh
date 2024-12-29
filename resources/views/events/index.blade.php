@@ -206,8 +206,12 @@
                         <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $event->course->course_title }}
                         </td>
-                        <td class="border px-4 py-2 whitespace-nowrap">
-                            {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
+                        <td class="border px-4 py-2">
+                            @foreach($event->facilitators as $facilitator)
+                                <div class="whitespace-nowrap">
+                                    {{ $facilitator->first_name }} {{ $facilitator->last_name }}
+                                </div>
+                            @endforeach
                         </td>
                         <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $event->participant_count }}

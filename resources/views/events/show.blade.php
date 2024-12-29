@@ -28,9 +28,14 @@
             <p class="text-lg mb-2">
                 <strong>Date:</strong> {{ $event->datefrom }} to {{ $event->dateto ?? 'N/A' }}
             </p>
-            <p class="text-lg mb-2">
-                <strong>Facilitator:</strong> {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
-            </p>
+            <div class="text-lg mb-2">
+                <strong>Facilitators:</strong>
+                <ul class="list-disc ml-6">
+                    @foreach($event->facilitators as $facilitator)
+                        <li>{{ $facilitator->first_name }} {{ $facilitator->last_name }}</li>
+                    @endforeach
+                </ul>
+            </div>
             <p class="text-lg mb-1">
                 @livewire('participant-count', ['event' => $event])
             </p>

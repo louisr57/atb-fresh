@@ -17,6 +17,7 @@ class Facilitator extends Model
 
     public function events()
     {
-        return $this->hasMany(Event::class, 'facilitator_id');
+        return $this->belongsToMany(Event::class)
+            ->withTimestamps();
     }
 }

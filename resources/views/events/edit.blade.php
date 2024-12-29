@@ -48,21 +48,66 @@
                     </div>
 
                     <!-- Facilitator Selection -->
-                    <div class="mb-4"
-                        x-data="{ open: false, selectedId: '{{ $event->facilitator_id }}', selectedText: '{{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}' }">
-                        <label for="facilitator_id" class="block text-gray-700 font-bold mb-2">Facilitator</label>
+                    <div class="mb-4" x-data="{
+                        open: false,
+                        selectedFacilitators: [
+                            @foreach($event->facilitators as $facilitator)
+                                {
+                                    id: '{{ $facilitator->id }}',
+                                    name: '{{ $facilitator->first_name }} {{ $facilitator->last_name }}'
+                                },
+                            @endforeach
+                        ],
+                        toggleFacilitator(id, name) {
+                            const index = this.selectedFacilitators.findIndex(f => f.id === id);
+                            if (index === -1) {
+                                this.selectedFacilitators.push({ id: id, name: name });
+                            } else {
+                                this.selectedFacilitators.splice(index, 1);
+                            }
+                        },
+                        isSelected(id) {
+                            return this.selectedFacilitators.some(f => f.id === id);
+                        }
+                    }">
+                        <label class="block text-gray-700 font-bold mb-2">Facilitators</label>
                         <div class="relative">
-                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                                readonly>
-                            <input type="hidden" name="facilitator_id" :value="selectedId">
+                            <!-- Selected facilitators display -->
+                            <div class="mb-2 flex flex-wrap gap-2">
+                                <template x-for="facilitator in selectedFacilitators" :key="facilitator.id">
+                                    <div class="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center">
+                                        <span x-text="facilitator.name"></span>
+                                        <button type="button" @click="toggleFacilitator(facilitator.id, facilitator.name)"
+                                                class="ml-2 text-blue-600 hover:text-blue-800">&times;</button>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Dropdown trigger -->
+                            <button type="button"
+                                    @click="open = !open"
+                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
+                                           @error('facilitator_ids') border-red-500 @enderror">
+                                Select Facilitators
+                            </button>
+
+                            <!-- Hidden inputs for form submission -->
+                            <template x-for="facilitator in selectedFacilitators" :key="facilitator.id">
+                                <input type="hidden" name="facilitator_ids[]" :value="facilitator.id">
+                            </template>
+
+                            @error('facilitator_ids')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            @enderror
+
+                            <!-- Dropdown menu -->
                             <div x-show="open" @click.away="open = false"
                                 class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
                                 @foreach($facilitators as $facilitator)
-                                <div class="cursor-pointer p-2 hover:bg-gray-100" @click="selectedId = '{{ $facilitator->id }}';
-                                            selectedText = '{{ $facilitator->first_name }} {{ $facilitator->last_name }}';
-                                            open = false">
-                                    {{ $facilitator->first_name }} {{ $facilitator->last_name }}
+                                <div class="cursor-pointer p-2 hover:bg-gray-100 flex items-center"
+                                     @click="toggleFacilitator('{{ $facilitator->id }}', '{{ $facilitator->first_name }} {{ $facilitator->last_name }}')">
+                                    <div class="flex-1">{{ $facilitator->first_name }} {{ $facilitator->last_name }}</div>
+                                    <div x-show="isSelected('{{ $facilitator->id }}')" class="text-blue-600">✓</div>
                                 </div>
                                 @endforeach
                             </div>

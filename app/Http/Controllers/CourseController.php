@@ -32,10 +32,12 @@ class CourseController extends Controller
                     $query->orderBy('participant_count', $direction);
                     break;
                 case 'facilitator':
-                    $query->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
+                    $query->join('event_facilitator', 'events.id', '=', 'event_facilitator.event_id')
+                          ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
                           ->orderBy('facilitators.first_name', $direction)
                           ->orderBy('facilitators.last_name', $direction)
-                          ->select('events.*');
+                          ->select('events.*')
+                          ->distinct();
                     break;
                 case 'venue':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
@@ -60,7 +62,7 @@ class CourseController extends Controller
                 default:
                     $query->orderBy($sort_by, $direction);
             }
-        }, 'events.facilitator', 'events.venue'])->findOrFail($id);
+        }, 'events.facilitators', 'events.venue'])->findOrFail($id);
 
         // Return the course to the view with sorting parameters
         return view('courses.show', compact('course', 'sort_by', 'direction'));

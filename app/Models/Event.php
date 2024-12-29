@@ -23,9 +23,10 @@ class Event extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function facilitator()
+    public function facilitators()
     {
-        return $this->belongsTo(Facilitator::class);
+        return $this->belongsToMany(Facilitator::class)
+            ->withTimestamps();
     }
 
     public function venue()

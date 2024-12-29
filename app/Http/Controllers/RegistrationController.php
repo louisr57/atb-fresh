@@ -28,19 +28,21 @@ class RegistrationController extends Controller
         // Get the sort column from the mapping, or use default
         $sortColumn = $sortableColumns[$sort_by] ?? 'students.first_name';
 
-        $registrations = Registration::with(['student', 'event.course', 'event.facilitator'])
+        $registrations = Registration::with(['student', 'event.course', 'event.facilitators'])
             ->join('students', 'registrations.student_id', '=', 'students.id')
             ->join('events', 'registrations.event_id', '=', 'events.id')
             ->join('courses', 'events.course_id', '=', 'courses.id')
-            ->join('facilitators', 'events.facilitator_id', '=', 'facilitators.id')
+            ->join('event_facilitator', 'events.id', '=', 'event_facilitator.event_id')
+            ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
             ->select('registrations.*')
+            ->distinct()
             ->orderBy($sortColumn, $direction)
             ->when($sortColumn !== 'events.datefrom', function($query) {
                 $query->orderBy('events.datefrom', 'asc');
             })
             ->paginate(30);
 
-        // $registrations = Registration::with(['student', 'event.course', 'event.facilitator'])
+        // $registrations = Registration::with(['student', 'event.course', 'event.facilitators'])
         //     ->orderBy($sortColumn, $direction)
         //     ->paginate(50);
 
