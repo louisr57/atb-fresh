@@ -1,3 +1,4 @@
+<?php use Barryvdh\Debugbar\Facades\Debugbar; ?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-100" x-data>
 
@@ -52,6 +53,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php Debugbar::info('Hello again from Debugbar'); ?>
                     <div class="hidden md:block">
                         <div class="ml-4 flex items-center md:ml-6">
 
