@@ -58,11 +58,10 @@
                 <!-- Date of Birth -->
                 <div class="mb-6">
                     <label for="dob" class="block text-gray-700 font-medium mb-2">Date of Birth</label>
-                    <input type="text" name="dob" id="dob" {{--
-                        value="{{ old('dob', $facilitator->dob ? \Carbon\Carbon::parse($facilitator->dob)->format('Y-m-d') : '') }}"
-                        --}}
+                    <input type="text" name="dob" id="dob"
+                        value="{{ old('dob') }}"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>
+                        required readonly autocomplete="off">
                 </div>
 
                 <!-- Address -->

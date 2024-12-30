@@ -67,7 +67,7 @@
                         <input type="text" name="dob" id="dob"
                             value="{{ old('dob', \Carbon\Carbon::parse($student->dob)->format('Y-m-d')) }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
-                            required>
+                            required readonly autocomplete="off">
                     </div>
 
                     <!-- Address -->

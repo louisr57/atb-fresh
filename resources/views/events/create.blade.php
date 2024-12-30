@@ -139,7 +139,7 @@
                         <label for="datefrom" class="block text-gray-700 font-bold mb-2">Date From</label>
                         <input type="text" id="datefrom" name="datefrom"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            required>
+                            required readonly autocomplete="off">
                     </div>
 
                     <!-- Date To -->
@@ -147,7 +147,7 @@
                         <label for="dateto" class="block text-gray-700 font-bold mb-2">Date To</label>
                         <input type="text" id="dateto" name="dateto"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            required>
+                            required readonly autocomplete="off">
                     </div>
                 </div>
 
