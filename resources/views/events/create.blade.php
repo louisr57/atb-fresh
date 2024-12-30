@@ -64,7 +64,7 @@
                             return this.selectedFacilitators.some(f => f.id === id);
                         }
                     }">
-                        <label class="block text-gray-700 font-bold mb-2">Facilitators</label>
+                        <label class="block text-gray-700 font-bold mb-0">Facilitators</label>
                         <div class="relative">
                             <!-- Selected facilitators display -->
                             <div class="mb-2 flex flex-wrap gap-2">
