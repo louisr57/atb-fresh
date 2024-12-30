@@ -107,7 +107,7 @@
             </thead>
             <tbody class="bg-gray-50">
                 @foreach($venue->events as $event)
-                <tr class="hover:bg-sky-100">
+                <tr class="hover:bg-sky-100 cursor-pointer" onclick="window.location='{{ route('events.show', $event->id) }}'">
                     <td class="border border-gray-500 px-4 py-2">{{ $event->title }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $event->course->course_title }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $event->datefrom }}</td>
