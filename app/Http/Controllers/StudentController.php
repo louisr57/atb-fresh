@@ -18,7 +18,7 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        $student = Student::with('registrations.event.course', 'registrations.event.facilitator')->findOrFail($id);
+        $student = Student::with('registrations.event.course', 'registrations.event.facilitators')->findOrFail($id);
         activity('student') // Explicitly set the log name to 'student'
             ->performedOn($student)
             ->causedBy(Auth::user())

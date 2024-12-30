@@ -36,7 +36,7 @@ class VenueController extends Controller
 
     public function show($id)
     {
-        $venue = Venue::with('events.course', 'events.facilitator')->findOrFail($id);
+        $venue = Venue::with('events.course', 'events.facilitators')->findOrFail($id);
         return view('venues.show', compact('venue'));
     }
 

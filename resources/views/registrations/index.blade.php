@@ -105,9 +105,14 @@
                                 }}<br>
                                 Course ID: {{ $registration->event->course->id }} <br>
                                 Course Name: {{ $registration->event->course->course_title }} <br>
-                                facilitator ID: {{ $registration->event->facilitator->id }} <br>
-                                facilitator Name: {{ $registration->event->facilitator->first_name }} {{
-                                $registration->event->facilitator->last_name }} <br>
+                                Facilitators:
+                                @forelse ($registration->event->facilitators as $facilitator)
+                                    {{ $facilitator->first_name }} {{ $facilitator->last_name }}
+                                    @unless ($loop->last), @endunless
+                                @empty
+                                    No facilitator assigned
+                                @endforelse
+                                <br>
                             </td> --}}
                             <!-- Sticky "View" Button -->
                             <td class="sticky left-0 bg-gray-100 border px-4 py-2">
@@ -133,8 +138,12 @@
                                 {{ $registration->event->dateto ?? 'N/A' }}
                             </td>
                             <td class="border px-4 py-2 whitespace-nowrap">
-                                {{ $registration->event->facilitator->first_name ?? 'N/A' }} {{
-                                $registration->event->facilitator->last_name ?? 'N/A' }}
+                                @forelse ($registration->event->facilitators as $facilitator)
+                                    {{ $facilitator->first_name }} {{ $facilitator->last_name }}
+                                    @unless ($loop->last), @endunless
+                                @empty
+                                    No facilitator assigned
+                                @endforelse
                             </td>
                             <td class="border px-4 py-2 whitespace-nowrap">
                                 {{ ucfirst($registration->end_status) }}

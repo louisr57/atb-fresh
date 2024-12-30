@@ -113,7 +113,12 @@
                     <td class="border border-gray-500 px-4 py-2">{{ $event->datefrom }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $event->dateto }}</td>
                     <td class="border border-gray-500 px-4 py-2">
-                        {{ $event->facilitator->first_name }} {{ $event->facilitator->last_name }}
+                        @forelse ($event->facilitators as $facilitator)
+                            {{ $facilitator->first_name }} {{ $facilitator->last_name }}
+                            @unless ($loop->last), @endunless
+                        @empty
+                            No facilitator assigned
+                        @endforelse
                     </td>
                 </tr>
                 @endforeach

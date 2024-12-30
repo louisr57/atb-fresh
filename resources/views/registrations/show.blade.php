@@ -40,10 +40,14 @@
             </tr>
             <tr class="bg-gray-100">
                 <th class="border px-4 py-2">
-                    Facilitator Name</th>
+                    Facilitator(s)</th>
                 <td class="border px-4 py-2">
-                    {{ $registration->event->facilitator->first_name }} {{
-                    $registration->event->facilitator->last_name }}
+                    @forelse ($registration->event->facilitators as $facilitator)
+                        {{ $facilitator->first_name }} {{ $facilitator->last_name }}
+                        @unless ($loop->last), @endunless
+                    @empty
+                        No facilitator assigned
+                    @endforelse
                 </td>
             </tr>
             <tr>
