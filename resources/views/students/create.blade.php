@@ -163,11 +163,14 @@
                 </div>
 
                 <!-- Submit Button -->
-                <div>
+                <div class="flex justify-between items-center mt-6">
                     <button type="submit"
                         class="mt-7 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Submit
                     </button>
+                    <a href="{{ route('students.index') }}" class="mt-7 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+                        Cancel
+                    </a>
                 </div>
             </form>
         </div>

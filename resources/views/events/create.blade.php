@@ -160,58 +160,56 @@
                             <input type="text" x-model="selectedTime" @click="open = true"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                                 name="timefrom" readonly>
+                            <div x-show="open" @click.away="open = false" class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                @for ($hour = 6; $hour <= 22; $hour++)
+                                    @foreach(['00', '30'] as $minute)
+                                        <div class="cursor-pointer p-2 hover:bg-gray-100" @click="selectedTime = '{{ sprintf('%02d', $hour) }}:{{ $minute }}'; open = false"> {{ sprintf('%02d', $hour) }}:{{ $minute }} </div>
+                                    @endforeach
+                                @endfor
+                            </div>
+                    </div>
+                </div>
+
+                    <!-- Time To -->
+                    <div class="mb-4" x-data="{ open: false, selectedTime: '' }">
+                        <label for="timeto" class="block text-gray-700 font-bold mb-2">Time To</label>
+                        <div class="relative">
+                            <input type="text" x-model="selectedTime" @click="open = true"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                                name="timeto" readonly>
                             <div x-show="open" @click.away="open = false"
                                 class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
-                                @for ($hour = 6; $hour <= 22; $hour++) @foreach(['00', '30' ] as $minute) <div
-                                    class="cursor-pointer p-2 hover:bg-gray-100"
-                                    @click="selectedTime = '{{ sprintf('%02d', $hour) }}:{{ $minute }}'; open = false">
-                                    {{ sprintf('%02d', $hour) }}:{{ $minute }}
+                                @for ($hour = 6; $hour <= 22; $hour++)
+                                    @foreach(['00', '30'] as $minute)
+                                        <div class="cursor-pointer p-2 hover:bg-gray-100"
+                                            @click="selectedTime = '{{ sprintf('%02d', $hour) }}:{{ $minute }}'; open = false">
+                                            {{ sprintf('%02d', $hour) }}:{{ $minute }}
+                                        </div>
+                                    @endforeach
+                                @endfor
                             </div>
-                            @endforeach
-                            @endfor
                         </div>
                     </div>
                 </div>
 
-                <!-- Time To -->
-                <div class="mb-4" x-data="{ open: false, selectedTime: '' }">
-                    <label for="timeto" class="block text-gray-700 font-bold mb-2">Time To</label>
-                    <div class="relative">
-                        <input type="text" x-model="selectedTime" @click="open = true"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            name="timeto" readonly>
-                        <div x-show="open" @click.away="open = false"
-                            class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
-                            @for ($hour = 6; $hour <= 22; $hour++) @foreach(['00', '30' ] as $minute) <div
-                                class="cursor-pointer p-2 hover:bg-gray-100"
-                                @click="selectedTime = '{{ sprintf('%02d', $hour) }}:{{ $minute }}'; open = false">
-                                {{ sprintf('%02d', $hour) }}:{{ $minute }}
-                        </div>
-                        @endforeach
-                        @endfor
-                    </div>
+                <!-- Remarks - Full width -->
+                <div class="mb-4">
+                    <label for="remarks" class="block text-gray-700 font-bold mb-2">Remarks</label>
+                    <textarea id="remarks" name="remarks"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 h-32">{{ old('remarks') }}</textarea>
                 </div>
+
+                <!-- Submit and Cancel buttons -->
+                <div class="flex justify-between items-center mt-6">
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                        Create Event
+                    </button>
+                    <a href="{{ route('events.index') }}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+                        Cancel
+                    </a>
+                </div>
+            </form>
         </div>
-    </div>
-
-    <!-- Remarks - Full width -->
-    <div class="mb-4">
-        <label for="remarks" class="block text-gray-700 font-bold mb-2">Remarks</label>
-        <textarea id="remarks" name="remarks"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 h-32">{{ old('remarks') }}</textarea>
-    </div>
-
-    <!-- Submit and Cancel buttons -->
-    <div class="flex justify-between items-center mt-6">
-        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-            Create Event
-        </button>
-        <a href="{{ route('events.index') }}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
-            Cancel
-        </a>
-    </div>
-    </form>
-    </div>
     </div>
 
     <!-- Include Pikaday CSS and JS -->
