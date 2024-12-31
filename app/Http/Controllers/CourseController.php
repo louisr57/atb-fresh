@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course; // Assuming your model is named 'Course'
+use cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Course; // Assuming your model is named 'Course'
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\Container\BindingResolutionException;
+
+// Following TODO extension terms are just for reminding me to use them in the future
+// I've seen many places in the codebase where other authors have used these.
+//FIXME: ... more details here ... I can also use NOTE, REVIEW, DEBUG, HACK, IDEA, or any other comment tags
+//TODO: ... more details here ... see TODO extension for more details
 
 class CourseController extends Controller
 {
+
     public function index(Request $request)
     {
         $sort_by = $request->get('sort_by', 'id');  // Default sort column

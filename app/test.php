@@ -1,20 +1,23 @@
 <?php
 
-use Faker\Core\Barcode;
-use Illuminate\Support\Collection;
-use Psy\TabCompletion\Matcher\FunctionsMatcher;
+use App\Models\Student;
+use App\Models\Event;
 
-$collection = new Collection();
-$collection->mapToGroups($_ENV);
+// Example 1: Query all students
+$students = Student::all();
 
-$foo = new Foo;
-$foo->bar();
-class Foo {
-    public function bar($bar='Bob') {
-        $collection = new Collection();
-        return $bar;
-    }
-    public function baz($bar='Phil') {
-        return $bar;
-    }
-}
+// Example 2: Get count of all events
+$eventCount = Event::count();
+
+// Example 3: Complex query with relationship
+$activeEvents = Event::with('facilitators')
+    ->whereHas('registrations', function($query) {
+        $query->where('status', 'confirmed');
+    })
+    ->get();
+
+// Example 4: Create a new student
+$newStudent = new Student();
+$newStudent->name = "Test Student";
+$newStudent->email = "test@example.com";
+// Don't save in example, just demonstrate object creation

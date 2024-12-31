@@ -9,6 +9,22 @@ use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+// Following TODO extension terms are just for reminding me to use them in the future
+// I've seen many places in the codebase where other authors have used these.
+//DEBUG: use Illuminate\Support\Facades\DB;
+
+//REVIEW: This controller is responsible for handling all course-related actions
+
+//NOTE: This controller is responsible for handling all course-related actions
+
+//HACK: This controller is responsible for handling all course-related actions
+
+//TODO: This controller is responsible for handling all course-related actions
+
+//FIXME: This controller is responsible for handling all course-related actions
+
+//TODO: This controller is responsible for handling all course-related actions
+
 class EventController extends Controller
 {
     public function index(Request $request)

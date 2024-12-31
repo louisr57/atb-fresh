@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\Student;
 
+// Following TODO extension terms are just for reminding me to use them in the future
+// I've seen many places in the codebase where other authors have used these.
+// FIXME:  ... more details here ... I can also use NOTE, REVIEW, DEBUG, HACK, IDEA, or any other comment tags
+// TODO: ... more details here ... see TODO extension for more details
+// QUESTION: ...
+// IDEA:  ...
+// REVIEW: ...
+
 class ActivityLogController extends Controller
 {
     public function index(Request $request)
