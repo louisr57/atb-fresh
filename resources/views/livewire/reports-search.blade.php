@@ -43,7 +43,14 @@
             <!-- Event Date -->
             <div>
                 <label for="search_date" class="block text-sm font-medium text-gray-700 mb-1">Event Date</label>
-                <input type="date" wire:model.live="search_date" id="search_date" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <div class="flex gap-2">
+                    <select wire:model.live="search_date_operator" id="search_date_operator" class="w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        @foreach($dateOperators as $operator)
+                            <option value="{{ $operator }}">{{ $operator }}</option>
+                        @endforeach
+                    </select>
+                    <input type="date" wire:model.live="search_date" id="search_date" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
             </div>
 
             <!-- Student City -->

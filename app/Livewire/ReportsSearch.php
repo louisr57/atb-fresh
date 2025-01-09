@@ -17,6 +17,7 @@ class ReportsSearch extends Component
     public $showSearch = true;
     public $search_course;
     public $search_status;
+    public $search_date_operator = '=';
     public $search_date;
     public $search_student_city;
     public $search_student_country;
@@ -44,6 +45,7 @@ class ReportsSearch extends Component
         $this->reset([
             'search_course',
             'search_status',
+            'search_date_operator',
             'search_date',
             'search_student_city',
             'search_student_country',
@@ -93,7 +95,7 @@ class ReportsSearch extends Component
         }
 
         if ($this->search_date) {
-            $query->where('events.datefrom', '=', $this->search_date);
+            $query->where('events.datefrom', $this->search_date_operator, $this->search_date);
         }
 
         if ($this->search_student_city) {
@@ -226,6 +228,7 @@ class ReportsSearch extends Component
 
         return view('livewire.reports-search', [
             'results' => $results,
+            'dateOperators' => ['=', '>=', '>', '<=', '<'],
             'courses' => $coursesQuery->select('courses.course_title')->distinct()->orderBy('courses.course_title')->pluck('course_title'),
             'statuses' => $statusesQuery->select('registrations.end_status')->distinct()->orderBy('registrations.end_status')->pluck('end_status'),
             'studentCities' => $studentCitiesQuery->select('students.city')->distinct()->orderBy('students.city')->pluck('city'),
