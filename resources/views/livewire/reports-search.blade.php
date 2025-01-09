@@ -23,6 +23,9 @@
                 <label for="search_course" class="block text-sm font-medium text-gray-700 mb-1">Course Title</label>
                 <select wire:model.live="search_course" id="search_course" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Course</option>
+                    @if($search_course && !$courses->contains($search_course))
+                        <option value="{{ $search_course }}" selected>{{ $search_course }}</option>
+                    @endif
                     @foreach($courses as $course)
                         <option value="{{ $course }}">{{ $course }}</option>
                     @endforeach
@@ -34,6 +37,9 @@
                 <label for="search_status" class="block text-sm font-medium text-gray-700 mb-1">Registration Status</label>
                 <select wire:model.live="search_status" id="search_status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Status</option>
+                    @if($search_status && !$statuses->contains($search_status))
+                        <option value="{{ $search_status }}" selected>{{ $search_status }}</option>
+                    @endif
                     @foreach($statuses as $status)
                         <option value="{{ $status }}">{{ $status }}</option>
                     @endforeach
@@ -58,6 +64,9 @@
                 <label for="search_student_city" class="block text-sm font-medium text-gray-700 mb-1">Student City</label>
                 <select wire:model.live="search_student_city" id="search_student_city" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select City</option>
+                    @if($search_student_city && !$studentCities->contains($search_student_city))
+                        <option value="{{ $search_student_city }}" selected>{{ $search_student_city }}</option>
+                    @endif
                     @foreach($studentCities as $city)
                         <option value="{{ $city }}">{{ $city }}</option>
                     @endforeach
@@ -69,6 +78,9 @@
                 <label for="search_student_country" class="block text-sm font-medium text-gray-700 mb-1">Student Country</label>
                 <select wire:model.live="search_student_country" id="search_student_country" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Country</option>
+                    @if($search_student_country && !$studentCountries->contains($search_student_country))
+                        <option value="{{ $search_student_country }}" selected>{{ $search_student_country }}</option>
+                    @endif
                     @foreach($studentCountries as $country)
                         <option value="{{ $country }}">{{ $country }}</option>
                     @endforeach
@@ -80,6 +92,9 @@
                 <label for="search_venue_name" class="block text-sm font-medium text-gray-700 mb-1">Venue Name</label>
                 <select wire:model.live="search_venue_name" id="search_venue_name" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Venue</option>
+                    @if($search_venue_name && !$venueNames->contains($search_venue_name))
+                        <option value="{{ $search_venue_name }}" selected>{{ $search_venue_name }}</option>
+                    @endif
                     @foreach($venueNames as $venue)
                         <option value="{{ $venue }}">{{ $venue }}</option>
                     @endforeach
@@ -91,6 +106,9 @@
                 <label for="search_venue_city" class="block text-sm font-medium text-gray-700 mb-1">Venue City</label>
                 <select wire:model.live="search_venue_city" id="search_venue_city" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select City</option>
+                    @if($search_venue_city && !$venueCities->contains($search_venue_city))
+                        <option value="{{ $search_venue_city }}" selected>{{ $search_venue_city }}</option>
+                    @endif
                     @foreach($venueCities as $city)
                         <option value="{{ $city }}">{{ $city }}</option>
                     @endforeach
@@ -102,6 +120,9 @@
                 <label for="search_venue_state" class="block text-sm font-medium text-gray-700 mb-1">Venue State</label>
                 <select wire:model.live="search_venue_state" id="search_venue_state" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select State</option>
+                    @if($search_venue_state && !$venueStates->contains($search_venue_state))
+                        <option value="{{ $search_venue_state }}" selected>{{ $search_venue_state }}</option>
+                    @endif
                     @foreach($venueStates as $state)
                         <option value="{{ $state }}">{{ $state }}</option>
                     @endforeach
@@ -113,6 +134,9 @@
                 <label for="search_venue_country" class="block text-sm font-medium text-gray-700 mb-1">Venue Country</label>
                 <select wire:model.live="search_venue_country" id="search_venue_country" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Country</option>
+                    @if($search_venue_country && !$venueCountries->contains($search_venue_country))
+                        <option value="{{ $search_venue_country }}" selected>{{ $search_venue_country }}</option>
+                    @endif
                     @foreach($venueCountries as $country)
                         <option value="{{ $country }}">{{ $country }}</option>
                     @endforeach
