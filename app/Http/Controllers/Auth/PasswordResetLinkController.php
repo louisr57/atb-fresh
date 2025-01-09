@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
@@ -45,7 +45,7 @@ class PasswordResetLinkController extends Controller
                 'remoteip' => $request->ip(),
             ]);
 
-            if (!$response->json('success')) {
+            if (! $response->json('success')) {
                 return back()->withErrors(['g-recaptcha-response' => 'Please complete the CAPTCHA verification.']);
             }
         }

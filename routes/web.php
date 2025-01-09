@@ -1,19 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\VenueController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\FacilitatorController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
-
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\VenueController;
+use Illuminate\Support\Facades\Route;
 
 // Breeze Authentication Routes
-require __DIR__ . '/auth.php';
-
+require __DIR__.'/auth.php';
 
 // Protected routes (require authentication)
 Route::middleware(['auth'])->group(function () {

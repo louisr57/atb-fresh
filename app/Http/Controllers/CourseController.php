@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use cache;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Course; // Assuming your model is named 'Course'
+use App\Models\Course;
 use Illuminate\Contracts\View\View;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Http\Request; // Assuming your model is named 'Course'
+use Illuminate\Support\Facades\Validator;
 
 // Following TODO extension terms are just for reminding me to use them in the future
 // I've seen many places in the codebase where other authors have used these.
-//FIXME: ... more details here ... I can also use NOTE, REVIEW, DEBUG, HACK, IDEA, or any other comment tags
-//TODO: ... more details here ... see TODO extension for more details
+// FIXME: ... more details here ... I can also use NOTE, REVIEW, DEBUG, HACK, IDEA, or any other comment tags
+// TODO: ... more details here ... see TODO extension for more details
 
 class CourseController extends Controller
 {
-
     public function index(Request $request)
     {
         $sort_by = $request->get('sort_by', 'id');  // Default sort column
@@ -34,39 +31,39 @@ class CourseController extends Controller
         $direction = $request->get('direction', 'asc');    // Default sort direction
 
         // Fetch the course with its events and related models
-        $course = Course::with(['events' => function($query) use ($sort_by, $direction) {
+        $course = Course::with(['events' => function ($query) use ($sort_by, $direction) {
             // Handle different sort columns
-            switch($sort_by) {
+            switch ($sort_by) {
                 case 'participant_count':
                     $query->orderBy('participant_count', $direction);
                     break;
                 case 'facilitator':
                     $query->join('event_facilitator', 'events.id', '=', 'event_facilitator.event_id')
-                          ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
-                          ->orderBy('facilitators.first_name', $direction)
-                          ->orderBy('facilitators.last_name', $direction)
-                          ->select('events.*')
-                          ->distinct();
+                        ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
+                        ->orderBy('facilitators.first_name', $direction)
+                        ->orderBy('facilitators.last_name', $direction)
+                        ->select('events.*')
+                        ->distinct();
                     break;
                 case 'venue':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                          ->orderBy('venues.venue_name', $direction)
-                          ->select('events.*');
+                        ->orderBy('venues.venue_name', $direction)
+                        ->select('events.*');
                     break;
                 case 'city':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                          ->orderBy('venues.city', $direction)
-                          ->select('events.*');
+                        ->orderBy('venues.city', $direction)
+                        ->select('events.*');
                     break;
                 case 'state':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                          ->orderBy('venues.state', $direction)
-                          ->select('events.*');
+                        ->orderBy('venues.state', $direction)
+                        ->select('events.*');
                     break;
                 case 'country':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                          ->orderBy('venues.country', $direction)
-                          ->select('events.*');
+                        ->orderBy('venues.country', $direction)
+                        ->select('events.*');
                     break;
                 default:
                     $query->orderBy($sort_by, $direction);
@@ -113,6 +110,7 @@ class CourseController extends Controller
     public function edit($id)
     {
         $course = Course::findOrFail($id);
+
         return view('courses.edit', compact('course'));
     }
 
@@ -121,7 +119,7 @@ class CourseController extends Controller
         $course = Course::findOrFail($id);
 
         $validatedData = $request->validate([
-            'course_code' => 'required|string|max:255|unique:courses,course_code,' . $id,
+            'course_code' => 'required|string|max:255|unique:courses,course_code,'.$id,
             'course_title' => 'required|string|max:255',
             'description' => 'required|string',
             'prerequisites' => 'required|string',

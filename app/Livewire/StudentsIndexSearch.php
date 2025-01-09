@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Student;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class StudentsIndexSearch extends Component
@@ -11,7 +11,9 @@ class StudentsIndexSearch extends Component
     use WithPagination;
 
     public $search = '';
+
     public $sortBy = 'first_name';
+
     public $direction = 'asc';
 
     public function mount()
@@ -43,8 +45,8 @@ class StudentsIndexSearch extends Component
                     ->orWhere('last_name', 'like', "%{$this->search}%");
             }
         })
-        ->orderBy($this->sortBy, $this->direction)
-        ->paginate(10);
+            ->orderBy($this->sortBy, $this->direction)
+            ->paginate(10);
     }
 
     public function render()

@@ -15,7 +15,7 @@ class StudentSeeder extends Seeder
         Student::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'email' => 'john.doe@example.com'
+            'email' => 'john.doe@example.com',
         ]);
     }
 }

@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
-use Rinvex\Country\CountryLoader;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Activitylog\Facades\ActivityLog;
+use Rinvex\Country\CountryLoader;
 
 class StudentController extends Controller
 {
@@ -30,6 +29,7 @@ class StudentController extends Controller
     public function create()
     {
         $countries = CountryLoader::countries();
+
         return view('students.create', compact('countries'));
     }
 
@@ -82,13 +82,14 @@ class StudentController extends Controller
             'page' => $page,
             'highlight' => $student->id,
             'sort_by' => $sort_by,
-            'direction' => $direction
+            'direction' => $direction,
         ])->with('success', 'Student created successfully.');
     }
 
     public function edit(Student $student)
     {
         $countries = CountryLoader::countries();
+
         return view('students.edit', compact('student', 'countries'));
     }
 
@@ -97,7 +98,7 @@ class StudentController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:students,email,' . $student->id,
+            'email' => 'required|string|email|max:255|unique:students,email,'.$student->id,
             'phone_number' => 'required|string|max:20',
             'dob' => 'required|date',
             'address' => 'required|string|max:255',

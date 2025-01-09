@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class UpdateEventParticipantCounts extends Command
 {
     protected $signature = 'events:update-counts';
+
     protected $description = 'Update participant counts for all events';
 
     public function handle()

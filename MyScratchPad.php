@@ -1,4 +1,4 @@
-<? ?>
+<?php ?>
 
 <?php
 
@@ -49,8 +49,9 @@ $nextEvent = $events->first(function ($event) {
 });
 
 // If no event is found, return an empty array (no registration)
-if (!$nextEvent) {
+if (! $nextEvent) {
     echo "No available events found for the course '{$nextCourse->course_title}'\n";
+
     return [];
 }
 

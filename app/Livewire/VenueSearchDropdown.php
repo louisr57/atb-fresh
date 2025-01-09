@@ -8,11 +8,17 @@ use Livewire\Component;
 class VenueSearchDropdown extends Component
 {
     public $search = '';
+
     public $suggestions = [];
+
     public $showDropdown = false;
+
     public $fieldType;
+
     public $selectedValue = '';
+
     public $name;
+
     public $placeholder;
 
     public function mount($fieldType, $name, $placeholder = '')
@@ -29,10 +35,11 @@ class VenueSearchDropdown extends Component
         if (strlen($this->search) < 1) {
             $this->suggestions = [];
             $this->showDropdown = false;
+
             return;
         }
 
-        $searchTerm = '%' . $this->search . '%';
+        $searchTerm = '%'.$this->search.'%';
 
         $this->suggestions = match ($this->fieldType) {
             'venue' => Venue::where('venue_name', 'like', $searchTerm)

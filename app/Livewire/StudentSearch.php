@@ -2,18 +2,24 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Student;
 use Illuminate\Support\Facades\Log;
+use Livewire\Component;
 
 class StudentSearch extends Component
 {
     public $event;
+
     public $search = '';
+
     public $selectedName = '';
+
     public $selectedId;
+
     public $showDropdown = false;
+
     public $message = '';
+
     public $selectedStudentName = '';
 
     public function mount($event)
@@ -37,13 +43,14 @@ class StudentSearch extends Component
             Log::info('Student search results', [
                 'search' => $this->search,
                 'count' => $students->count(),
-                'students' => $students->toArray()
+                'students' => $students->toArray(),
             ]);
 
             return $students;
         }
 
         $this->showDropdown = false;
+
         return collect();
     }
 
@@ -52,7 +59,7 @@ class StudentSearch extends Component
         // Debug logging
         Log::info('Search updated', [
             'search' => $this->search,
-            'length' => strlen($this->search)
+            'length' => strlen($this->search),
         ]);
 
         // Clear any previous messages
@@ -68,12 +75,12 @@ class StudentSearch extends Component
         // Debug logging
         Log::info('Student selected', [
             'id' => $id,
-            'name' => $fname . ' ' . $lname
+            'name' => $fname.' '.$lname,
         ]);
 
         $this->selectedId = $id;
-        $this->search = $fname . ' ' . $lname;
-        $this->selectedName = $fname . ' ' . $lname;
+        $this->search = $fname.' '.$lname;
+        $this->selectedName = $fname.' '.$lname;
         $this->showDropdown = false;
     }
 
@@ -81,8 +88,9 @@ class StudentSearch extends Component
     {
         $this->search = '';
 
-        if (!$this->selectedId) {
+        if (! $this->selectedId) {
             $this->message = 'Please select a student first.';
+
             return;
         }
 
@@ -93,14 +101,15 @@ class StudentSearch extends Component
 
         if ($existingRegistration) {
             $this->search = '';
-            $this->message = $this->selectedName . ' is already registered for this event.';
+            $this->message = $this->selectedName.' is already registered for this event.';
+
             return;
         }
 
         // Create the registration
         $this->event->registrations()->create([
             'student_id' => $this->selectedId,
-            'end_status' => 'registered'
+            'end_status' => 'registered',
         ]);
 
         // Reset the form
@@ -136,14 +145,13 @@ class StudentSearch extends Component
         $this->dispatch('clear-messages'); // Dispatch a custom event to clear flash messages
     }
 
-
     public function render()
     {
         // Debug logging
         Log::info('Rendering search component', [
             'search' => $this->search,
             'showDropdown' => $this->showDropdown,
-            'hasStudents' => isset($this->students) ? $this->students->count() : 0
+            'hasStudents' => isset($this->students) ? $this->students->count() : 0,
         ]);
 
         return view('livewire.student-search', [

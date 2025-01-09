@@ -2,14 +2,17 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\User;
+use Livewire\Component;
 
 class UserSearchDropdown extends Component
 {
     public $search = '';
+
     public $users = [];
+
     public $selectedUser = '';
+
     public $showDropdown = false;
 
     public function mount()
@@ -24,7 +27,7 @@ class UserSearchDropdown extends Component
     public function updatedSearch()
     {
         if (strlen($this->search) > 0) {
-            $this->users = User::where('name', 'like', '%' . $this->search . '%')
+            $this->users = User::where('name', 'like', '%'.$this->search.'%')
                 ->limit(5)
                 ->get();
             $this->showDropdown = true;

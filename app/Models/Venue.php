@@ -17,7 +17,7 @@ class Venue extends Model
         'country',
         'postcode',
         'location_geocode',
-        'remarks'
+        'remarks',
     ];
 
     // Define relationship with the Event model

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Models\Student;
 use App\Models\Registration;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
@@ -45,7 +45,7 @@ class RegistrationController extends Controller
             )
             ->distinct()
             ->orderBy($sortColumn, $direction)
-            ->when($sortColumn !== 'events.datefrom', function($query) {
+            ->when($sortColumn !== 'events.datefrom', function ($query) {
                 $query->orderBy('events.datefrom', 'asc');
             })
             ->paginate(30);
@@ -57,7 +57,6 @@ class RegistrationController extends Controller
         // Pass the sorting parameters to the view
         return view('registrations.index', compact('registrations', 'sort_by', 'direction')); // , 'sort_by', 'direction'
     }
-
 
     public function show(Registration $registration)
     {
@@ -71,6 +70,7 @@ class RegistrationController extends Controller
     public function create(Event $event)
     {
         $students = Student::orderBy('first_name')->get();
+
         return view('registrations.create', compact('event', 'students'));
     }
 
@@ -79,7 +79,7 @@ class RegistrationController extends Controller
         $validatedData = $request->validate([
             'event_id' => 'required|exists:events,id',
             'student_id' => 'required|exists:students,id',
-            'end_status' => 'required|string'
+            'end_status' => 'required|string',
         ]);
 
         Registration::create($validatedData);
@@ -89,5 +89,4 @@ class RegistrationController extends Controller
     }
 }
 
-
-    // You can add methods for create, store, update, and delete if needed
+// You can add methods for create, store, update, and delete if needed

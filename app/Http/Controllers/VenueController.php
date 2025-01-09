@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Venue;
 use Illuminate\Http\Request;
-use Rinvex\Country\CountryLoader;
 use Illuminate\Support\Facades\Validator;
+use Rinvex\Country\CountryLoader;
 
 class VenueController extends Controller
 {
@@ -18,15 +18,15 @@ class VenueController extends Controller
 
         // Apply search filters
         if ($request->filled('search_venue')) {
-            $query->where('venue_name', 'like', '%' . $request->search_venue . '%');
+            $query->where('venue_name', 'like', '%'.$request->search_venue.'%');
         }
 
         if ($request->filled('search_city')) {
-            $query->where('city', 'like', '%' . $request->search_city . '%');
+            $query->where('city', 'like', '%'.$request->search_city.'%');
         }
 
         if ($request->filled('search_country')) {
-            $query->where('country', 'like', '%' . $request->search_country . '%');
+            $query->where('country', 'like', '%'.$request->search_country.'%');
         }
 
         $venues = $query->orderBy($sort_by, $direction)->paginate(30);
@@ -37,12 +37,14 @@ class VenueController extends Controller
     public function show($id)
     {
         $venue = Venue::with('events.course', 'events.facilitators')->findOrFail($id);
+
         return view('venues.show', compact('venue'));
     }
 
     public function create()
     {
         $countries = CountryLoader::countries();
+
         return view('venues.create', compact('countries'));
     }
 
@@ -56,7 +58,7 @@ class VenueController extends Controller
             'country' => 'required|string|max:100',
             'postcode' => 'required|string|max:20',
             'location_geocode' => 'nullable|string|max:255',
-            'remarks' => 'nullable|string|max:1000'
+            'remarks' => 'nullable|string|max:1000',
         ]);
 
         $venue = Venue::create($validated);
@@ -81,13 +83,14 @@ class VenueController extends Controller
             'page' => $page,
             'highlight' => $venue->id,
             'sort_by' => $sort_by,
-            'direction' => $direction
+            'direction' => $direction,
         ])->with('success', 'Venue created successfully.');
     }
 
     public function edit(Venue $venue)
     {
         $countries = CountryLoader::countries();
+
         return view('venues.edit', compact('venue', 'countries'));
     }
 
@@ -101,7 +104,7 @@ class VenueController extends Controller
             'country' => 'required|string|max:100',
             'postcode' => 'required|string|max:20',
             'location_geocode' => 'nullable|string|max:255',
-            'remarks' => 'nullable|string|max:1000'
+            'remarks' => 'nullable|string|max:1000',
         ]);
 
         if ($validator->fails()) {

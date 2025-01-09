@@ -7,7 +7,9 @@ use Livewire\Component;
 class SearchableDropdown extends Component
 {
     public $search = '';
+
     public $items = ['Apple', 'Banana', 'Cherry', 'Date', 'Fig', 'Grape'];
+
     public $selectedItem = null;
 
     public function render()

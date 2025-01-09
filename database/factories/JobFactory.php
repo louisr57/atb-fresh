@@ -18,7 +18,7 @@ class JobFactory extends Factory
     {
         return [
             'title' => $this->faker->jobTitle(),
-            'salary' => '$' . number_format($this->faker->numberBetween(18000, 100000), 0),
+            'salary' => '$'.number_format($this->faker->numberBetween(18000, 100000), 0),
         ];
     }
 }

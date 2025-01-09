@@ -2,20 +2,26 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Course;
 use App\Models\Facilitator;
 use App\Models\Venue;
 use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class EventSearchDropdown extends Component
 {
     public $search = '';
+
     public $suggestions = [];
+
     public $showDropdown = false;
+
     public $fieldType;
+
     public $selectedValue = '';
+
     public $name;
+
     public $placeholder;
 
     public function mount($fieldType, $name, $placeholder = '')
@@ -32,10 +38,11 @@ class EventSearchDropdown extends Component
         if (strlen($this->search) < 1) {
             $this->suggestions = [];
             $this->showDropdown = false;
+
             return;
         }
 
-        $searchTerm = '%' . $this->search . '%';
+        $searchTerm = '%'.$this->search.'%';
 
         $this->suggestions = match ($this->fieldType) {
             'course' => Course::where('course_title', 'like', $searchTerm)

@@ -25,7 +25,7 @@ class StudentFactory extends Factory
             'post_code' => $this->faker->postcode(),
             'dob' => $this->faker->date(),
             'gender' => $gender,
-            'website' => $this->faker->url()
+            'website' => $this->faker->url(),
         ];
     }
 }

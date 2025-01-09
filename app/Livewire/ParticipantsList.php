@@ -2,16 +2,19 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Event;
 use App\Models\Registration;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class ParticipantsList extends Component
 {
     public $event;
+
     public $isDeleting = false;
+
     public $sortField = 'first_name';
+
     public $sortDirection = 'asc';
 
     public function mount(Event $event)
@@ -49,7 +52,7 @@ class ParticipantsList extends Component
 
         try {
             $registration = Registration::findOrFail($registrationId);
-            $studentName = $registration->student->first_name . ' ' . $registration->student->last_name;
+            $studentName = $registration->student->first_name.' '.$registration->student->last_name;
 
             // Add a small delay to ensure proper handling
             usleep(500000); // 0.5 second delay
@@ -92,14 +95,14 @@ class ParticipantsList extends Component
         } elseif (in_array($this->sortField, ['first_name', 'email'])) {
             // Sort by student fields using a join
             $query->join('students', 'registrations.student_id', '=', 'students.id')
-                  ->orderBy('students.' . $this->sortField, $this->sortDirection)
-                  ->select('registrations.*'); // Ensure we only get registration fields
+                ->orderBy('students.'.$this->sortField, $this->sortDirection)
+                ->select('registrations.*'); // Ensure we only get registration fields
         }
 
         $registrations = $query->get();
 
         return view('livewire.participants-list', [
-            'registrations' => $registrations
+            'registrations' => $registrations,
         ]);
     }
 }

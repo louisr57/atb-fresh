@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Course;
+use App\Models\Event;
 use App\Models\Registration;
 use App\Models\Student;
-use App\Models\Event;
-use App\Models\Course;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RegistrationFactory extends Factory
@@ -65,7 +65,7 @@ class RegistrationFactory extends Factory
         // echo "\$lastCompletedRegistration: " . $lastCompletedRegistration . " which is of type " . gettype($lastCompletedRegistration) . "\n\n";
 
         // Debug to check the result
-        if (!$lastCompletedRegistration) {
+        if (! $lastCompletedRegistration) {
             // echo "No completed registrations found.\n\n";
         } else {
             // Check if event and course are properly loaded
@@ -76,7 +76,6 @@ class RegistrationFactory extends Factory
                 // echo "Event or course information missing.\n\n";
             }
         }
-
 
         // Determine the next course in the progression
         $lastCompletedCourseCode = $lastCompletedRegistration
@@ -89,7 +88,6 @@ class RegistrationFactory extends Factory
             : 0; // If no course completed, start with the first course
         // echo "\$currentCourseIndex: " . $currentCourseIndex . "\n\n"; // This is an array number, NOT a course code!
 
-
         if ($allCoursesCompleted) {
             // If all courses are completed, allow repeating any previous course except the one with ID 0
             $repeatableCourses = array_diff($completedCourseCodes, ['ATB K-BT']);
@@ -98,7 +96,7 @@ class RegistrationFactory extends Factory
             // Find the next course in sequence that hasn't been completed yet
             $nextCourseCode = null;
             for ($i = $currentCourseIndex + 1; $i < count($this->courseSequence); $i++) {
-                if (!in_array($this->courseSequence[$i], $completedCourseCodes)) {
+                if (! in_array($this->courseSequence[$i], $completedCourseCodes)) {
                     $nextCourseCode = $this->courseSequence[$i];
                     break;
                 }
@@ -106,9 +104,8 @@ class RegistrationFactory extends Factory
         }
         // echo "\$nextCourseCode: " . $nextCourseCode . "\n\n";
 
-
         // If no further courses are available, return empty array (no registration)
-        if (!$nextCourseCode) {
+        if (! $nextCourseCode) {
             return [];
         }
 
@@ -117,7 +114,7 @@ class RegistrationFactory extends Factory
         // echo "\$nextCourse: " . $nextCourse . "\n\n";
         // Seems a bit early in the code for this check, but let's keep it here for now.
 
-        if (!$nextCourse) {
+        if (! $nextCourse) {
             // echo "No course found for code: $nextCourseCode\n\n";
             return [];
         }
@@ -140,10 +137,9 @@ class RegistrationFactory extends Factory
         // echo "\$baselineDate: " . ($baselineDate ?? 'No baseline date available') . "\n\n";
 
         // If no baseline date is found (i.e., student has no registrations), default to null or another strategy.
-        if (!$baselineDate) {
+        if (! $baselineDate) {
             // echo "No previous registrations found. Defaulting to no baseline date.\n";
         }
-
 
         // Step 4: Find the next available event for this course after the baseline date
         $registeredEventIds = null; // Starting point for the variable value
@@ -164,7 +160,6 @@ class RegistrationFactory extends Factory
             ->limit(5) // Limit the number of events to 5
             ->get();
 
-
         // echo "\$events: " . json_encode($events, JSON_PRETTY_PRINT) . "\n\n";
 
         // echo "Available Events for the same course:\n";
@@ -179,7 +174,7 @@ class RegistrationFactory extends Factory
         // echo "\$nextEvent: " . json_encode($nextEvent, JSON_PRETTY_PRINT) . "\n\n";
 
         // If no event is available, return no registration
-        if (!$nextEvent) {
+        if (! $nextEvent) {
             // echo "No available events found for the course '{$nextCourse->course_title}' after {$baselineDate}\n\n";
             return []; // Exit early if no event is available
         }

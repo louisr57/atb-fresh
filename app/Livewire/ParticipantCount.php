@@ -2,9 +2,9 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Event;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class ParticipantCount extends Component
 {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Facilitator;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Rinvex\Country\CountryLoader; // If you're using the Laravel package for countries
 
 class FacilitatorController extends Controller
@@ -34,35 +33,35 @@ class FacilitatorController extends Controller
             $query->withCount('registrations');
 
             // Handle different sort columns
-            switch($sort_by) {
+            switch ($sort_by) {
                 case 'course_title':
                     $query->join('courses', 'events.course_id', '=', 'courses.id')
-                          ->orderBy('courses.course_title', $direction)
-                          ->withCount('registrations')
-                          ->select('events.*');
+                        ->orderBy('courses.course_title', $direction)
+                        ->withCount('registrations')
+                        ->select('events.*');
                     break;
                 case 'participant_count':
                     $query->orderBy('registrations_count', $direction);
                     break;
                 case 'venue':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                          ->orderBy('venues.venue_name', $direction)
-                          ->select('events.*');
+                        ->orderBy('venues.venue_name', $direction)
+                        ->select('events.*');
                     break;
                 case 'city':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                          ->orderBy('venues.city', $direction)
-                          ->select('events.*');
+                        ->orderBy('venues.city', $direction)
+                        ->select('events.*');
                     break;
                 case 'state':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                          ->orderBy('venues.state', $direction)
-                          ->select('events.*');
+                        ->orderBy('venues.state', $direction)
+                        ->select('events.*');
                     break;
                 case 'country':
                     $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                          ->orderBy('venues.country', $direction)
-                          ->select('events.*');
+                        ->orderBy('venues.country', $direction)
+                        ->select('events.*');
                     break;
                 default:
                     $query->orderBy($sort_by, $direction);
@@ -111,9 +110,8 @@ class FacilitatorController extends Controller
             'state' => 'nullable|string|max:255',
             'country' => 'nullable|string|max:255',
             'post_code' => 'nullable|string|max:20',
-            'website' => 'nullable|url|max:255'
+            'website' => 'nullable|url|max:255',
         ]);
-
 
         // Create a new facilitator record
         $facilitator = Facilitator::create($validatedData);
@@ -126,6 +124,7 @@ class FacilitatorController extends Controller
     {
         // If using the Rinvex package to fetch countries
         $countries = CountryLoader::countries(); // Fetch all countries
+
         return view('facilitators.edit', compact('facilitator', 'countries'));
     }
 
@@ -140,7 +139,7 @@ class FacilitatorController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'gender' => 'nullable|string|max:10',
-            'email' => 'required|email|unique:facilitators,email,' . $facilitator->id,
+            'email' => 'required|email|unique:facilitators,email,'.$facilitator->id,
             'phone_number' => 'nullable|string|max:20',
             'dob' => [
                 'nullable',
@@ -159,7 +158,7 @@ class FacilitatorController extends Controller
             'state' => 'nullable|string|max:255',
             'country' => 'nullable|string|max:255',
             'post_code' => 'nullable|string|max:20',
-            'website' => 'nullable|url|max:255'
+            'website' => 'nullable|url|max:255',
         ]);
 
         $facilitator->update($validatedData);

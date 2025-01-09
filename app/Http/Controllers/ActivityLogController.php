@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
-use App\Models\Student;
 
 // Following TODO extension terms are just for reminding me to use them in the future
 // I've seen many places in the codebase where other authors have used these.
@@ -37,7 +37,7 @@ class ActivityLogController extends Controller
 
         // Filter by user if provided
         if ($request->filled('user')) {
-            $query->whereHas('causer', function($q) use ($request) {
+            $query->whereHas('causer', function ($q) use ($request) {
                 $q->where('name', $request->user);
             });
         }

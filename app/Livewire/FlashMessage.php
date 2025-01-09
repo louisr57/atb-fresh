@@ -2,13 +2,15 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class FlashMessage extends Component
 {
     public $message = '';
+
     public $type = '';
+
     public $show = false;
 
     #[On('flash-message')]

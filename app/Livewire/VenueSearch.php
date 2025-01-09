@@ -2,14 +2,17 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Venue;
+use Livewire\Component;
 
 class VenueSearch extends Component
 {
     public $search = '';
+
     public $venues = [];
+
     public $selectedVenueId = '';
+
     public $showDropdown = false;
 
     public function mount()
@@ -22,7 +25,7 @@ class VenueSearch extends Component
         $this->selectedVenueId = '';
 
         if (strlen($this->search) > 0) {
-            $this->venues = Venue::where('venue_name', 'like', '%' . $this->search . '%')
+            $this->venues = Venue::where('venue_name', 'like', '%'.$this->search.'%')
                 ->get();
             $this->showDropdown = true;
         } else {

@@ -2,16 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\Student;
 use App\Models\Event;
-use App\Models\Venue;
 use App\Models\Registration;
-use Illuminate\Support\Facades\Hash;
-
+use App\Models\Student;
+use App\Models\Venue;
+use Faker\Factory as Faker;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -145,49 +144,49 @@ class DatabaseSeeder extends Seeder
                 'course_title' => 'Kindergarten/Basic Tools Module',
                 'description' => 'Kindergarten/Basic Tools Module',
                 'prerequisites' => 'none',
-                'duration' => '1.0'
+                'duration' => '1.0',
             ],
             [
                 'course_code' => 'ATB 1',
                 'course_title' => 'Introductory Basic Module',
                 'description' => 'Introductory Basic Module',
                 'prerequisites' => 'none',
-                'duration' => '2.0'
+                'duration' => '2.0',
             ],
             [
                 'course_code' => 'ATB 2',
                 'course_title' => 'Basic Module 2',
                 'description' => 'Basic Module 2',
                 'prerequisites' => 'ATB 1',
-                'duration' => '3.0'
+                'duration' => '3.0',
             ],
             [
                 'course_code' => 'ATB 3',
                 'course_title' => 'Basic Module 3',
                 'description' => 'Basic Module 3',
                 'prerequisites' => 'ATB 2',
-                'duration' => '3.0'
+                'duration' => '3.0',
             ],
             [
                 'course_code' => 'ATB 4',
                 'course_title' => 'Advanced Module 1',
                 'description' => 'Advanced Module',
                 'prerequisites' => 'All ATB Basic Modules',
-                'duration' => '4.0'
+                'duration' => '4.0',
             ],
             [
                 'course_code' => 'ATB 5',
                 'course_title' => 'Advanced Module 2',
                 'description' => 'Advanced Module',
                 'prerequisites' => 'All ATB Basic Modules',
-                'duration' => '5.0'
+                'duration' => '5.0',
             ],
             [
                 'course_code' => 'M_Body',
                 'course_title' => 'Embodiment Module',
                 'description' => 'Embodiment Module',
                 'prerequisites' => 'none',
-                'duration' => '2.0'
+                'duration' => '2.0',
             ],
         ]);
 
@@ -361,7 +360,7 @@ class DatabaseSeeder extends Seeder
                 'post_code' => null,
                 'website' => $faker->url(),
                 'dob' => $faker->dateTimeBetween($startDate = '-70 years', $endDate = '-20 years', $timezone = null),
-            ]
+            ],
         ]);
 
         // Create venues first since events depend on them
@@ -385,7 +384,8 @@ class DatabaseSeeder extends Seeder
             try {
                 Registration::factory()->count($size)->create();
             } catch (\Exception $e) {
-                $this->command->error("Error in batch $i: " . $e->getMessage());
+                $this->command->error("Error in batch $i: ".$e->getMessage());
+
                 continue;
             }
 

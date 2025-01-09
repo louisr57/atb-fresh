@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Student extends Model
 {
     use HasFactory, LogsActivity;
+
     const LOG_NAME = 'student';
 
     protected $fillable = [
@@ -28,7 +29,7 @@ class Student extends Model
         'ident',
         'next_of_kin',
         'allergies',
-        'special_needs'
+        'special_needs',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -51,10 +52,10 @@ class Student extends Model
                 'next_of_kin',
                 'allergies',
                 'special_needs',
-                'reg_count'
+                'reg_count',
             ])
             ->logOnlyDirty()
-            ->setDescriptionForEvent(fn(string $eventName) => "Student has been {$eventName}")
+            ->setDescriptionForEvent(fn (string $eventName) => "Student has been {$eventName}")
             ->useLogName(self::LOG_NAME);
     }
 

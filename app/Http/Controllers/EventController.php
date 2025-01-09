@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
 use App\Models\Course;
+use App\Models\Event;
 use App\Models\Facilitator;
 use App\Models\Venue;
 use Illuminate\Http\Request;
@@ -11,19 +11,19 @@ use Illuminate\Support\Facades\DB;
 
 // Following TODO extension terms are just for reminding me to use them in the future
 // I've seen many places in the codebase where other authors have used these.
-//DEBUG: use Illuminate\Support\Facades\DB;
+// DEBUG: use Illuminate\Support\Facades\DB;
 
-//REVIEW: This controller is responsible for handling all course-related actions
+// REVIEW: This controller is responsible for handling all course-related actions
 
-//NOTE: This controller is responsible for handling all course-related actions
+// NOTE: This controller is responsible for handling all course-related actions
 
-//HACK: This controller is responsible for handling all course-related actions
+// HACK: This controller is responsible for handling all course-related actions
 
-//TODO: This controller is responsible for handling all course-related actions
+// TODO: This controller is responsible for handling all course-related actions
 
-//FIXME: This controller is responsible for handling all course-related actions
+// FIXME: This controller is responsible for handling all course-related actions
 
-//TODO: This controller is responsible for handling all course-related actions
+// TODO: This controller is responsible for handling all course-related actions
 
 class EventController extends Controller
 {
@@ -59,14 +59,14 @@ class EventController extends Controller
 
         // Apply search filters
         if ($request->filled('search_course')) {
-            $query->where('courses.course_title', 'like', '%' . $request->search_course . '%');
+            $query->where('courses.course_title', 'like', '%'.$request->search_course.'%');
         }
 
         if ($request->filled('search_facilitator')) {
             $searchTerm = $request->search_facilitator;
-            $query->where(function($q) use ($searchTerm) {
-                $q->where(DB::raw("CONCAT(facilitators.first_name, ' ', facilitators.last_name)"), 'like', '%' . $searchTerm . '%')
-                  ->orWhere(DB::raw("CONCAT(facilitators.last_name, ' ', facilitators.first_name)"), 'like', '%' . $searchTerm . '%');
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where(DB::raw("CONCAT(facilitators.first_name, ' ', facilitators.last_name)"), 'like', '%'.$searchTerm.'%')
+                    ->orWhere(DB::raw("CONCAT(facilitators.last_name, ' ', facilitators.first_name)"), 'like', '%'.$searchTerm.'%');
             });
         }
 
@@ -75,27 +75,27 @@ class EventController extends Controller
         }
 
         if ($request->filled('search_venue')) {
-            $query->where('venues.venue_name', 'like', '%' . $request->search_venue . '%');
+            $query->where('venues.venue_name', 'like', '%'.$request->search_venue.'%');
         }
 
         if ($request->filled('search_city')) {
-            $query->where('venues.city', 'like', '%' . $request->search_city . '%');
+            $query->where('venues.city', 'like', '%'.$request->search_city.'%');
         }
 
         if ($request->filled('search_state')) {
-            $query->where('venues.state', 'like', '%' . $request->search_state . '%');
+            $query->where('venues.state', 'like', '%'.$request->search_state.'%');
         }
 
         if ($request->filled('search_country')) {
-            $query->where('venues.country', 'like', '%' . $request->search_country . '%');
+            $query->where('venues.country', 'like', '%'.$request->search_country.'%');
         }
 
         // Apply sorting and get paginated results
         $events = $query->orderBy($sortColumn, $direction)
-                       ->when($sortColumn !== 'events.datefrom', function($query) {
-                           $query->orderBy('events.datefrom', 'asc');
-                       })
-                       ->paginate(15);
+            ->when($sortColumn !== 'events.datefrom', function ($query) {
+                $query->orderBy('events.datefrom', 'asc');
+            })
+            ->paginate(15);
 
         // Pass the sorting parameters to the view
         return view('events.index', compact('events', 'sort_by', 'direction'));
@@ -136,7 +136,7 @@ class EventController extends Controller
             'dateto' => 'required|date|after_or_equal:datefrom',
             'timefrom' => 'required',
             'timeto' => 'required',
-            'remarks' => 'nullable|string'
+            'remarks' => 'nullable|string',
         ]);
 
         // Remove facilitator_ids from validated data as it's not a column in events table
@@ -156,6 +156,7 @@ class EventController extends Controller
         $courses = Course::all();
         $facilitators = Facilitator::all();
         $venues = Venue::all();
+
         return view('events.edit', compact('event', 'courses', 'facilitators', 'venues'));
     }
 
@@ -173,9 +174,8 @@ class EventController extends Controller
             'dateto' => 'required|date|after_or_equal:datefrom',
             'timefrom' => 'required',
             'timeto' => 'required',
-            'remarks' => 'nullable|string'
+            'remarks' => 'nullable|string',
         ]);
-
 
         // Remove facilitator_ids from validated data
         $facilitatorIds = $validatedData['facilitator_ids'];
@@ -184,6 +184,7 @@ class EventController extends Controller
         // Update event and sync facilitators
         $event->update($validatedData);
         $event->facilitators()->sync($facilitatorIds);
+
         return redirect()->route('events.show', $event->id)
             ->with('success', 'Event updated successfully.');
     }

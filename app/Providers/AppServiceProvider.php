@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
+use App\Livewire\StudentSearch;
 use App\Models\Registration;
 use App\Observers\RegistrationObserver;
-use Livewire\Livewire;
-use App\Livewire\StudentSearch;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {

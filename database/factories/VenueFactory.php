@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Venue;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VenueFactory extends Factory
 {
@@ -18,7 +18,7 @@ class VenueFactory extends Factory
             'state' => $this->faker->state(),
             'country' => $this->faker->country(),
             'postcode' => $this->faker->postcode(),
-            'location_geocode' => $this->faker->latitude() . ', ' . $this->faker->longitude(),
+            'location_geocode' => $this->faker->latitude().', '.$this->faker->longitude(),
             'remarks' => $this->faker->optional()->sentence(),
         ];
     }

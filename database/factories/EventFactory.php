@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Event;
 use App\Models\Course;
+use App\Models\Event;
 use App\Models\Facilitator;
 use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -15,7 +15,9 @@ class EventFactory extends Factory
 
     // Cache for IDs
     protected static $courseIds = null;
+
     protected static $facilitatorIds = null;
+
     protected static $venueIds = null;
 
     protected function initializeIds()

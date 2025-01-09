@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Registration;
+use Illuminate\Database\Seeder;
 
 class RegistrationSeeder extends Seeder
 {
