@@ -226,14 +226,14 @@ class ReportsSearch extends Component
 
         return view('livewire.reports-search', [
             'results' => $results,
-            'courses' => $coursesQuery->select('courses.course_title')->distinct()->pluck('course_title'),
-            'statuses' => $statusesQuery->select('registrations.end_status')->distinct()->pluck('end_status'),
-            'studentCities' => $studentCitiesQuery->select('students.city')->distinct()->pluck('city'),
-            'studentCountries' => $studentCountriesQuery->select('students.country')->distinct()->pluck('country'),
-            'venueNames' => $venueNamesQuery->select('venues.venue_name')->distinct()->pluck('venue_name'),
-            'venueCities' => $venueCitiesQuery->select('venues.city')->distinct()->pluck('city'),
-            'venueStates' => $venueStatesQuery->select('venues.state')->distinct()->pluck('state'),
-            'venueCountries' => $venueCountriesQuery->select('venues.country')->distinct()->pluck('country')
+            'courses' => $coursesQuery->select('courses.course_title')->distinct()->orderBy('courses.course_title')->pluck('course_title'),
+            'statuses' => $statusesQuery->select('registrations.end_status')->distinct()->orderBy('registrations.end_status')->pluck('end_status'),
+            'studentCities' => $studentCitiesQuery->select('students.city')->distinct()->orderBy('students.city')->pluck('city'),
+            'studentCountries' => $studentCountriesQuery->select('students.country')->distinct()->orderBy('students.country')->pluck('country'),
+            'venueNames' => $venueNamesQuery->select('venues.venue_name')->distinct()->orderBy('venues.venue_name')->pluck('venue_name'),
+            'venueCities' => $venueCitiesQuery->select('venues.city')->distinct()->orderBy('venues.city')->pluck('city'),
+            'venueStates' => $venueStatesQuery->select('venues.state')->distinct()->orderBy('venues.state')->pluck('state'),
+            'venueCountries' => $venueCountriesQuery->select('venues.country')->distinct()->orderBy('venues.country')->pluck('country')
         ]);
     }
 }
