@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FacilitatorController;
@@ -83,4 +84,7 @@ Route::middleware(['auth'])->group(function () {
     // Activity Log routes (all protected)
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
     Route::get('/activity-logs/students/{student}', [ActivityLogController::class, 'studentLogs'])->name('activity-logs.student');
+
+    // Reports routes (all protected)
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 });

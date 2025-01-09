@@ -44,6 +44,8 @@
                                 </x-nav-link>
                                 <x-nav-link href="/facilitators" :active="request()->is('facilitators')">Facilitators
                                 </x-nav-link>
+                                <x-nav-link href="/reports" :active="request()->is('reports')">Reports
+                                </x-nav-link>
                                 @if(auth()->user()->name === 'Louisr57')
                                 <x-nav-link href="/registrations" :active="request()->is('registrations')">Registrations
                                 </x-nav-link>
@@ -131,10 +133,18 @@
                 <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                     <a href="/"
                         class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Home</a>
-                    <a href="/about"
-                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">About</a>
-                    <a href="/contact"
-                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Contact</a>
+                    <a href="/students"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Students</a>
+                    <a href="/events"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Events</a>
+                    <a href="/venues"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Venues</a>
+                    <a href="/courses"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Courses</a>
+                    <a href="/facilitators"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Facilitators</a>
+                    <a href="/reports"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Reports</a>
                 </div>
                 <div class="border-t border-gray-700 pb-3 pt-4">
                     <div class="flex items-center px-5">
