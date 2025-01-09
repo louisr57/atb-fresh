@@ -7,12 +7,12 @@ use App\Models\Student;
 $students = Student::all();
 
 // Example 2: Get count of all events
-$eventCount = Event::count();
+$eventCount = Event::query()->count();
 
 // Example 3: Complex query with relationship
 $activeEvents = Event::with('facilitators')
     ->whereHas('registrations', function ($query) {
-        $query->where('status', 'confirmed');
+        $query->where('end_status', 'confirmed');
     })
     ->get();
 
