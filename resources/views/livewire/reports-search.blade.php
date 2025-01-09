@@ -16,7 +16,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 transform scale-100"
          x-transition:leave-end="opacity-0 transform scale-95"
-         class="bg-white p-4 rounded-lg shadow mb-6">
+         class="bg-sky-200 border border-blue-800 border-solid p-4 rounded-lg shadow mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Course Title -->
             <div>
