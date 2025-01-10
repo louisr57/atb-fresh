@@ -162,7 +162,8 @@
                 <span>{{ $copiedEmails ? 'Copied!' : 'Get & Copy Email List' }}</span>
             </button>
             <p class="text-sm text-gray-600">
-                Click to generate a comma-separated list of emails in the format "First Last &lt;email@example.com&gt;" for all filtered results
+                Click to generate a list of emails for all currently filtered results.<br>
+                You can then copy/paste this list into your email client. Clicking the Reset button above will clear the list.
             </p>
         </div>
         @if($emailList)
