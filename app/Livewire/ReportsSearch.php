@@ -183,6 +183,7 @@ class ReportsSearch extends Component
         // Get dropdown options from the filtered recordset
         $coursesQuery = clone $baseQuery;
         $statusesQuery = clone $baseQuery;
+        $datesQuery = clone $baseQuery;
         $studentCitiesQuery = clone $baseQuery;
         $studentCountriesQuery = clone $baseQuery;
         $venueNamesQuery = clone $baseQuery;
@@ -193,6 +194,7 @@ class ReportsSearch extends Component
         // Remove each field's own filter when getting its options
         if ($this->search_course) $coursesQuery->where('courses.course_title', '=', $this->search_course);
         if ($this->search_status) $statusesQuery->where('registrations.end_status', '=', $this->search_status);
+        if ($this->search_date) $datesQuery->where('events.datefrom', $this->search_date_operator, $this->search_date);
         if ($this->search_student_city) $studentCitiesQuery->where('students.city', '=', $this->search_student_city);
         if ($this->search_student_country) $studentCountriesQuery->where('students.country', '=', $this->search_student_country);
         if ($this->search_venue_name) $venueNamesQuery->where('venues.venue_name', '=', $this->search_venue_name);
@@ -210,7 +212,8 @@ class ReportsSearch extends Component
             'venueNames' => $venueNamesQuery->select('venues.venue_name')->whereNotNull('venues.venue_name')->distinct()->orderBy('venues.venue_name')->pluck('venue_name'),
             'venueCities' => $venueCitiesQuery->select('venues.city')->whereNotNull('venues.city')->distinct()->orderBy('venues.city')->pluck('city'),
             'venueStates' => $venueStatesQuery->select('venues.state')->whereNotNull('venues.state')->distinct()->orderBy('venues.state')->pluck('state'),
-            'venueCountries' => $venueCountriesQuery->select('venues.country')->whereNotNull('venues.country')->distinct()->orderBy('venues.country')->pluck('country')
+            'venueCountries' => $venueCountriesQuery->select('venues.country')->whereNotNull('venues.country')->distinct()->orderBy('venues.country')->pluck('country'),
+            'dates' => $datesQuery->select('events.datefrom')->distinct()->orderBy('events.datefrom', 'asc')->pluck('datefrom')
         ]);
     }
 }
