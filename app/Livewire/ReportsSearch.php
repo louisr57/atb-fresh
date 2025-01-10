@@ -40,6 +40,68 @@ class ReportsSearch extends Component
         'search_venue_country' => ['except' => '']
     ];
 
+    public function toggleSearch()
+    {
+        $this->showSearch = !$this->showSearch;
+    }
+
+    public $emailList = '';
+
+    public $copiedEmails = false;
+
+    public function getFormattedEmails()
+    {
+        $baseQuery = Registration::query()
+            ->join('students', 'registrations.student_id', '=', 'students.id')
+            ->join('events', 'registrations.event_id', '=', 'events.id')
+            ->join('courses', 'events.course_id', '=', 'courses.id')
+            ->join('venues', 'events.venue_id', '=', 'venues.id');
+
+        // Apply all current filters
+        if ($this->search_course) {
+            $baseQuery->where('courses.course_title', '=', $this->search_course);
+        }
+        if ($this->search_status) {
+            $baseQuery->where('registrations.end_status', '=', $this->search_status);
+        }
+        if ($this->search_date) {
+            $baseQuery->where('events.datefrom', $this->search_date_operator, $this->search_date);
+        }
+        if ($this->search_student_city) {
+            $baseQuery->where('students.city', '=', $this->search_student_city);
+        }
+        if ($this->search_student_country) {
+            $baseQuery->where('students.country', '=', $this->search_student_country);
+        }
+        if ($this->search_venue_name) {
+            $baseQuery->where('venues.venue_name', '=', $this->search_venue_name);
+        }
+        if ($this->search_venue_city) {
+            $baseQuery->where('venues.city', '=', $this->search_venue_city);
+        }
+        if ($this->search_venue_state) {
+            $baseQuery->where('venues.state', '=', $this->search_venue_state);
+        }
+        if ($this->search_venue_country) {
+            $baseQuery->where('venues.country', '=', $this->search_venue_country);
+        }
+
+        $this->emailList = $baseQuery->select('students.first_name', 'students.last_name', 'students.email')
+            ->get()
+            ->map(function ($student) {
+                return "{$student->first_name} {$student->last_name} <{$student->email}>";
+            })
+            ->join(', ');
+
+        // After generating the list, copy to clipboard
+        $this->js("
+            navigator.clipboard.writeText('{$this->emailList}').then(() => {
+                \$wire.set('copiedEmails', true);
+                setTimeout(() => \$wire.set('copiedEmails', false), 2000);
+            });
+        ");
+    }
+
     public function resetSearch()
     {
         $this->reset([
@@ -53,14 +115,10 @@ class ReportsSearch extends Component
             'search_venue_address',
             'search_venue_city',
             'search_venue_state',
-            'search_venue_country'
+            'search_venue_country',
+            'emailList' // Clear the email list
         ]);
         $this->resetPage();
-    }
-
-    public function toggleSearch()
-    {
-        $this->showSearch = !$this->showSearch;
     }
 
     public function render()

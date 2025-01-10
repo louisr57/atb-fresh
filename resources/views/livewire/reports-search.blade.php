@@ -152,6 +152,26 @@
         </div>
     </div>
 
+    <!-- Copy Emails Section -->
+    <div class="mb-6">
+        <div class="flex items-center gap-4 mb-2">
+            <button
+                wire:click="getFormattedEmails"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center"
+            >
+                <span>{{ $copiedEmails ? 'Copied!' : 'Get & Copy Email List' }}</span>
+            </button>
+            <p class="text-sm text-gray-600">
+                Click to generate a comma-separated list of emails in the format "First Last &lt;email@example.com&gt;" for all filtered results
+            </p>
+        </div>
+        @if($emailList)
+            <div class="mt-2 p-4 bg-gray-100 rounded text-sm">
+                {{ $emailList }}
+            </div>
+        @endif
+    </div>
+
     <!-- Results Table -->
     <div class="relative overflow-x-auto">
         <table class="min-w-full table-auto border-collapse border border-gray-300">
