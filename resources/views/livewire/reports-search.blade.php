@@ -226,24 +226,6 @@
                     class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                     Reset
                 </button>
-                <button
-                    x-on:click="
-                        $wire.refreshFields();
-                        $wire.set('search_course', persistedSearch.course);
-                        $wire.set('search_status', persistedSearch.status);
-                        $wire.set('search_date_operator', persistedSearch.date_operator);
-                        $wire.set('search_date', persistedSearch.date);
-                        $wire.set('search_student_city', persistedSearch.student_city);
-                        $wire.set('search_student_country', persistedSearch.student_country);
-                        $wire.set('search_venue_name', persistedSearch.venue_name);
-                        $wire.set('search_venue_city', persistedSearch.venue_city);
-                        $wire.set('search_venue_state', persistedSearch.venue_state);
-                        $wire.set('search_venue_country', persistedSearch.venue_country)
-                    "
-                    type="button"
-                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    Refresh Fields
-                </button>
             </div>
         </div>
     </div>
