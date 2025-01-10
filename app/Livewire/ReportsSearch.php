@@ -102,6 +102,13 @@ class ReportsSearch extends Component
         ");
     }
 
+    public function refreshFields()
+    {
+        // This method will be called by the Refresh Fields button
+        // The actual refresh logic is handled in the blade template
+        // through Alpine.js by setting the Livewire properties
+    }
+
     public function resetSearch()
     {
         $this->reset([
