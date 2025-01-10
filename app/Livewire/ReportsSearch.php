@@ -97,7 +97,7 @@ class ReportsSearch extends Component
         $this->js("
             navigator.clipboard.writeText('{$this->emailList}').then(() => {
                 \$wire.set('copiedEmails', true);
-                setTimeout(() => \$wire.set('copiedEmails', false), 2000);
+                setTimeout(() => \$wire.set('copiedEmails', false), 5000);
             });
         ");
     }
