@@ -35,7 +35,7 @@
             <div>
                 <label for="search_course" class="block text-sm font-medium text-gray-700 mb-1">Course Title</label>
                 <select
-                    x-model="persistedSearch.course"
+                    x-model.debounce.300ms="persistedSearch.course"
                     x-on:change="$wire.set('search_course', persistedSearch.course)"
                     id="search_course"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -53,7 +53,7 @@
             <div>
                 <label for="search_status" class="block text-sm font-medium text-gray-700 mb-1">Registration Status</label>
                 <select
-                    x-model="persistedSearch.status"
+                    x-model.debounce.300ms="persistedSearch.status"
                     x-on:change="$wire.set('search_status', persistedSearch.status)"
                     id="search_status"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -72,7 +72,7 @@
                 <label for="search_date" class="block text-sm font-medium text-gray-700 mb-1">Event Date</label>
                 <div class="flex gap-2">
                     <select
-                        x-model="persistedSearch.date_operator"
+                        x-model.debounce.300ms="persistedSearch.date_operator"
                         x-on:change="$wire.set('search_date_operator', persistedSearch.date_operator)"
                         id="search_date_operator"
                         class="w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -81,7 +81,7 @@
                         @endforeach
                     </select>
                     <select
-                        x-model="persistedSearch.date"
+                        x-model.debounce.300ms="persistedSearch.date"
                         x-on:change="$wire.set('search_date', persistedSearch.date)"
                         id="search_date"
                         class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -100,7 +100,7 @@
             <div>
                 <label for="search_student_city" class="block text-sm font-medium text-gray-700 mb-1">Student City</label>
                 <select
-                    x-model="persistedSearch.student_city"
+                    x-model.debounce.300ms="persistedSearch.student_city"
                     x-on:change="$wire.set('search_student_city', persistedSearch.student_city)"
                     id="search_student_city"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -118,7 +118,7 @@
             <div>
                 <label for="search_student_country" class="block text-sm font-medium text-gray-700 mb-1">Student Country</label>
                 <select
-                    x-model="persistedSearch.student_country"
+                    x-model.debounce.300ms="persistedSearch.student_country"
                     x-on:change="$wire.set('search_student_country', persistedSearch.student_country)"
                     id="search_student_country"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -136,7 +136,7 @@
             <div>
                 <label for="search_venue_name" class="block text-sm font-medium text-gray-700 mb-1">Venue Name</label>
                 <select
-                    x-model="persistedSearch.venue_name"
+                    x-model.debounce.300ms="persistedSearch.venue_name"
                     x-on:change="$wire.set('search_venue_name', persistedSearch.venue_name)"
                     id="search_venue_name"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -154,7 +154,7 @@
             <div>
                 <label for="search_venue_city" class="block text-sm font-medium text-gray-700 mb-1">Venue City</label>
                 <select
-                    x-model="persistedSearch.venue_city"
+                    x-model.debounce.300ms="persistedSearch.venue_city"
                     x-on:change="$wire.set('search_venue_city', persistedSearch.venue_city)"
                     id="search_venue_city"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -172,7 +172,7 @@
             <div>
                 <label for="search_venue_state" class="block text-sm font-medium text-gray-700 mb-1">Venue State</label>
                 <select
-                    x-model="persistedSearch.venue_state"
+                    x-model.debounce.300ms="persistedSearch.venue_state"
                     x-on:change="$wire.set('search_venue_state', persistedSearch.venue_state)"
                     id="search_venue_state"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -190,7 +190,7 @@
             <div>
                 <label for="search_venue_country" class="block text-sm font-medium text-gray-700 mb-1">Venue Country</label>
                 <select
-                    x-model="persistedSearch.venue_country"
+                    x-model.debounce.300ms="persistedSearch.venue_country"
                     x-on:change="$wire.set('search_venue_country', persistedSearch.venue_country)"
                     id="search_venue_country"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
