@@ -164,7 +164,7 @@
             <p class="text-sm text-gray-600">
                 Click to generate a list of emails for all currently filtered results.<br>
                 You can then copy/paste this list into your email client. Clicking the Reset button above will clear the list.<br>
-            </p>
+            </p><br><br>
         </div>
         @if($emailList)
             <div class="mt-2 p-4 bg-gray-100 rounded text-sm">
