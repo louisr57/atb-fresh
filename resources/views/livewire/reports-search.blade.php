@@ -163,7 +163,7 @@
             </button>
             <p class="text-sm text-gray-600">
                 Click to generate a list of emails for all currently filtered results.<br>
-                You can then copy/paste this list into your email client. Clicking the Reset button above will clear the list.
+                You can then copy/paste this list into your email client. Clicking the Reset button above will clear the list.<br>
             </p>
         </div>
         @if($emailList)
