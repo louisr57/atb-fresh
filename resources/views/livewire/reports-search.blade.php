@@ -1,4 +1,17 @@
-<div class="container mx-auto p-4">
+<div class="container mx-auto p-4" x-data="{
+    persistedSearch: $persist({
+        course: '',
+        status: '',
+        date_operator: '',
+        date: '',
+        student_city: '',
+        student_country: '',
+        venue_name: '',
+        venue_city: '',
+        venue_state: '',
+        venue_country: ''
+    })
+}">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold mb-0 mt-1">Reports</h1>
         <button type="button"
@@ -21,7 +34,11 @@
             <!-- Course Title -->
             <div>
                 <label for="search_course" class="block text-sm font-medium text-gray-700 mb-1">Course Title</label>
-                <select wire:model.live="search_course" id="search_course" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <select
+                    x-model="persistedSearch.course"
+                    x-on:change="$wire.set('search_course', persistedSearch.course)"
+                    id="search_course"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Course</option>
                     @if($search_course && !$courses->contains($search_course))
                         <option value="{{ $search_course }}" selected>{{ $search_course }}</option>
@@ -35,7 +52,11 @@
             <!-- Registration Status -->
             <div>
                 <label for="search_status" class="block text-sm font-medium text-gray-700 mb-1">Registration Status</label>
-                <select wire:model.live="search_status" id="search_status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <select
+                    x-model="persistedSearch.status"
+                    x-on:change="$wire.set('search_status', persistedSearch.status)"
+                    id="search_status"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Status</option>
                     @if($search_status && !$statuses->contains($search_status))
                         <option value="{{ $search_status }}" selected>{{ $search_status }}</option>
@@ -50,19 +71,32 @@
             <div>
                 <label for="search_date" class="block text-sm font-medium text-gray-700 mb-1">Event Date</label>
                 <div class="flex gap-2">
-                    <select wire:model.live="search_date_operator" id="search_date_operator" class="w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <select
+                        x-model="persistedSearch.date_operator"
+                        x-on:change="$wire.set('search_date_operator', persistedSearch.date_operator)"
+                        id="search_date_operator"
+                        class="w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                         @foreach($dateOperators as $operator)
                             <option value="{{ $operator }}">{{ $operator }}</option>
                         @endforeach
                     </select>
-                    <input type="date" wire:model.live="search_date" id="search_date" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <input
+                        type="date"
+                        x-model="persistedSearch.date"
+                        x-on:change="$wire.set('search_date', persistedSearch.date)"
+                        id="search_date"
+                        class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
             </div>
 
             <!-- Student City -->
             <div>
                 <label for="search_student_city" class="block text-sm font-medium text-gray-700 mb-1">Student City</label>
-                <select wire:model.live="search_student_city" id="search_student_city" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <select
+                    x-model="persistedSearch.student_city"
+                    x-on:change="$wire.set('search_student_city', persistedSearch.student_city)"
+                    id="search_student_city"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select City</option>
                     @if($search_student_city && !$studentCities->contains($search_student_city))
                         <option value="{{ $search_student_city }}" selected>{{ $search_student_city }}</option>
@@ -76,7 +110,11 @@
             <!-- Student Country -->
             <div>
                 <label for="search_student_country" class="block text-sm font-medium text-gray-700 mb-1">Student Country</label>
-                <select wire:model.live="search_student_country" id="search_student_country" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <select
+                    x-model="persistedSearch.student_country"
+                    x-on:change="$wire.set('search_student_country', persistedSearch.student_country)"
+                    id="search_student_country"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Country</option>
                     @if($search_student_country && !$studentCountries->contains($search_student_country))
                         <option value="{{ $search_student_country }}" selected>{{ $search_student_country }}</option>
@@ -90,7 +128,11 @@
             <!-- Venue Name -->
             <div>
                 <label for="search_venue_name" class="block text-sm font-medium text-gray-700 mb-1">Venue Name</label>
-                <select wire:model.live="search_venue_name" id="search_venue_name" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <select
+                    x-model="persistedSearch.venue_name"
+                    x-on:change="$wire.set('search_venue_name', persistedSearch.venue_name)"
+                    id="search_venue_name"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Venue</option>
                     @if($search_venue_name && !$venueNames->contains($search_venue_name))
                         <option value="{{ $search_venue_name }}" selected>{{ $search_venue_name }}</option>
@@ -104,7 +146,11 @@
             <!-- Venue City -->
             <div>
                 <label for="search_venue_city" class="block text-sm font-medium text-gray-700 mb-1">Venue City</label>
-                <select wire:model.live="search_venue_city" id="search_venue_city" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <select
+                    x-model="persistedSearch.venue_city"
+                    x-on:change="$wire.set('search_venue_city', persistedSearch.venue_city)"
+                    id="search_venue_city"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select City</option>
                     @if($search_venue_city && !$venueCities->contains($search_venue_city))
                         <option value="{{ $search_venue_city }}" selected>{{ $search_venue_city }}</option>
@@ -118,7 +164,11 @@
             <!-- Venue State -->
             <div>
                 <label for="search_venue_state" class="block text-sm font-medium text-gray-700 mb-1">Venue State</label>
-                <select wire:model.live="search_venue_state" id="search_venue_state" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <select
+                    x-model="persistedSearch.venue_state"
+                    x-on:change="$wire.set('search_venue_state', persistedSearch.venue_state)"
+                    id="search_venue_state"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select State</option>
                     @if($search_venue_state && !$venueStates->contains($search_venue_state))
                         <option value="{{ $search_venue_state }}" selected>{{ $search_venue_state }}</option>
@@ -132,7 +182,11 @@
             <!-- Venue Country -->
             <div>
                 <label for="search_venue_country" class="block text-sm font-medium text-gray-700 mb-1">Venue Country</label>
-                <select wire:model.live="search_venue_country" id="search_venue_country" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <select
+                    x-model="persistedSearch.venue_country"
+                    x-on:change="$wire.set('search_venue_country', persistedSearch.venue_country)"
+                    id="search_venue_country"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">Select Country</option>
                     @if($search_venue_country && !$venueCountries->contains($search_venue_country))
                         <option value="{{ $search_venue_country }}" selected>{{ $search_venue_country }}</option>
@@ -145,7 +199,24 @@
 
             <!-- Reset Button -->
             <div class="md:col-span-3">
-                <button wire:click="resetSearch" type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                <button
+                    x-on:click="
+                        $wire.resetSearch();
+                        persistedSearch = $persist({
+                            course: '',
+                            status: '',
+                            date_operator: '',
+                            date: '',
+                            student_city: '',
+                            student_country: '',
+                            venue_name: '',
+                            venue_city: '',
+                            venue_state: '',
+                            venue_country: ''
+                        })
+                    "
+                    type="button"
+                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                     Reset
                 </button>
             </div>
