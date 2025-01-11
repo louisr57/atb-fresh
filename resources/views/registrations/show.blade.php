@@ -50,18 +50,12 @@
                     @endforelse
                 </td>
             </tr>
-            <tr>
-                <th class="border px-4 py-2">Registration Status</th>
-                <td class="border px-4 py-2">{{ ucfirst($registration->end_status) }}</td>
-            </tr>
-            <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Remarks</th>
-                <td class="border px-4 py-2">{{ $registration->comments ?? 'No remarks' }}</td>
-            </tr>
+            <livewire:registration-edit :registration="$registration" />
         </table>
 
-        <a href="{{ route('registrations.index') }}" class="text-blue-600 hover:underline">Back to Registrations
-            List</a>
+        <div class="mt-4">
+            <a href="{{ route('registrations.index') }}" class="text-blue-600 hover:underline">Back to Registrations List</a>
+        </div>
     </div>
 
 
