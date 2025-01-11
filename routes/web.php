@@ -80,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->name('registrations.show');
     Route::get('/registrations/create/{event}', [RegistrationController::class, 'create'])->name('registrations.create');
     Route::post('/registrations', [RegistrationController::class, 'store'])->name('registrations.store');
+    Route::put('/registrations/{registration}', [RegistrationController::class, 'update'])->name('registrations.update');
 
     // Activity Log routes (all protected)
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');

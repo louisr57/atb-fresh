@@ -69,7 +69,7 @@ class RegistrationController extends Controller
 
     public function create(Event $event)
     {
-        $students = Student::orderBy('first_name')->get();
+        $students = Student::query()->orderBy('first_name')->get();
 
         return view('registrations.create', compact('event', 'students'));
     }
@@ -82,11 +82,70 @@ class RegistrationController extends Controller
             'end_status' => 'required|string',
         ]);
 
-        Registration::create($validatedData);
+        $registration = new Registration($validatedData);
+        $registration->save();
 
         return redirect()->route('events.show', $request->event_id)
             ->with('success', 'Participant added successfully');
     }
-}
 
-// You can add methods for create, store, update, and delete if needed
+    public function update(Request $request, Registration $registration)
+    {
+        \Log::info('Update request received', [
+            'request_data' => $request->all(),
+            'registration_id' => $registration->id,
+            'is_ajax' => $request->ajax(),
+            'content_type' => $request->header('Content-Type')
+        ]);
+
+        try {
+            $validatedData = $request->validate([
+                'end_status' => 'required|in:Registered,Withdrawn,Completed,Incomplete',
+                'comments' => 'nullable|string'
+            ]);
+
+            \Log::info('Validated data', ['data' => $validatedData]);
+
+            $registration->fill($validatedData);
+            $saved = $registration->save();
+
+            \Log::info('Save attempt result', [
+                'saved' => $saved,
+                'registration' => $registration->toArray()
+            ]);
+
+            if (!$saved) {
+                throw new \Exception('Failed to save registration');
+            }
+
+            $registration->refresh();
+
+            if ($request->ajax()) {
+                $response = [
+                    'success' => true,
+                    'message' => 'Registration updated successfully',
+                    'registration' => $registration->toArray()
+                ];
+                \Log::info('Sending JSON response', $response);
+                return response()->json($response);
+            }
+
+            return back()->with('success', 'Registration updated successfully');
+        } catch (\Exception $e) {
+            \Log::error('Error updating registration', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'registration_id' => $registration->id
+            ]);
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error updating registration: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->with('error', 'Error updating registration');
+        }
+    }
+}

@@ -9,7 +9,12 @@ class Registration extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'student_id',
+        'event_id',
+        'end_status',
+        'comments'
+    ];
 
     // Define relationship with the Student model
     public function student()

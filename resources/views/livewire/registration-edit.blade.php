@@ -31,18 +31,15 @@
     <tr class="{{ $isEditing ? 'bg-gray-100' : '' }}">
         <td colspan="2" class="border px-4 py-2 text-right">
             @if ($isEditing)
-<<<<<<< Tabnine <<<<<<<
                 <button
-                    wire:click="$dispatch('saveChanges')"//-
-                    wire:click="saveChanges"//+
+                    wire:click="$dispatch('saveChanges', { id: {{ $registration->id }} })"
                     type="button"
                     class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
                 >
                     Save Changes
                 </button>
->>>>>>> Tabnine >>>>>>>// {"source":"chat"}
                 <button
-                    wire:click="$dispatch('cancelEdit')"
+                    wire:click="cancelEdit"
                     type="button"
                     class="ml-2 bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 text-sm"
                 >
@@ -50,7 +47,7 @@
                 </button>
             @else
                 <button
-                    wire:click="$dispatch('startEdit')"
+                    wire:click="startEdit"
                     type="button"
                     class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
                 >

@@ -1,8 +1,9 @@
-<x-layout>
-
-    <x-slot:heading>
-        Registration Details
-    </x-slot:heading>
+<x-app-layout>
+    <x-slot:header>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Registration Details
+        </h2>
+    </x-slot:header>
 
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-6">Registration Details</h1>
@@ -50,7 +51,7 @@
                     @endforelse
                 </td>
             </tr>
-            <livewire:registration-edit :registration="$registration" />
+            @include('registrations._details', ['registration' => $registration])
         </table>
 
         <div class="mt-4">
@@ -58,5 +59,5 @@
         </div>
     </div>
 
-
-</x-layout>
+    @stack('scripts')
+</x-app-layout>

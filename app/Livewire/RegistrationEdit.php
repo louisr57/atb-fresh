@@ -36,7 +36,7 @@ class RegistrationEdit extends Component
     }
 
     #[On('saveChanges')]
-    public function saveChanges()
+    public function saveChanges($id)
     {
         $validated = $this->validate([
             'end_status' => 'required|in:' . implode(',', $this->statuses),
@@ -52,7 +52,8 @@ class RegistrationEdit extends Component
 
         $this->isEditing = false;
 
-        $this->dispatch('registration-updated');
+        $this->dispatch('registration-updated')->self();
+        $this->render();
     }
 
     public function render()
