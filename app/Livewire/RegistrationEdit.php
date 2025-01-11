@@ -11,7 +11,7 @@ class RegistrationEdit extends Component
     public $isEditing = false;
     public $end_status;
     public $comments;
-    public $statuses = ['registered', 'withdrawn', 'complete', 'incomplete'];
+    public $statuses = ['Registered', 'Withdrawn', 'Completed', 'Incomplete'];
 
     public function mount(Registration $registration)
     {
@@ -23,6 +23,11 @@ class RegistrationEdit extends Component
     public function toggleEdit()
     {
         $this->isEditing = !$this->isEditing;
+        if ($this->isEditing) {
+            // Refresh values when entering edit mode
+            $this->end_status = $this->registration->end_status;
+            $this->comments = $this->registration->comments;
+        }
     }
 
     public function save()
@@ -33,6 +38,7 @@ class RegistrationEdit extends Component
         ]);
 
         $this->isEditing = false;
+        $this->dispatch('saved');
     }
 
     public function render()
