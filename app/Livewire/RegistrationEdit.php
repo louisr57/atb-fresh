@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Registration;
+use Livewire\Attributes\On;
 
 class RegistrationEdit extends Component
 {
@@ -20,25 +21,38 @@ class RegistrationEdit extends Component
         $this->comments = $registration->comments;
     }
 
-    public function toggleEdit()
+    #[On('startEdit')]
+    public function startEdit()
     {
-        $this->isEditing = !$this->isEditing;
-        if ($this->isEditing) {
-            // Refresh values when entering edit mode
-            $this->end_status = $this->registration->end_status;
-            $this->comments = $this->registration->comments;
-        }
+        $this->isEditing = true;
+        $this->end_status = $this->registration->end_status;
+        $this->comments = $this->registration->comments;
     }
 
-    public function save()
+    #[On('cancelEdit')]
+    public function cancelEdit()
     {
-        $this->registration->update([
-            'end_status' => $this->end_status,
-            'comments' => $this->comments
+        $this->isEditing = false;
+    }
+
+    #[On('saveChanges')]
+    public function saveChanges()
+    {
+        $validated = $this->validate([
+            'end_status' => 'required|in:' . implode(',', $this->statuses),
+            'comments' => 'nullable|string'
         ]);
 
+
+        $this->registration->update($validated);
+        $this->registration->refresh();
+
+        $this->end_status = $this->registration->end_status;
+        $this->comments = $this->registration->comments;
+
         $this->isEditing = false;
-        $this->dispatch('saved');
+
+        $this->dispatch('registration-updated');
     }
 
     public function render()

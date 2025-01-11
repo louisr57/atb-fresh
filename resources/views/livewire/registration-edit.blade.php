@@ -1,15 +1,15 @@
-<tbody>
+<tbody wire:key="registration-{{ $registration->id }}">
     <tr>
         <th class="border px-4 py-2">Registration Status</th>
         <td class="border px-4 py-2">
             @if ($isEditing)
-                <select wire:model.live="end_status" class="w-full p-1 border rounded">
+                <select wire:model="end_status" class="w-full p-1 border rounded">
                     @foreach ($statuses as $status)
-                        <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                        <option value="{{ $status }}">{{ $status }}</option>
                     @endforeach
                 </select>
             @else
-                {{ ucfirst($end_status) }}
+                {{ $end_status }}
             @endif
         </td>
     </tr>
@@ -18,7 +18,7 @@
         <td class="border px-4 py-2">
             @if ($isEditing)
                 <textarea
-                    wire:model.live="comments"
+                    wire:model="comments"
                     rows="3"
                     class="w-full p-1 border rounded"
                     placeholder="Add remarks here..."
@@ -31,15 +31,18 @@
     <tr class="{{ $isEditing ? 'bg-gray-100' : '' }}">
         <td colspan="2" class="border px-4 py-2 text-right">
             @if ($isEditing)
+<<<<<<< Tabnine <<<<<<<
                 <button
-                    wire:click="save"
+                    wire:click="$dispatch('saveChanges')"//-
+                    wire:click="saveChanges"//+
                     type="button"
                     class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
                 >
                     Save Changes
                 </button>
+>>>>>>> Tabnine >>>>>>>// {"source":"chat"}
                 <button
-                    wire:click="toggleEdit"
+                    wire:click="$dispatch('cancelEdit')"
                     type="button"
                     class="ml-2 bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 text-sm"
                 >
@@ -47,7 +50,7 @@
                 </button>
             @else
                 <button
-                    wire:click="toggleEdit"
+                    wire:click="$dispatch('startEdit')"
                     type="button"
                     class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
                 >
