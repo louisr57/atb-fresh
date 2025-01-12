@@ -53,7 +53,7 @@
         </table>
 
         <div class="mt-4">
-            <a href="{{ route('registrations.index') }}" class="text-blue-600 hover:underline">Back to Registrations List</a>
+            <a href="{{ route('events.show', $registration->event) }}" class="text-blue-600 hover:underline">Back to Events List</a>
         </div>
     </div>
 
