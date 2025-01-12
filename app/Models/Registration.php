@@ -43,4 +43,18 @@ class Registration extends Model
             ->orderBy('id', 'desc')
             ->first();
     }
+
+    public function getPositionInEvent()
+    {
+        $position = $this->where('event_id', $this->event_id)
+            ->where('id', '<=', $this->id)
+            ->count();
+
+        $total = $this->where('event_id', $this->event_id)->count();
+
+        return [
+            'current' => $position,
+            'total' => $total
+        ];
+    }
 }

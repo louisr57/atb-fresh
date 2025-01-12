@@ -4,7 +4,15 @@
     </x-slot:heading>
 
     <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-6">Registration Details</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Registration Details</h1>
+            @php
+                $position = $registration->getPositionInEvent();
+            @endphp
+            <span class="text-gray-600 text-xl mr-3 font-semibold">
+                {{ $position['current'] }} of {{ $position['total'] }}
+            </span>
+        </div>
 
         <table class="min-w-full table-fixed border-collapse border border-gray-300 mb-4">
             <tr class="bg-gray-100">
