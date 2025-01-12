@@ -29,28 +29,61 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2" class="border px-4 py-2 text-right">
-            <div class="registration-display">
-                <button
-                    type="button"
-                    class="edit-registration bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
-                >
-                    Edit
-                </button>
-            </div>
-            <div class="registration-edit hidden">
-                <button
-                    type="button"
-                    class="save-registration bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
-                >
-                    Save Changes
-                </button>
-                <button
-                    type="button"
-                    class="cancel-edit ml-2 bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 text-sm"
-                >
-                    Cancel
-                </button>
+        <td colspan="2" class="border px-4 py-2">
+            <div class="flex justify-between items-center">
+                <div>
+                    <div class="registration-display">
+                        <button
+                            type="button"
+                            class="edit-registration bg-blue-500 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            Edit Status and Remarks
+                        </button>
+                    </div>
+                    <div class="registration-edit hidden">
+                        <button
+                            type="button"
+                            class="save-registration bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
+                        >
+                            Save Changes
+                        </button>
+                        <button
+                            type="button"
+                            class="cancel-edit ml-2 bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 text-sm"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    @if($registration->previousInEvent())
+                        <a href="{{ route('registrations.show', $registration->previousInEvent()) }}" class="text-gray-600 hover:text-gray-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </a>
+                    @else
+                        <span class="text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </span>
+                    @endif
+
+                    @if($registration->nextInEvent())
+                        <a href="{{ route('registrations.show', $registration->nextInEvent()) }}" class="text-gray-600 hover:text-gray-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    @else
+                        <span class="text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </span>
+                    @endif
+                </div>
             </div>
         </td>
     </tr>

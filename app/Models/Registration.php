@@ -27,4 +27,20 @@ class Registration extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function nextInEvent()
+    {
+        return $this->where('event_id', $this->event_id)
+            ->where('id', '>', $this->id)
+            ->orderBy('id', 'asc')
+            ->first();
+    }
+
+    public function previousInEvent()
+    {
+        return $this->where('event_id', $this->event_id)
+            ->where('id', '<', $this->id)
+            ->orderBy('id', 'desc')
+            ->first();
+    }
 }
