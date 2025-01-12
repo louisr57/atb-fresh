@@ -16,37 +16,37 @@
 
         <table class="min-w-full table-fixed border-collapse border border-gray-300 mb-4">
             <tr class="bg-gray-100">
-                <th class="w-1/4 border px-4 py-2 text-left">Student ID</th>
+                <th class="w-1/5 border px-4 py-2 text-left">Student ID</th>
                 <td class="border px-4 py-2">
                     {{ $registration->student->id }}
                 </td>
             </tr>
-            <tr class="bg-gray-100">
-                <th class="w-1/4 border px-4 py-2 text-left">Registration ID</th>
+            <tr>
+                <th class="w-1/5 border px-4 py-2 text-left">Registration ID</th>
                 <td class="border px-4 py-2">
                     {{ $registration->id }}
                 </td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="w-1/4 border px-4 py-2 text-left">Student Name</th>
+                <th class="w-1/5 border px-4 py-2 text-left">Student Name</th>
                 <td class="border px-4 py-2">
                     {{ $registration->student->first_name }} {{ $registration->student->last_name }}
                 </td>
             </tr>
             <tr>
-                <th class="w-1/4 border px-4 py-2 text-left">Course Name</th>
+                <th class="w-1/5 border px-4 py-2 text-left">Course Name</th>
                 <td class="border px-4 py-2">{{ $registration->event->course->course_title }}</td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="w-1/4 border px-4 py-2 text-left">Course Start Date</th>
+                <th class="w-1/5 border px-4 py-2 text-left">Course Start Date</th>
                 <td class="border px-4 py-2">{{ $registration->event->datefrom }}</td>
             </tr>
             <tr>
-                <th class="w-1/4 border px-4 py-2 text-left">Course End Date</th>
+                <th class="w-1/5 border px-4 py-2 text-left">Course End Date</th>
                 <td class="border px-4 py-2">{{ $registration->event->dateto ?? 'N/A' }}</td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="w-1/4 border px-4 py-2 text-left">
+                <th class="w-1/5 border px-4 py-2 text-left">
                     Facilitator(s)</th>
                 <td class="border px-4 py-2">
                     @forelse ($registration->event->facilitators as $facilitator)
@@ -61,7 +61,7 @@
         </table>
 
         <div class="mt-4">
-            <a href="{{ route('events.show', $registration->event) }}" class="text-blue-600 text-xl font-bold hover:underline">Back to Events List</a>
+            <a href="{{ route('events.show', $registration->event) }}" class="ml-5 text-blue-600 text-xl font-bold hover:underline">Back to Events List</a>
         </div>
     </div>
 
