@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Registration;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RegistrationController extends Controller
 {
@@ -63,6 +64,11 @@ class RegistrationController extends Controller
         // Load related data for a single registration
         $student = $registration->student; // Make sure it correctly loads the associated student
         $registration->load('student'); // Eager load student relationship
+
+        activity('registration') // Explicitly set the log name to 'registration'
+            ->performedOn($registration)
+            ->causedBy(Auth::user())
+            ->log('Registration profile viewed');
 
         return view('registrations.show', compact('registration', 'student'));
     }

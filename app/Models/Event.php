@@ -4,12 +4,47 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    const LOG_NAME = 'event';
+
+    protected $fillable = [
+        'title',
+        'datefrom',
+        'dateto',
+        'timefrom',
+        'timeto',
+        'venue_id',
+        'course_id',
+        'facilitator_id',
+        'remarks',
+        'participant_count'
+    ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'title',
+                'datefrom',
+                'dateto',
+                'timefrom',
+                'timeto',
+                'venue_id',
+                'course_id',
+                'facilitator_id',
+                'remarks',
+                'participant_count'
+            ])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(fn (string $eventName) => "Event has been {$eventName}")
+            ->useLogName(self::LOG_NAME);
+    }
 
     protected static function booted()
     {

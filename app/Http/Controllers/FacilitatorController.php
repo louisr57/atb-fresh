@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Facilitator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Rinvex\Country\CountryLoader; // If you're using the Laravel package for countries
 
 class FacilitatorController extends Controller
@@ -67,6 +68,11 @@ class FacilitatorController extends Controller
                     $query->orderBy($sort_by, $direction);
             }
         }, 'events.course', 'events.venue'])->findOrFail($id);
+
+        activity('facilitator') // Explicitly set the log name to 'facilitator'
+            ->performedOn($facilitator)
+            ->causedBy(Auth::user())
+            ->log('Facilitator profile viewed');
 
         // Return view with facilitator data
         return view('facilitators.show', compact('facilitator', 'sort_by', 'direction'));

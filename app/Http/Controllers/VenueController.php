@@ -38,6 +38,11 @@ class VenueController extends Controller
     {
         $venue = Venue::with('events.course', 'events.facilitators')->findOrFail($id);
 
+        activity('venue') // Explicitly set the log name to 'venue'
+            ->performedOn($venue)
+            ->causedBy(Auth::user())
+            ->log('Venue profile viewed');
+
         return view('venues.show', compact('venue'));
     }
 

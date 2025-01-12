@@ -4,12 +4,51 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Facilitator extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    const LOG_NAME = 'facilitator';
+
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'gender',
+        'email',
+        'phone_number',
+        'address',
+        'city',
+        'state',
+        'country',
+        'post_code',
+        'website',
+        'dob'
+    ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'first_name',
+                'last_name',
+                'gender',
+                'email',
+                'phone_number',
+                'address',
+                'city',
+                'state',
+                'country',
+                'post_code',
+                'website',
+                'dob'
+            ])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(fn (string $facilitatorName) => "Facilitator has been {$facilitatorName}")
+            ->useLogName(self::LOG_NAME);
+    }
 
     protected $casts = [
         'dob' => 'date:Y-m-d',

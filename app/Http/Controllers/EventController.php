@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Facilitator;
 use App\Models\Venue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 // Following TODO extension terms are just for reminding me to use them in the future
@@ -111,6 +112,11 @@ class EventController extends Controller
                     ->orderBy('registrations.id');
             }])
             ->findOrFail($id);
+
+        activity('event') // Explicitly set the log name to 'event'
+            ->performedOn($event)
+            ->causedBy(Auth::user())
+            ->log('Event profile viewed');
 
         return view('events.show', compact('event'));
     }

@@ -6,6 +6,7 @@ use App\Models\Course;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request; // Assuming your model is named 'Course'
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 // Following TODO extension terms are just for reminding me to use them in the future
 // I've seen many places in the codebase where other authors have used these.
@@ -69,6 +70,11 @@ class CourseController extends Controller
                     $query->orderBy($sort_by, $direction);
             }
         }, 'events.facilitators', 'events.venue'])->findOrFail($id);
+
+        activity('course') // Explicitly set the log name to 'course'
+            ->performedOn($course)
+            ->causedBy(Auth::user())
+            ->log('Course profile viewed');
 
         // Return the course to the view with sorting parameters
         return view('courses.show', compact('course', 'sort_by', 'direction'));
