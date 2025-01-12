@@ -1,6 +1,6 @@
 <tbody data-registration-id="{{ $registration->id }}">
     <tr>
-        <th class="border px-4 py-2">Registration Status</th>
+        <th class="w-1/4 border px-4 py-2 text-left">Registration Status</th>
         <td class="border px-4 py-2">
             <span class="registration-display">{{ $registration->end_status }}</span>
             <div class="registration-edit hidden">
@@ -15,7 +15,7 @@
         </td>
     </tr>
     <tr class="bg-gray-100">
-        <th class="border px-4 py-2">Remarks</th>
+        <th class="w-1/4 border px-4 py-2 text-left">Remarks</th>
         <td class="border px-4 py-2">
             <span class="registration-display">{{ $registration->comments ?? 'No remarks' }}</span>
             <div class="registration-edit hidden">

@@ -6,39 +6,39 @@
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-6">Registration Details</h1>
 
-        <table class="min-w-full table-auto border-collapse border border-gray-300 mb-4">
+        <table class="min-w-full table-fixed border-collapse border border-gray-300 mb-4">
             <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Student ID</th>
+                <th class="w-1/4 border px-4 py-2 text-left">Student ID</th>
                 <td class="border px-4 py-2">
                     {{ $registration->student->id }}
                 </td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Registration ID</th>
+                <th class="w-1/4 border px-4 py-2 text-left">Registration ID</th>
                 <td class="border px-4 py-2">
                     {{ $registration->id }}
                 </td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Student Name</th>
+                <th class="w-1/4 border px-4 py-2 text-left">Student Name</th>
                 <td class="border px-4 py-2">
                     {{ $registration->student->first_name }} {{ $registration->student->last_name }}
                 </td>
             </tr>
             <tr>
-                <th class="border px-4 py-2">Course Name</th>
+                <th class="w-1/4 border px-4 py-2 text-left">Course Name</th>
                 <td class="border px-4 py-2">{{ $registration->event->course->course_title }}</td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="border px-4 py-2">Course Start Date</th>
+                <th class="w-1/4 border px-4 py-2 text-left">Course Start Date</th>
                 <td class="border px-4 py-2">{{ $registration->event->datefrom }}</td>
             </tr>
             <tr>
-                <th class="border px-4 py-2">Course End Date</th>
+                <th class="w-1/4 border px-4 py-2 text-left">Course End Date</th>
                 <td class="border px-4 py-2">{{ $registration->event->dateto ?? 'N/A' }}</td>
             </tr>
             <tr class="bg-gray-100">
-                <th class="border px-4 py-2">
+                <th class="w-1/4 border px-4 py-2 text-left">
                     Facilitator(s)</th>
                 <td class="border px-4 py-2">
                     @forelse ($registration->event->facilitators as $facilitator)
