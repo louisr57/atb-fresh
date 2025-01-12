@@ -55,7 +55,7 @@ class Student extends Model
                 'reg_count',
             ])
             ->logOnlyDirty()
-            ->setDescriptionForEvent(fn (string $eventName) => "Student has been {$eventName}")
+            ->setDescriptionForEvent(fn (string $studentName) => "Student has been {$studentName}")
             ->useLogName(self::LOG_NAME);
     }
 

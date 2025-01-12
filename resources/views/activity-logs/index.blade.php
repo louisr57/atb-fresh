@@ -9,6 +9,18 @@
             <form action="{{ route('activity-logs.index') }}" method="GET" class="mb-6">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
+                        <label class="block text-gray-700 font-bold mb-2">Model Type</label>
+                        <select name="model" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="">All Models</option>
+                            <option value="student" {{ request('model') == 'student' ? 'selected' : '' }}>Students</option>
+                            <option value="course" {{ request('model') == 'course' ? 'selected' : '' }}>Courses</option>
+                            <option value="event" {{ request('model') == 'event' ? 'selected' : '' }}>Events</option>
+                            <option value="facilitator" {{ request('model') == 'facilitator' ? 'selected' : '' }}>Facilitators</option>
+                            <option value="registration" {{ request('model') == 'registration' ? 'selected' : '' }}>Registrations</option>
+                            <option value="venue" {{ request('model') == 'venue' ? 'selected' : '' }}>Venues</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-gray-700 font-bold mb-2">Action Type</label>
                         <select name="action" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <option value="">All Actions</option>
@@ -65,47 +77,146 @@
                                 </td>
                                 <td class="border border-gray-500 px-4 py-2">
                                     {{-- @dump($activity->description); --}}
-                                    @if($activity->subject_type === \App\Models\Student::class)
-
-                                        <strong>Student:</strong>
-                                        @if($activity->subject)
-                                            <a href="{{ route('students.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
-                                                {{ $activity->subject->first_name }} {{ $activity->subject->last_name }}
-                                            </a>
-                                            {{-- @dump($activity->description); --}}
-                                            @if(str_contains($activity->description, 'viewed'))
-                                                <span class="text-gray-500">
-                                                    Profile viewed by {{ $activity->causer->name ?? 'System' }}
-                                                </span>
+                                    @switch($activity->subject_type)
+                                        @case(\App\Models\Student::class)
+                                            <strong>Student:</strong>
+                                            @if($activity->subject)
+                                                <a href="{{ route('students.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
+                                                    {{ $activity->subject->first_name }} {{ $activity->subject->last_name }}
+                                                </a>
+                                                @if(str_contains($activity->description, 'viewed'))
+                                                    <span class="text-gray-500">
+                                                        Profile viewed by {{ $activity->causer->name ?? 'System' }}
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="text-gray-500">(Student no longer exists)</span>
                                             @endif
-                                        @else
-                                            <span class="text-gray-500">(Student no longer exists)</span>
-                                        @endif
-                                        <br>
-                                    @endif
+                                            <br>
+                                            @break
+
+                                        @case(\App\Models\Course::class)
+                                            <strong>Course:</strong>
+                                            @if($activity->subject)
+                                                <a href="{{ route('courses.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
+                                                    {{ $activity->subject->course_title }}
+                                                </a>
+                                                @if(str_contains($activity->description, 'viewed'))
+                                                    <span class="text-gray-500">
+                                                        Profile viewed by {{ $activity->causer->name ?? 'System' }}
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="text-gray-500">(Course no longer exists)</span>
+                                            @endif
+                                            <br>
+                                            @break
+
+                                        @case(\App\Models\Event::class)
+                                            <strong>Event:</strong>
+                                            @if($activity->subject)
+                                                <a href="{{ route('events.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
+                                                    {{ $activity->subject->title }}
+                                                </a>
+                                                @if(str_contains($activity->description, 'viewed'))
+                                                    <span class="text-gray-500">
+                                                        Profile viewed by {{ $activity->causer->name ?? 'System' }}
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="text-gray-500">(Event no longer exists)</span>
+                                            @endif
+                                            <br>
+                                            @break
+
+                                        @case(\App\Models\Facilitator::class)
+                                            <strong>Facilitator:</strong>
+                                            @if($activity->subject)
+                                                <a href="{{ route('facilitators.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
+                                                    {{ $activity->subject->first_name }} {{ $activity->subject->last_name }}
+                                                </a>
+                                                @if(str_contains($activity->description, 'viewed'))
+                                                    <span class="text-gray-500">
+                                                        Profile viewed by {{ $activity->causer->name ?? 'System' }}
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="text-gray-500">(Facilitator no longer exists)</span>
+                                            @endif
+                                            <br>
+                                            @break
+
+                                        @case(\App\Models\Registration::class)
+                                            <strong>Registration:</strong>
+                                            @if($activity->subject)
+                                                <a href="{{ route('registrations.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
+                                                    {{ $activity->subject->student->first_name }} {{ $activity->subject->student->last_name }}
+                                                    - {{ $activity->subject->event->title }}
+                                                </a>
+                                                @if(str_contains($activity->description, 'viewed'))
+                                                    <span class="text-gray-500">
+                                                        Profile viewed by {{ $activity->causer->name ?? 'System' }}
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="text-gray-500">(Registration no longer exists)</span>
+                                            @endif
+                                            <br>
+                                            @break
+
+                                        @case(\App\Models\Venue::class)
+                                            <strong>Venue:</strong>
+                                            @if($activity->subject)
+                                                <a href="{{ route('venues.show', $activity->subject_id) }}" class="text-blue-600 hover:underline">
+                                                    {{ $activity->subject->venue_name }}
+                                                </a>
+                                                @if(str_contains($activity->description, 'viewed'))
+                                                    <span class="text-gray-500">
+                                                        Profile viewed by {{ $activity->causer->name ?? 'System' }}
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="text-gray-500">(Venue no longer exists)</span>
+                                            @endif
+                                            <br>
+                                            @break
+                                    @endswitch
 
                                     @if(str_contains($activity->description, 'deleted'))
                                         @php
-                                            // Define the desired field order (same as for updates)
-                                            $fieldOrder = [
-                                                'first_name',
-                                                'last_name',
-                                                'email',
-                                                'phone_number',
-                                                'dob',
-                                                'gender',
-                                                'address',
-                                                'city',
-                                                'state',
-                                                'country',
-                                                'post_code',
-                                                'website',
-                                                'ident',
-                                                'next_of_kin',
-                                                'allergies',
-                                                'special_needs',
-                                                'reg_count'
+                                            // Define field orders for each model
+                                            $fieldOrders = [
+                                                \App\Models\Student::class => [
+                                                    'first_name', 'last_name', 'email', 'phone_number',
+                                                    'dob', 'gender', 'address', 'city', 'state',
+                                                    'country', 'post_code', 'website', 'ident',
+                                                    'next_of_kin', 'allergies', 'special_needs', 'reg_count'
+                                                ],
+                                                \App\Models\Course::class => [
+                                                    'course_code', 'course_title', 'description',
+                                                    'prerequisites', 'duration'
+                                                ],
+                                                \App\Models\Event::class => [
+                                                    'title', 'datefrom', 'dateto', 'timefrom', 'timeto',
+                                                    'venue_id', 'course_id', 'facilitator_id', 'remarks',
+                                                    'participant_count'
+                                                ],
+                                                \App\Models\Facilitator::class => [
+                                                    'first_name', 'last_name', 'gender', 'email',
+                                                    'phone_number', 'address', 'city', 'state',
+                                                    'country', 'post_code', 'website', 'dob'
+                                                ],
+                                                \App\Models\Registration::class => [
+                                                    'student_id', 'event_id', 'end_status', 'comments'
+                                                ],
+                                                \App\Models\Venue::class => [
+                                                    'venue_name', 'address', 'city', 'state', 'country',
+                                                    'postcode', 'location_geocode', 'remarks'
+                                                ]
                                             ];
+
+                                            // Get the appropriate field order for this model
+                                            $fieldOrder = $fieldOrders[$activity->subject_type] ?? [];
 
                                             // Get the properties
                                             $properties = $activity->properties;
@@ -161,26 +272,8 @@
                                                         }
                                                     }
 
-                                                    // Define the desired field order
-                                                    $fieldOrder = [
-                                                        'first_name',
-                                                        'last_name',
-                                                        'email',
-                                                        'phone_number',
-                                                        'dob',
-                                                        'gender',
-                                                        'address',
-                                                        'city',
-                                                        'state',
-                                                        'country',
-                                                        'post_code',
-                                                        'website',
-                                                        'ident',
-                                                        'next_of_kin',
-                                                        'allergies',
-                                                        'special_needs',
-                                                        'reg_count'
-                                                    ];
+                                                    // Get the appropriate field order for this model
+                                                    $fieldOrder = $fieldOrders[$activity->subject_type] ?? [];
 
                                                     // Sort the changes array based on the field order
                                                     $sortedChanges = [];
