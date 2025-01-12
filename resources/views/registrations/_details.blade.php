@@ -55,30 +55,34 @@
                         </button>
                     </div>
                 </div>
-                <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-12">
                     @if($registration->previousInEvent())
-                        <a href="{{ route('registrations.show', $registration->previousInEvent()) }}" class="text-gray-600 hover:text-gray-900">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <a href="{{ route('registrations.show', $registration->previousInEvent()) }}" class="flex items-center text-gray-600 hover:text-gray-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
+                            <span class="ml-2">Previous</span>
                         </a>
                     @else
-                        <span class="text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="flex items-center text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
+                            <span class="ml-2">Previous</span>
                         </span>
                     @endif
 
                     @if($registration->nextInEvent())
-                        <a href="{{ route('registrations.show', $registration->nextInEvent()) }}" class="text-gray-600 hover:text-gray-900">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <a href="{{ route('registrations.show', $registration->nextInEvent()) }}" class="flex items-center text-gray-600 hover:text-gray-900">
+                            <span class="mr-2">Next</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </a>
                     @else
-                        <span class="text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="flex items-center text-gray-300">
+                            <span class="mr-2">Next</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </span>
