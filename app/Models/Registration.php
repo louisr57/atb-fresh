@@ -23,7 +23,7 @@ class Registration extends Model
                 'comments'
             ])
             ->logOnlyDirty()
-            ->setDescriptionForEvent(fn (string $eventName) => "Registration has been {$eventName}")
+            ->setDescriptionForEvent(fn (string $registrationName) => "Registration has been {$registrationName}")
             ->useLogName(self::LOG_NAME);
     }
 
