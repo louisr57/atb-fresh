@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Save button click
-    registrationDetails.querySelector('.save-registration').addEventListener('click', function() {
+    registrationDetails.querySelector('.save-registration').addEventListener('click', async function() {
         const data = {
             end_status: registrationDetails.querySelector('select[name="end_status"]').value,
             comments: registrationDetails.querySelector('textarea[name="comments"]').value
@@ -85,64 +85,84 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Data to send:', data);
 
         // Get CSRF token
-        const token = document.querySelector('meta[name="csrf-token"]');
-        if (!token) {
-            console.error('CSRF token not found');
-            alert('CSRF token not found. Please refresh the page.');
-            return;
+        function getCsrfToken() {
+            return new Promise((resolve, reject) => {
+                // First try to get the token from the meta tag
+                const metaToken = document.querySelector('meta[name="csrf-token"]');
+                if (metaToken && metaToken.content) {
+                    return resolve(metaToken.content);
+                }
+
+                // If meta tag is not found, try to get it from a form
+                const tokenInput = document.querySelector('input[name="_token"]');
+                if (tokenInput && tokenInput.value) {
+                    return resolve(tokenInput.value);
+                }
+
+                // If neither is found, reject with a clear error
+                reject(new Error('CSRF token not found. Please ensure you are logged in and try refreshing the page.'));
+            });
         }
 
-        // Show loading state
-        const saveButton = registrationDetails.querySelector('.save-registration');
-        const originalText = saveButton.textContent;
-        saveButton.textContent = 'Saving...';
-        saveButton.disabled = true;
+        try {
+            // Show loading state
+            const saveButton = registrationDetails.querySelector('.save-registration');
+            const originalText = saveButton.textContent;
+            saveButton.textContent = 'Saving...';
+            saveButton.disabled = true;
 
-        fetch(`{{ route('registrations.update', $registration) }}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': token.content,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
+            const token = await getCsrfToken();
+
+            // Add a hidden form with CSRF token for future use
+            if (!document.querySelector('input[name="_token"]')) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '_token';
+                tokenInput.value = token;
+                document.body.appendChild(tokenInput);
+            }
+
+            const response = await fetch(`{{ route('registrations.update', $registration) }}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify(data)
+            });
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Response:', data);
-            if (data.success) {
-                // Update the display values
-                const statusDisplay = registrationDetails.querySelector('.registration-display:first-child');
-                const commentsDisplay = registrationDetails.querySelectorAll('.registration-display')[1];
 
-                console.log('Updating status to:', data.registration.end_status);
-                console.log('Updating comments to:', data.registration.comments);
+            const responseData = await response.json();
+            console.log('Response:', responseData);
 
-                statusDisplay.textContent = data.registration.end_status;
-                commentsDisplay.textContent = data.registration.comments || 'No remarks';
-
-                // Switch back to display mode
-                registrationDetails.querySelectorAll('.registration-edit').forEach(el => el.classList.add('hidden'));
-                registrationDetails.querySelectorAll('.registration-display').forEach(el => el.classList.remove('hidden'));
-            } else {
+            if (!responseData.success) {
                 throw new Error('Update was not successful');
             }
-        })
-        .catch(error => {
+
+            // Update the display values
+            const statusDisplay = registrationDetails.querySelector('.registration-display:first-child');
+            const commentsDisplay = registrationDetails.querySelectorAll('.registration-display')[1];
+
+            console.log('Updating status to:', responseData.registration.end_status);
+            console.log('Updating comments to:', responseData.registration.comments);
+
+            statusDisplay.textContent = responseData.registration.end_status;
+            commentsDisplay.textContent = responseData.registration.comments || 'No remarks';
+
+            // Switch back to display mode
+            registrationDetails.querySelectorAll('.registration-edit').forEach(el => el.classList.add('hidden'));
+            registrationDetails.querySelectorAll('.registration-display').forEach(el => el.classList.remove('hidden'));
+        } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while saving changes: ' + error.message);
-        })
-        .finally(() => {
-            // Reset button state
             saveButton.textContent = originalText;
             saveButton.disabled = false;
-        });
+        }
     });
 });
 </script>

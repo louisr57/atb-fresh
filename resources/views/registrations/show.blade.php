@@ -1,9 +1,7 @@
-<x-app-layout>
-    <x-slot:header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Registration Details
-        </h2>
-    </x-slot:header>
+<x-layout>
+    <x-slot:heading>
+        Registrations Details
+    </x-slot:heading>
 
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-6">Registration Details</h1>
@@ -60,4 +58,4 @@
     </div>
 
     @stack('scripts')
-</x-app-layout>
+</x-layout>
