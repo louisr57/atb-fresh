@@ -14,7 +14,7 @@
         }
     </style>
 
-    @livewireStyles
+    {{-- @livewireStyles ... as per Livewire 3 docs ... no need to have this override automatic injection --}}
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -173,7 +173,7 @@
         </main>
     </div>
 
-    @livewireScripts
+    {{-- @livewireScripts ... as per Livewire 3 docs ... no need to have this override automatic injection--}}
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
