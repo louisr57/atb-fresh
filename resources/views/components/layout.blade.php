@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    @livewireStyles
 
     <style>
         .highlight {
@@ -15,6 +14,7 @@
         }
     </style>
 
+    @livewireStyles
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
