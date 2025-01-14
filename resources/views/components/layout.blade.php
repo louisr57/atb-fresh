@@ -14,7 +14,21 @@
         }
     </style>
 
-    {{-- @livewireStyles ... as per Livewire 3 docs ... no need to have this override automatic injection --}}
+    @livewireStyles
+    {{-- ... safer to include the above line in case there are no livewire components on the page
+          which I believe is the case in this layout.blade file!  --}}
+    {{-- /*
+    |---------------------------------------------------------------------------
+    | Auto-inject Frontend Assets
+    |---------------------------------------------------------------------------
+    |
+    | By default, Livewire automatically injects its JavaScript and CSS into the
+    | <head> and <body> of pages CONTAINING LIVEWIRE COMPONENTS. Shouting loud here
+    | because the auto-injection will not happen if there are no livewire component present
+    | on the page. This means that any Alpine code will not function either!
+    | By disabling the below setting, you need to use @livewireStyles and @livewireScripts.
+    |
+    */    'inject_assets' => true,  --}}
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -34,8 +48,6 @@
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <x-nav-link href="/" :active="request()->is('/')">Home</x-nav-link>
                                 <x-nav-link href="/students" :active="request()->is('students')">Students</x-nav-link>
-                                {{-- <x-nav-link href="/registrations" :active="request()->is('registrations')">Registrations
-                                </x-nav-link> --}}
                                 <x-nav-link href="/events" :active="request()->is('events')">Events
                                 </x-nav-link>
                                 <x-nav-link href="/venues" :active="request()->is('venues')">Venues
@@ -46,11 +58,11 @@
                                 </x-nav-link>
                                 <x-nav-link href="/reports" :active="request()->is('reports')">Reports
                                 </x-nav-link>
-                                @if(auth()->user()->name === 'Louisr57')
-                                <x-nav-link href="/registrations" :active="request()->is('registrations')">Registrations
-                                </x-nav-link>
-                                <x-nav-link href="/activity-logs" :active="request()->is('activity-logs')">Activity Logs
-                                </x-nav-link>
+                                @if (auth()->user()->name === 'Louisr57')
+                                    <x-nav-link href="/registrations" :active="request()->is('registrations')">Registrations
+                                    </x-nav-link>
+                                    <x-nav-link href="/activity-logs" :active="request()->is('activity-logs')">Activity Logs
+                                    </x-nav-link>
                                 @endif
                             </div>
                         </div>
@@ -60,48 +72,49 @@
                         <div class="ml-4 flex items-center md:ml-6">
 
                             @auth
-                            <div class="hidden md:block">
-                                <div class="ml-4 flex items-center md:ml-6">
-                                    <span class="text-white mr-10" style="word-spacing: 15px;">Welcome: {{ Auth::user()->name }}</span>
-                                    <!-- Profile dropdown -->
-                                    <div class="relative ml-3" x-data="{ open: false }">
-                                        <div>
-                                            <button @click="open = !open" type="button"
-                                                class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                                id="user-menu-button">
-                                                <span class="absolute -inset-1.5"></span>
-                                                <span class="sr-only">Open user menu</span>
-                                                <img class="h-8 w-8 rounded-full"
-                                                    src="https://laracasts.com/images/lary-ai-face.svg" alt="">
-                                            </button>
-                                        </div>
-
-                                        <div x-show="open" @click.away="open = false"
-                                            class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
-                                            role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
-                                            tabindex="-1">
-
-                                            @if(!request()->routeIs('dashboard'))
-                                            <a href="{{ route('dashboard') }}"
-                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
-                                            @endif
-
-                                            @if(!request()->routeIs('profile.edit'))
-                                            <a href="{{ route('profile.edit') }}"
-                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                                            @endif
-
-                                            <form method="POST" action="{{ route('logout') }}">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                    Log Out
+                                <div class="hidden md:block">
+                                    <div class="ml-4 flex items-center md:ml-6">
+                                        <span class="text-white mr-10" style="word-spacing: 15px;">Welcome:
+                                            {{ Auth::user()->name }}</span>
+                                        <!-- Profile dropdown -->
+                                        <div class="relative ml-3" x-data="{ open: false }">
+                                            <div>
+                                                <button @click="open = !open" type="button"
+                                                    class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                                    id="user-menu-button">
+                                                    <span class="absolute -inset-1.5"></span>
+                                                    <span class="sr-only">Open user menu</span>
+                                                    <img class="h-8 w-8 rounded-full"
+                                                        src="https://laracasts.com/images/lary-ai-face.svg" alt="">
                                                 </button>
-                                            </form>
+                                            </div>
+
+                                            <div x-show="open" @click.away="open = false"
+                                                class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
+                                                role="menu" aria-orientation="vertical"
+                                                aria-labelledby="user-menu-button" tabindex="-1">
+
+                                                @if (!request()->routeIs('dashboard'))
+                                                    <a href="{{ route('dashboard') }}"
+                                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                                                @endif
+
+                                                @if (!request()->routeIs('profile.edit'))
+                                                    <a href="{{ route('profile.edit') }}"
+                                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                                                @endif
+
+                                                <form method="POST" action="{{ route('logout') }}">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                        Log Out
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             @endauth
                         </div>
                     </div>
@@ -173,10 +186,12 @@
         </main>
     </div>
 
-    {{-- @livewireScripts ... as per Livewire 3 docs ... no need to have this override automatic injection--}}
+    @livewireScripts
+    {{-- ... safer to include the above line in case there are no livewire components on the page
+          which I believe is the case in this layout.blade file!  --}}
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const rows = document.querySelectorAll('.registration-row');
             if (rows.length > 0) {
                 let currentIndex = null;
@@ -190,22 +205,22 @@
                 }
 
                 rows.forEach((row, index) => {
-                    row.addEventListener('click', function () {
+                    row.addEventListener('click', function() {
                         highlightRow(index);
                     });
 
-                    row.addEventListener('mouseover', function () {
+                    row.addEventListener('mouseover', function() {
                         row.classList.add('highlight');
                     });
 
-                    row.addEventListener('mouseout', function () {
+                    row.addEventListener('mouseout', function() {
                         if (index !== currentIndex) {
                             row.classList.remove('highlight');
                         }
                     });
                 });
 
-                document.addEventListener('keydown', function (event) {
+                document.addEventListener('keydown', function(event) {
                     if (currentIndex !== null) {
                         if (event.key === 'ArrowDown') {
                             if (currentIndex < rows.length - 1) {
