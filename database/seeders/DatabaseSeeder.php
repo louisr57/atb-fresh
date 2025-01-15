@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         // Create students first
         $this->command->info('Creating students...');
-        Student::factory(100)->create();
+        Student::factory(30)->create();
 
         // Create users
         $this->command->info('Creating users...');
@@ -364,15 +364,15 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create venues first since events depend on them
-        Venue::factory(50)->create();
+        Venue::factory(30)->create();
 
         $this->command->info('Creating events...');
-        Event::factory(200)->create();
+        Event::factory(25)->create();
 
         // Create registrations in small batches with progress tracking
         $this->command->info('Creating registrations...');
-        $batchSize = 10;
-        $totalRegistrations = 100;
+        $batchSize = 5;
+        $totalRegistrations = 50;
         $batches = ceil($totalRegistrations / $batchSize);
 
         $bar = $this->command->getOutput()->createProgressBar($batches);

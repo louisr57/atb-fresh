@@ -189,7 +189,7 @@ class RegistrationFactory extends Factory
         return [
             'student_id' => $student->id,
             'event_id' => $nextEvent->id, // Ensure this is valid
-            'end_status' => $this->faker->randomElement(['completed', 'incomplete']),
+            'end_status' => $this->faker->randomElement(['registered','completed', 'incomplete']),
             'comments' => $this->faker->optional()->sentence(),
         ];
     }
