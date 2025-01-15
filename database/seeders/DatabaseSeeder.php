@@ -369,31 +369,40 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Creating events...');
         Event::factory(25)->create();
 
-        // Create registrations in small batches with progress tracking
+        // Create registrations with better error handling and empty result handling
         $this->command->info('Creating registrations...');
-        $batchSize = 5;
-        $totalRegistrations = 50;
-        $batches = ceil($totalRegistrations / $batchSize);
+        $targetRegistrations = 50;
+        $createdRegistrations = 0;
+        $maxAttempts = 200; // Increased max attempts since we expect some empty results
+        $attempts = 0;
 
-        $bar = $this->command->getOutput()->createProgressBar($batches);
+        $bar = $this->command->getOutput()->createProgressBar($targetRegistrations);
         $bar->start();
 
-        for ($i = 0; $i < $batches; $i++) {
-            $size = min($batchSize, $totalRegistrations - ($i * $batchSize));
-
+        while ($createdRegistrations < $targetRegistrations && $attempts < $maxAttempts) {
             try {
-                Registration::factory()->count($size)->create();
+                // Get the factory result without creating the model yet
+                $attributes = Registration::factory()->raw();
+
+                // Only create if we got valid attributes (not empty array)
+                if (!empty($attributes)) {
+                    Registration::create($attributes);
+                    $createdRegistrations++;
+                    $bar->advance();
+                }
             } catch (\Exception $e) {
-                $this->command->error("Error in batch $i: ".$e->getMessage());
-
-                continue;
+                $this->command->error("Error creating registration: ".$e->getMessage());
             }
-
-            $bar->advance();
+            $attempts++;
         }
 
         $bar->finish();
-        $this->command->info("\nRegistrations created successfully");
+
+        if ($createdRegistrations < $targetRegistrations) {
+            $this->command->warn("\nOnly created $createdRegistrations out of $targetRegistrations registrations after $attempts attempts");
+        } else {
+            $this->command->info("\nSuccessfully created $createdRegistrations registrations");
+        }
 
         // Update participant counts efficiently
         $this->command->info('Updating participant counts...');

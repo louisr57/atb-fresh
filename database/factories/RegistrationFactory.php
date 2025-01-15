@@ -173,7 +173,7 @@ class RegistrationFactory extends Factory
         });
         // echo "\$nextEvent: " . json_encode($nextEvent, JSON_PRETTY_PRINT) . "\n\n";
 
-        // If no event is available, return no registration
+        // If no event is available, return empty array (no registration)
         if (! $nextEvent) {
             // echo "No available events found for the course '{$nextCourse->course_title}' after {$baselineDate}\n\n";
             return []; // Exit early if no event is available
