@@ -52,7 +52,7 @@
             </thead>
             <tbody>
                 @foreach($registrations as $registration)
-                <tr class="hover:bg-gray-100">
+                <tr class="hover:bg-sky-100 cursor-pointer">
                     <td onclick="window.location='{{ route('students.show', $registration->student->id) }}'" class="border px-4 py-2 cursor-pointer">
                         {{ $registration->student->first_name }} {{ $registration->student->last_name }}
                     </td>

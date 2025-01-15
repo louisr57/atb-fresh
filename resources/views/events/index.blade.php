@@ -130,10 +130,6 @@
             <table class="min-w-full table-auto border-collapse border border-gray-300">
                 <thead class="bg-gray-100">
                     <tr>
-                        <!-- Action column -->
-                        <th class="border px-4 py-2 sticky left-0 bg-gray-100 z-10">
-                            Action
-                        </th>
                         <th class="border px-4 py-2">
                             <a
                                 href="{{ route('events.index', array_merge(request()->except(['sort_by', 'direction']), ['sort_by' => 'course_title', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">
@@ -196,13 +192,7 @@
                 </thead>
                 <tbody>
                     @foreach ($events as $event)
-                    <tr class="hover:bg-gray-100 registration-row">
-                        <!-- Action column with sticky left positioning -->
-                        <td class="border px-4 py-2 sticky left-0 bg-white z-10">
-                            <a href="{{ route('events.show', $event->id) }}" class="text-blue-600 hover:underline">
-                                View
-                            </a>
-                        </td>
+                    <tr class="hover:bg-sky-200 cursor-pointer" onclick="window.location='{{ route('events.show', $event) }}'">
                         <td class="border px-4 py-2 whitespace-nowrap">
                             {{ $event->course->course_title }}
                         </td>
