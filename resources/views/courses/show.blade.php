@@ -133,7 +133,7 @@
                 </thead>
                 <tbody>
                     @foreach($events as $event)
-                    <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location='{{ route('events.show', $event->id) }}'">
+                    <tr class="hover:bg-sky-100 cursor-pointer" onclick="window.location='{{ route('events.show', $event->id) }}'">
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->title }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->participant_count }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->datefrom }}</td>
