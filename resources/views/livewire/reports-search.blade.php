@@ -254,30 +254,36 @@
     <!-- Results Table -->
     <div class="relative overflow-x-auto">
         <table class="min-w-full table-auto border-collapse border border-gray-300">
-            <thead class="bg-gray-100">
+            <thead colspan="7" class=" p-0 bg-gray-100">
                 <tr>
-                    <th class="border px-4 py-2">Student Name</th>
-                    <th class="border px-4 py-2">Email</th>
-                    <th class="border px-4 py-2">Course</th>
-                    <th class="border px-4 py-2">Status</th>
-                    <th class="border px-4 py-2">Event Date</th>
-                    <th class="border px-4 py-2">Student Location</th>
-                    <th class="border px-4 py-2">Venue Details</th>
+                    <th class="border px-4 py-2 w-[15%]">Student Name</th>
+                    <th class="border px-4 py-2 w-[20%]">Email</th>
+                    <th class="border px-4 py-2 w-[15%]">Course</th>
+                    <th class="border px-4 py-2 w-[10%]">Status</th>
+                    <th class="border px-4 py-2 w-[10%]">Event Date</th>
+                    <th class="border px-4 py-2 w-[15%]">Student Location</th>
+                    <th class="border px-4 py-2 w-[15%]">Venue Details</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($results as $result)
-                    <tr class="hover:bg-gray-100">
-                        <td class="border px-4 py-2">{{ $result->first_name }} {{ $result->last_name }}</td>
-                        <td class="border px-4 py-2">{{ $result->email }}</td>
-                        <td class="border px-4 py-2">{{ $result->course_title }}</td>
-                        <td class="border px-4 py-2">{{ $result->end_status }}</td>
-                        <td class="border px-4 py-2">{{ $result->datefrom }}</td>
-                        <td class="border px-4 py-2">{{ $result->student_city }}, {{ $result->student_country }}</td>
-                        <td class="border px-4 py-2">
-                            {{ $result->venue_name }}<br>
-                            {{ $result->venue_city }}, {{ $result->venue_state }}<br>
-                            {{ $result->venue_country }}
+                    <tr class="hover:bg-sky-100 cursor-pointer">
+                        <td colspan="7" class="p-0">
+                            <a href="{{ route('students.show', $result->student_id) }}" class="block">
+                                <div class="grid" style="grid-template-columns: 15% 20% 15% 10% 10% 15% 15%;">
+                                    <div class="border px-4 py-2">{{ $result->first_name }} {{ $result->last_name }}</div>
+                                    <div class="border px-4 py-2">{{ $result->email }}</div>
+                                    <div class="border px-4 py-2">{{ $result->course_title }}</div>
+                                    <div class="border px-4 py-2">{{ $result->end_status }}</div>
+                                    <div class="border px-4 py-2">{{ $result->datefrom }}</div>
+                                    <div class="border px-4 py-2">{{ $result->student_city }}, {{ $result->student_country }}</div>
+                                    <div class="border px-4 py-2">
+                                        {{ $result->venue_name }}<br>
+                                        {{ $result->venue_city }}, {{ $result->venue_state }}<br>
+                                        {{ $result->venue_country }}
+                                    </div>
+                                </div>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

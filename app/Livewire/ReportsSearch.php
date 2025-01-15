@@ -172,6 +172,7 @@ class ReportsSearch extends Component
         // Clone the filtered base query for results
         $resultsQuery = clone $baseQuery;
         $results = $resultsQuery->select(
+            'students.id as student_id',
             'students.first_name',
             'students.last_name',
             'students.email',
