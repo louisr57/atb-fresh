@@ -50,11 +50,12 @@
              x-transition:leave-end="opacity-0 transform scale-95"
              class="bg-white p-4 rounded-lg shadow mb-6"
              style="display: none;">
-            <form action="{{ route('venues.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" id="searchForm">
+            <form action="{{ route('venues.index') }}" method="GET" id="searchForm">
                 <!-- Preserve sort parameters -->
                 <input type="hidden" name="sort_by" value="{{ request('sort_by', 'venue_name') }}">
                 <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
 
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Venue Name -->
                 <div>
                     <label for="search_venue" class="block text-sm font-medium text-gray-700 mb-1">Venue Name</label>
@@ -84,7 +85,39 @@
                         placeholder="Search country..."
                     />
                 </div>
+            </div><br>
 
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Contact Name -->
+                <div>
+                    <label for="search_contact" class="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
+                    <livewire:venue-search-dropdown
+                        field-type="vcontact_person"
+                        name="search_contact"
+                        placeholder="Search contact name..."
+                    />
+                </div>
+
+                <!-- City -->
+                <div>
+                    <label for="search_phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <livewire:venue-search-dropdown
+                        field-type="vcontact_phone"
+                        name="search_phone"
+                        placeholder="Search phone..."
+                    />
+                </div>
+
+                <!-- Country -->
+                <div>
+                    <label for="search_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <livewire:venue-search-dropdown
+                        field-type="vcontact_email"
+                        name="search_email"
+                        placeholder="Search email..."
+                    />
+                </div>
+            </div><br>
                 <!-- Search and Reset Buttons -->
                 <div class="md:col-span-3 flex items-end space-x-4">
                     <button type="submit"
@@ -98,7 +131,7 @@
                     </button>
                 </div>
             </form>
-        </div>
+        </div><br>
 
         @if($venues->isEmpty())
         <h1>No venues available.</h1>

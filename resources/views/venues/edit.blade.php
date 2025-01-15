@@ -93,6 +93,33 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                    <!-- Contact Name -->
+                    <div class="mb-4">
+                        <label for="vcontact_person" class="block text-gray-700 font-bold mb-2">Contact Name</label>
+                        <input type="text" id="vcontact_person" name="vcontact_person"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                            value="{{ old('vcontact_person', $venue->vcontact_person) }}">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-4">
+                        <label for="vcontact_phone" class="block text-gray-700 font-bold mb-2">Phone</label>
+                        <input type="text" id="vcontact_phone" name="vcontact_phone"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                            value="{{ old('vcontact_phone', $venue->vcontact_phone) }}">
+                    </div>
+
+                    <!-- Post Code -->
+                    <div class="mb-4">
+                        <label for="vcontact_email" class="block text-gray-700 font-bold mb-2">Email</label>
+                        <input type="text" id="vcontact_email" name="vcontact_email"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                            value="{{ old('vcontact_email', $venue->vcontact_email) }}">
+                    </div>
+                </div>
+
                 <!-- Remarks -->
                 <div class="mb-4">
                     <label for="remarks" class="block text-gray-700 font-bold mb-2">Remarks</label>

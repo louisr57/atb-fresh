@@ -30,6 +30,18 @@ class VenueController extends Controller
             $query->where('country', 'like', '%'.$request->search_country.'%');
         }
 
+        if ($request->filled('search_contact')) {
+            $query->where('vcontact_person', 'like', '%'.$request->search_contact.'%');
+        }
+
+        if ($request->filled('search_phone')) {
+            $query->where('vcontact_phone', 'like', '%'.$request->search_phone.'%');
+        }
+
+        if ($request->filled('search_email')) {
+            $query->where('vcontact_email', 'like', '%'.$request->search_email.'%');
+        }
+
         $venues = $query->orderBy($sort_by, $direction)->paginate(30);
 
         return view('venues.index', compact('venues', 'sort_by', 'direction'));

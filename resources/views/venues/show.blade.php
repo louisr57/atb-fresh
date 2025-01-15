@@ -23,7 +23,7 @@
         </div>
 
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Venue Name -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Venue Name</label>
@@ -31,6 +31,17 @@
                         {{ $venue->venue_name }}
                     </p>
                 </div>
+
+                <!-- Address -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2">Address</label>
+                    <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
+                        {{ $venue->address }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                 <!-- City -->
                 <div class="mb-4">
@@ -48,14 +59,6 @@
                     </p>
                 </div>
 
-                <!-- Country -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2">Country</label>
-                    <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
-                        {{ $venue->country }}
-                    </p>
-                </div>
-
                 <!-- Postcode -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Postcode</label>
@@ -64,24 +67,53 @@
                     </p>
                 </div>
 
-                <!-- Location Geocode -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2">Location Geocode</label>
-                    <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
-                        {{ $venue->location_geocode ?? 'N/A' }}
-                    </p>
-                </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-4">
-                <!-- Address -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Country -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2">Address</label>
+                    <label class="block text-gray-700 font-bold mb-2">Country</label>
                     <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
-                        {{ $venue->address }}
+                        {{ $venue->country }}
                     </p>
                 </div>
 
+                <!-- Location Geocode -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2">Location Geocode</label>
+                <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
+                    {{ $venue->location_geocode ?? 'N/A' }}
+                </p>
+            </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                 <!-- Contact Name -->
+                 <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2">Contact Name</label>
+                    <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
+                        {{ $venue->vcontact_person }}
+                    </p>
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2">Phone</label>
+                    <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
+                        {{ $venue->vcontact_phone }}
+                    </p>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2">Email</label>
+                    <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
+                        {{ $venue->vcontact_email }}
+                    </p>
+                </div>
+        </div>
+
+            <div class="grid grid-cols-1 gap-4">
                 <!-- Remarks -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Remarks</label>
@@ -91,6 +123,7 @@
                     </p>
                 </div>
             </div>
+        </div>
         </div>
 
         @if($venue->events->isNotEmpty())

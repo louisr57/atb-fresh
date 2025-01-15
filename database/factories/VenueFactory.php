@@ -19,6 +19,9 @@ class VenueFactory extends Factory
             'country' => $this->faker->country(),
             'postcode' => $this->faker->postcode(),
             'location_geocode' => $this->faker->latitude().', '.$this->faker->longitude(),
+            'vcontact_person' => $this->faker->name(),
+            'vcontact_phone' => $this->faker->phoneNumber(),
+            'vcontact_email' => $this->faker->email(),
             'remarks' => $this->faker->optional()->sentence(),
         ];
     }

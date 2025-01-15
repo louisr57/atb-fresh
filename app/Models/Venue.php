@@ -21,6 +21,9 @@ class Venue extends Model
         'country',
         'postcode',
         'location_geocode',
+        'vcontact_person',
+        'vcontact_phone',
+        'vcontact_email',
         'remarks',
     ];
 
@@ -37,6 +40,9 @@ class Venue extends Model
                 'country',
                 'postcode',
                 'location_geocode',
+                'vcontact_person',
+                'vcontact_phone',
+                'vcontact_email',
                 'remarks',
             ])
             ->logOnlyDirty()

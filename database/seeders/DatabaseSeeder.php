@@ -364,10 +364,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create venues first since events depend on them
-        Venue::factory(100)->create();
+        Venue::factory(50)->create();
 
         $this->command->info('Creating events...');
-        Event::factory(300)->create();
+        Event::factory(200)->create();
 
         // Create registrations in small batches with progress tracking
         $this->command->info('Creating registrations...');

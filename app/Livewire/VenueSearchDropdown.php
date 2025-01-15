@@ -60,6 +60,24 @@ class VenueSearchDropdown extends Component
                 ->limit(10)
                 ->pluck('text'),
 
+            'vcontact_person' => Venue::where('vcontact_person', 'like', $searchTerm)
+                ->select('vcontact_person as text')
+                ->distinct()
+                ->limit(10)
+                ->pluck('text'),
+
+            'vcontact_phone' => Venue::where('vcontact_phone', 'like', $searchTerm)
+                ->select('vcontact_phone as text')
+                ->distinct()
+                ->limit(10)
+                ->pluck('text'),
+
+            'vcontact_email' => Venue::where('vcontact_email', 'like', $searchTerm)
+                ->select('vcontact_email as text')
+                ->distinct()
+                ->limit(10)
+                ->pluck('text'),
+
             default => collect([]),
         };
 
