@@ -132,7 +132,7 @@
             </div>
         </div>
 
-        @if($facilitator->events->isNotEmpty())
+        @if($events->isNotEmpty())
         <div class="mb-6 mt-10">
             <h2 class="text-2xl text-blue-700 font-semibold">Past and Future Courses</h2></br>
 
@@ -201,7 +201,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($facilitator->events as $event)
+                        @foreach($events as $event)
                         <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location='{{ route('events.show', $event->id) }}'">
                             <td class="border px-4 py-2 whitespace-nowrap">{{ $event->course->course_title }}</td>
                             <td class="border px-4 py-2 whitespace-nowrap text-center">{{ $event->participant_count ?? 0 }}</td>
@@ -215,6 +215,11 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="mt-4">
+                {{ $events->appends(request()->query())->links() }}
             </div>
         </div>
         @else

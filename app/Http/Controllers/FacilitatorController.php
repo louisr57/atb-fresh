@@ -15,7 +15,7 @@ class FacilitatorController extends Controller
         $sort_by = $request->get('sort_by', 'id');  // Default sort column
         $direction = $request->get('direction', 'asc');    // Default sort direction
         // Get all facilitators
-        $facilitators = Facilitator::orderBy($sort_by, $direction)->paginate(20); // Paginate for ease
+        $facilitators = (new Facilitator)->orderBy($sort_by, $direction)->paginate(20); // Paginate for ease
 
         // Return view with facilitators
         return view('facilitators.index', compact('facilitators', 'sort_by', 'direction'));
@@ -28,46 +28,49 @@ class FacilitatorController extends Controller
         $sort_by = $request->get('sort', 'datefrom');
         $direction = $request->get('direction', 'asc');
 
-        // Find the facilitator by ID and load related events and courses
-        $facilitator = Facilitator::with(['events' => function ($query) use ($sort_by, $direction) {
-            // First, add the registrations count to all events
-            $query->withCount('registrations');
+        // Find the facilitator by ID
+        $facilitator = (new Facilitator)->findOrFail($id);
 
-            // Handle different sort columns
-            switch ($sort_by) {
-                case 'course_title':
-                    $query->join('courses', 'events.course_id', '=', 'courses.id')
-                        ->orderBy('courses.course_title', $direction)
-                        ->withCount('registrations')
-                        ->select('events.*');
-                    break;
-                case 'participant_count':
-                    $query->orderBy('registrations_count', $direction);
-                    break;
-                case 'venue':
-                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                        ->orderBy('venues.venue_name', $direction)
-                        ->select('events.*');
-                    break;
-                case 'city':
-                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                        ->orderBy('venues.city', $direction)
-                        ->select('events.*');
-                    break;
-                case 'state':
-                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                        ->orderBy('venues.state', $direction)
-                        ->select('events.*');
-                    break;
-                case 'country':
-                    $query->join('venues', 'events.venue_id', '=', 'venues.id')
-                        ->orderBy('venues.country', $direction)
-                        ->select('events.*');
-                    break;
-                default:
-                    $query->orderBy($sort_by, $direction);
-            }
-        }, 'events.course', 'events.venue'])->findOrFail($id);
+        // Build the events query
+        $eventsQuery = $facilitator->events()->withCount('registrations');
+
+        // Handle different sort columns
+        switch ($sort_by) {
+            case 'course_title':
+                $eventsQuery->join('courses', 'events.course_id', '=', 'courses.id')
+                    ->orderBy('courses.course_title', $direction)
+                    ->withCount('registrations')
+                    ->select('events.*');
+                break;
+            case 'participant_count':
+                $eventsQuery->orderBy('registrations_count', $direction);
+                break;
+            case 'venue':
+                $eventsQuery->join('venues', 'events.venue_id', '=', 'venues.id')
+                    ->orderBy('venues.venue_name', $direction)
+                    ->select('events.*');
+                break;
+            case 'city':
+                $eventsQuery->join('venues', 'events.venue_id', '=', 'venues.id')
+                    ->orderBy('venues.city', $direction)
+                    ->select('events.*');
+                break;
+            case 'state':
+                $eventsQuery->join('venues', 'events.venue_id', '=', 'venues.id')
+                    ->orderBy('venues.state', $direction)
+                    ->select('events.*');
+                break;
+            case 'country':
+                $eventsQuery->join('venues', 'events.venue_id', '=', 'venues.id')
+                    ->orderBy('venues.country', $direction)
+                    ->select('events.*');
+                break;
+            default:
+                $eventsQuery->orderBy($sort_by, $direction);
+        }
+
+        // Get paginated events with relationships
+        $events = $eventsQuery->with(['course', 'venue'])->paginate(10);
 
         activity('facilitator') // Explicitly set the log name to 'facilitator'
             ->performedOn($facilitator)
@@ -75,7 +78,7 @@ class FacilitatorController extends Controller
             ->log('Facilitator profile viewed');
 
         // Return view with facilitator data
-        return view('facilitators.show', compact('facilitator', 'sort_by', 'direction'));
+        return view('facilitators.show', compact('facilitator', 'events', 'sort_by', 'direction'));
     }
 
     public function create()
@@ -120,7 +123,7 @@ class FacilitatorController extends Controller
         ]);
 
         // Create a new facilitator record
-        $facilitator = Facilitator::create($validatedData);
+        $facilitator = (new Facilitator)->create($validatedData);
 
         // Redirect back to a page (e.g., facilitator index) with a success message
         return redirect()->route('facilitators.show', $facilitator->id)->with('success', 'Facilitator created successfully.');
@@ -136,7 +139,6 @@ class FacilitatorController extends Controller
 
     public function update(Request $request, Facilitator $facilitator)
     {
-
         $currentYear = now()->year;
         $minBirthYear = $currentYear - 100;
         $maxBirthYear = $currentYear - 18;
@@ -174,7 +176,7 @@ class FacilitatorController extends Controller
 
     public function destroy($id)
     {
-        $facilitator = Facilitator::findOrFail($id);
+        $facilitator = (new Facilitator)->findOrFail($id);
 
         // The if will never run because the delete button is disabled in the view
         if ($facilitator->events->isNotEmpty()) {
