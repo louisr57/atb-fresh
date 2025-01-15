@@ -44,10 +44,13 @@
                         <input type="date" name="to_date" value="{{ request('to_date') }}"
                             class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     </div>
-                    <div class="flex items-end">
+                    <div class="flex items-end gap-2">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Filter
                         </button>
+                        <a href="{{ route('activity-logs.index') }}" class="bg-teal-700 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Reset
+                        </a>
                     </div>
                 </div>
             </form>
