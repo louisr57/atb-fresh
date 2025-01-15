@@ -61,7 +61,7 @@
         </table>
 
         <div class="mt-4">
-            <a href="{{ route('events.show', $registration->event) }}" class="ml-5 text-blue-600 text-xl font-bold hover:underline">Back to Events List</a>
+            <a href="{{ route('events.show', $registration->event) }}" class="ml-5 text-blue-600 text-xl font-bold hover:underline">Back to Event Details</a>
         </div>
     </div>
 
