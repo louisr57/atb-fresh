@@ -6,7 +6,7 @@ use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use Rinvex\Country\CountryLoader;
+use Illuminate\Support\Facades\Cache;
 
 class VenueController extends Controller
 {
@@ -61,7 +61,7 @@ class VenueController extends Controller
 
     public function create()
     {
-        $countries = CountryLoader::countries();
+        $countries = Cache::get('countries');
 
         return view('venues.create', compact('countries'));
     }
@@ -82,14 +82,17 @@ class VenueController extends Controller
             'remarks' => 'nullable|string|max:1000',
         ]);
 
-        $venue = Venue::create($validated);
+        $venue = new Venue();
+        $venue->fill($validated);
+        $venue->save();
 
         // Get the sorting and direction from the request
         $sort_by = $request->get('sort_by', 'venue_name');
         $direction = $request->get('direction', 'asc');
 
         // Calculate pagination for the newly created venue
-        $venueCountBefore = Venue::where($sort_by, '<', $venue->$sort_by)
+        $query = Venue::query();
+        $venueCountBefore = $query->where($sort_by, '<', $venue->$sort_by)
             ->orWhere(function ($query) use ($sort_by, $venue) {
                 $query->where($sort_by, '=', $venue->$sort_by)
                     ->where('id', '<', $venue->id);
@@ -110,7 +113,7 @@ class VenueController extends Controller
 
     public function edit(Venue $venue)
     {
-        $countries = CountryLoader::countries();
+        $countries = Cache::get('countries');
 
         return view('venues.edit', compact('venue', 'countries'));
     }
@@ -147,7 +150,8 @@ class VenueController extends Controller
 
     public function destroy($id)
     {
-        $venue = Venue::findOrFail($id);
+        $query = Venue::query();
+        $venue = $query->findOrFail($id);
 
         if ($venue->events->isNotEmpty()) {
             return redirect()->route('venues.show', $venue->id)

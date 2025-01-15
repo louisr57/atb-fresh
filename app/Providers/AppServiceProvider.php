@@ -8,6 +8,8 @@ use App\Observers\RegistrationObserver;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Illuminate\Support\Facades\Cache;
+use Rinvex\Country\CountryLoader;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
 
         if ($this->app->environment('local')) {
             $this->app['config']->set('cache.route', false);
+        }
+
+        // Cache countries data for 24 hours
+        if (!Cache::has('countries')) {
+            Cache::put('countries', CountryLoader::countries(), now()->addHours(24));
         }
     }
 }

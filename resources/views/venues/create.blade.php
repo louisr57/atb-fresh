@@ -131,7 +131,10 @@
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Create Venue
                     </button>
-                    <a href="{{ route('venues.index') }}" class="text-blue-600 hover:underline">Cancel</a>
+                    <a href="{{ route('venues.index') }}"
+                        class="mt-3 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+                        Cancel
+                    </a>
                 </div>
             </form>
         </div>

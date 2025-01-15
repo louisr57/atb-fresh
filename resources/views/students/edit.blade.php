@@ -167,10 +167,14 @@
                 </div>
 
                 <!-- Submit Button -->
-                <div>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Update Student
                     </button>
+                    <a href="{{ route('students.show', $student->id) }}"
+                        class="mt-3 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+                        Cancel
+                    </a>
                 </div>
             </form>
         </div>
