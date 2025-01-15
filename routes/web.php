@@ -65,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
     // Venue routes (all protected)
     Route::get('/venues', [VenueController::class, 'index'])->name('venues.index');

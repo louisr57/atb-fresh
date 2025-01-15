@@ -10,6 +10,16 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ $event->title }}</h1>
             <div class="space-x-4">
+                @if($event->isEmpty())
+                    <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            onclick="return confirm('Are you sure you want to delete this event? This action cannot be undone.');">
+                            Delete Event
+                        </button>
+                    </form>
+                @endif
                 <button type="button" x-data @click="$dispatch('open-modal', 'add-participant')"
                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                     Add Participant

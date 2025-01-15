@@ -194,4 +194,19 @@ class EventController extends Controller
         return redirect()->route('events.show', $event->id)
             ->with('success', 'Event updated successfully.');
     }
+
+    public function destroy(Event $event)
+    {
+        if (!$event->isEmpty()) {
+            return redirect()->route('events.show', $event->id)
+                ->with('error', 'Cannot delete event with existing registered participants.');
+        }
+
+        // Detach all facilitators before deleting
+        $event->facilitators()->detach();
+        $event->delete();
+
+        return redirect()->route('events.index')
+            ->with('success', 'Event deleted successfully.');
+    }
 }

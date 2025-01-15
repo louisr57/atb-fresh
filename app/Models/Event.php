@@ -84,4 +84,9 @@ class Event extends Model
         $this->participant_count = $this->registrations()->count();
         $this->saveQuietly(); // Use saveQuietly to prevent triggering observers
     }
+
+    public function isEmpty()
+    {
+        return $this->registrations()->count() === 0;
+    }
 }
