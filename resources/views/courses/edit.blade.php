@@ -60,11 +60,15 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="flex items-center justify-between">
                     <button type="submit"
                         class="mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Update Course
                     </button>
+                    <a href="{{ route('courses.show', $course->id) }}"
+                        class="mt-3 bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">
+                        Cancel
+                    </a>
                 </div>
             </form>
         </div>

@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         // Create students first
         $this->command->info('Creating students...');
-        Student::factory(30)->create();
+        Student::factory(50)->create();
 
         // Create users
         $this->command->info('Creating users...');
@@ -364,14 +364,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create venues first since events depend on them
-        Venue::factory(30)->create();
+        Venue::factory(50)->create();
 
         $this->command->info('Creating events...');
-        Event::factory(25)->create();
+        Event::factory(100)->create();
 
         // Create registrations with better error handling and empty result handling
         $this->command->info('Creating registrations...');
-        $targetRegistrations = 50;
+        $targetRegistrations = 100;
         $createdRegistrations = 0;
         $maxAttempts = 200; // Increased max attempts since we expect some empty results
         $attempts = 0;

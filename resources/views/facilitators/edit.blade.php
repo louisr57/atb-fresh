@@ -113,6 +113,10 @@
                     class="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Update Facilitator
                 </button>
+                <a href="{{ route('facilitators.show', $facilitator->id) }}"
+                    class="mt-10 bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">
+                    Cancel
+                </a>
             </div>
         </form>
 

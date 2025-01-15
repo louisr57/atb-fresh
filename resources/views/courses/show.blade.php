@@ -8,7 +8,7 @@
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ $course->course_title }}</h1>
-            @if($course->events->isEmpty())
+            @if($eventsCount === 0)
             <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="inline">
                 @csrf
                 @method('DELETE')
@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        @if($course->events->isNotEmpty())
+        @if($events->isNotEmpty())
         <h2 class="text-2xl font-bold mb-5 mt-5">Events for this Course</h2>
         <div class="relative overflow-x-auto">
             <table class="min-w-full table-auto border-collapse border border-gray-300">
@@ -132,7 +132,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($course->events as $event)
+                    @foreach($events as $event)
                     <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location='{{ route('events.show', $event->id) }}'">
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->title }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->participant_count }}</td>
@@ -158,6 +158,11 @@
         @else
         <p class="text-lg text-gray-600">No events have been scheduled for this course yet.</p>
         @endif
+
+        {{-- Pagination Links --}}
+        <div class="mt-4">
+            {{ $events->appends(['sort_by' => $sort_by, 'direction' => $direction])->links() }}
+        </div>
 
         <div class="mt-6">
             <a href="{{ route('courses.index') }}" class="text-blue-600 hover:underline">← Back to Courses List</a>
