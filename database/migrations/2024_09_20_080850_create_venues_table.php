@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('country');
             $table->string('postcode');
             $table->string('location_geocode')->nullable();
+            $table->string('vcontact_person')->nullable();
+            $table->string('vcontact_phone')->nullable();
+            $table->string('vcontact_email')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
         });

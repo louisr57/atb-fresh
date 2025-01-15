@@ -64,6 +64,9 @@ class VenueController extends Controller
             'country' => 'required|string|max:100',
             'postcode' => 'required|string|max:20',
             'location_geocode' => 'nullable|string|max:255',
+            'vcontact_person' => 'nullable|string|max:255',
+            'vcontact_phone' => 'nullable|string|max:255',
+            'vcontact_email' => 'nullable|string|max:255',
             'remarks' => 'nullable|string|max:1000',
         ]);
 
@@ -110,6 +113,9 @@ class VenueController extends Controller
             'country' => 'required|string|max:100',
             'postcode' => 'required|string|max:20',
             'location_geocode' => 'nullable|string|max:255',
+            'vcontact_person' => 'nullable|string|max:255',
+            'vcontact_phone' => 'nullable|string|max:255',
+            'vcontact_email' => 'nullable|string|max:255',
             'remarks' => 'nullable|string|max:1000',
         ]);
 
