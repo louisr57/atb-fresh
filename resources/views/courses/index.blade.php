@@ -68,7 +68,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-gray-50">
+                            <tbody class="bg-white">
                                 @foreach($courses as $course)
                                 <tr class="hover:bg-sky-200 cursor-pointer" onclick="window.location='{{ route('courses.show', $course->id) }}'">
                                     <td class="border border-gray-500 px-4 py-2 text-left">{{ $course->id }}</td>

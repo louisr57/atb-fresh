@@ -5,7 +5,7 @@
         ATB Calendar Events
     </x-slot:heading>
 
-    <div class="container mx-auto p-4" x-data="{
+    <div class="container mx-auto p-4 max-w-[95%]" x-data="{
         showSearch: {{ request('show_search', 'false') }} || false,
         resetSearch() {
             window.location.href = '{{ route('events.index') }}?show_search=true';
@@ -126,11 +126,11 @@
         </div>
 
         <!-- Wrapping the table inside a div to make it horizontally scrollable -->
-        <div class="relative overflow-x-auto">
-            <table class="min-w-full table-auto border-collapse border border-gray-300">
-                <thead class="bg-gray-100">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-white p-2">
+            <table class="min-w-full table-auto border-collapse border border-gray-500">
+                <thead class="bg-gray-200">
                     <tr>
-                        <th class="border px-4 py-2">
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">
                             <a
                                 href="{{ route('events.index', array_merge(request()->except(['sort_by', 'direction']), ['sort_by' => 'course_title', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">
                                 Course Title
@@ -139,7 +139,7 @@
                                 @endif
                             </a>
                         </th>
-                        <th class="border px-4 py-2">
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">
                             <a
                                 href="{{ route('events.index', array_merge(request()->except(['sort_by', 'direction']), ['sort_by' => 'facilitator_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">
                                 Facilitator Name
@@ -148,7 +148,7 @@
                                 @endif
                             </a>
                         </th>
-                        <th class="border px-4 py-2">
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">
                             <a
                                 href="{{ route('events.index', array_merge(request()->except(['sort_by', 'direction']), ['sort_by' => 'participant_count', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">
                                 Participant Count
@@ -157,7 +157,7 @@
                                 @endif
                             </a>
                         </th>
-                        <th class="border px-4 py-2">
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">
                             <a
                                 href="{{ route('events.index', array_merge(request()->except(['sort_by', 'direction']), ['sort_by' => 'datefrom', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">
                                 Start Date
@@ -166,7 +166,7 @@
                                 @endif
                             </a>
                         </th>
-                        <th class="border px-4 py-2">
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">
                             <a
                                 href="{{ route('events.index', array_merge(request()->except(['sort_by', 'direction']), ['sort_by' => 'dateto', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">
                                 End Date
@@ -175,7 +175,7 @@
                                 @endif
                             </a>
                         </th>
-                        <th class="border px-4 py-2">
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">
                             <a
                                 href="{{ route('events.index', array_merge(request()->except(['sort_by', 'direction']), ['sort_by' => 'venue_name', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">
                                 Venue
@@ -184,39 +184,39 @@
                                 @endif
                             </a>
                         </th>
-                        <th class="border px-4 py-2">City</th>
-                        <th class="border px-4 py-2">State</th>
-                        <th class="border px-4 py-2">Country</th>
-                        <th class="border px-4 py-2">Remarks</th>
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">City</th>
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">State</th>
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">Country</th>
+                        <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">Remarks</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($events as $event)
                     <tr class="hover:bg-sky-200 cursor-pointer" onclick="window.location='{{ route('events.show', $event) }}'">
-                        <td class="border px-4 py-2 whitespace-nowrap">
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">
                             {{ $event->course->course_title }}
                         </td>
-                        <td class="border px-4 py-2">
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">
                             @foreach($event->facilitators as $facilitator)
-                                <div class="whitespace-nowrap">
+                                <div>
                                     {{ $facilitator->first_name }} {{ $facilitator->last_name }}
                                 </div>
                             @endforeach
                         </td>
-                        <td class="border px-4 py-2 whitespace-nowrap">
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap text-center">
                             {{ $event->participant_count }}
                         </td>
-                        <td class="border px-4 py-2 whitespace-nowrap">
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">
                             {{ $event->datefrom }}
                         </td>
-                        <td class="border px-4 py-2 whitespace-nowrap">
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">
                             {{ $event->dateto ?? 'N/A' }}
                         </td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->venue_name ?? 'N/A' }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->city ?? 'N/A' }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->state ?? 'N/A' }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->country ?? 'N/A' }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $event->venue->venue_name ?? 'N/A' }}</td>
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $event->venue->city ?? 'N/A' }}</td>
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $event->venue->state ?? 'N/A' }}</td>
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $event->venue->country ?? 'N/A' }}</td>
+                        <td class="border border-gray-500 px-4 py-2 min-w-[200px] max-w-[300px] break-words">
                             {{ $event->remarks ?? 'No remarks' }}
                         </td>
                     </tr>
