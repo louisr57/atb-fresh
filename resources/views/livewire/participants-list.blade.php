@@ -47,6 +47,20 @@
                             @endif
                         </div>
                     </th>
+                    <th wire:click="sortBy('created_at')" class="border px-4 py-2 cursor-pointer hover:bg-gray-300">
+                        <div class="flex items-center">
+                            Reg Date
+                            @if($sortField === 'created_at')
+                                <span class="ml-1">
+                                    @if($sortDirection === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                </span>
+                            @endif
+                        </div>
+                    </th>
                     <th class="border px-4 py-2">Actions</th>
                 </tr>
             </thead>
@@ -61,6 +75,9 @@
                     </td>
                     <td onclick="window.location='{{ route('students.show', $registration->student->id) }}'" class="border px-4 py-2 cursor-pointer">
                         {{ $registration->end_status }}
+                    </td>
+                    <td onclick="window.location='{{ route('students.show', $registration->student->id) }}'" class="border px-4 py-2 cursor-pointer">
+                        {{ $registration->created_at->format('Y-m-d') }}
                     </td>
                     <td class="border px-4 py-2">
                         <div class="flex items-center space-x-3">

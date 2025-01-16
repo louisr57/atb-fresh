@@ -92,9 +92,9 @@ class ParticipantsList extends Component
         $query = $this->event->registrations()->with('student');
 
         // Handle sorting
-        if ($this->sortField === 'end_status') {
-            // Sort by end_status directly on registrations table
-            $query->orderBy('end_status', $this->sortDirection);
+        if (in_array($this->sortField, ['end_status', 'created_at'])) {
+            // Sort by fields directly on registrations table
+            $query->orderBy($this->sortField, $this->sortDirection);
         } elseif (in_array($this->sortField, ['first_name', 'email'])) {
             // Sort by student fields using a join
             $query->join('students', 'registrations.student_id', '=', 'students.id')
