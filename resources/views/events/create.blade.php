@@ -23,7 +23,7 @@
                 <!-- First row - Course, Facilitator, Venue selections -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Course Selection -->
-                    <div class="mb-4" x-data="{ open: false, selectedId: '', selectedText: '', eventTitle: '' }">
+                    <div class="mb-4" x-data="{ open: false, selectedId: '', selectedText: '', eventTitle: '', courseDuration: 0 }">
                         <label for="course_id" class="block text-gray-700 font-bold mb-2">Course Title</label>
                         <div class="relative">
                             <input type="text" x-model="selectedText" @click="open = true" @focus="open = true" class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
@@ -40,6 +40,7 @@
                                 <div class="cursor-pointer p-2 hover:bg-gray-100" @click="selectedId = '{{ $course->id }}';
                                            selectedText = '{{ $course->course_title }}';
                                            eventTitle = '{{ $course->course_title }}';
+                                           courseDuration = {{ $course->duration }};
                                            open = false">
                                     {{ $course->course_title }}
                                 </div>
@@ -64,8 +65,16 @@
                             return this.selectedFacilitators.some(f => f.id === id);
                         }
                     }">
-                        <label class="block text-gray-700 font-bold mb-0">Facilitators</label>
+                        <label class="block text-gray-700 font-bold mb-2">Facilitators</label>
                         <div class="relative">
+                            <!-- Dropdown trigger -->
+                            <button type="button"
+                                    @click="open = !open"
+                                    class="mb-2 shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
+                                           @error('facilitator_ids') border-red-500 @enderror">
+                                Select Facilitators
+                            </button>
+
                             <!-- Selected facilitators display -->
                             <div class="mb-2 flex flex-wrap gap-2">
                                 <template x-for="facilitator in selectedFacilitators" :key="facilitator.id">
@@ -76,14 +85,6 @@
                                     </div>
                                 </template>
                             </div>
-
-                            <!-- Dropdown trigger -->
-                            <button type="button"
-                                    @click="open = !open"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
-                                           @error('facilitator_ids') border-red-500 @enderror">
-                                Select Facilitators
-                            </button>
 
                             <!-- Hidden inputs for form submission -->
                             <template x-for="facilitator in selectedFacilitators" :key="facilitator.id">
@@ -218,25 +219,52 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            ['datefrom', 'dateto'].forEach(function(fieldId) {
-                new Pikaday({
-                    field: document.getElementById(fieldId),
-                    format: 'YYYY-MM-DD',
-                    showYearDropdown: true,
-                    showMonthDropdown: true,
-                    toString(date, format) {
-                        date.setHours(12, 0, 0, 0);
-                        return date ? date.toISOString().split('T')[0] : '';
-                    },
-                    parse(dateString, format) {
-                        const parts = dateString.split('-');
-                        return dateString ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
-                    },
-                    onSelect: function(date) {
-                        date.setHours(12, 0, 0, 0);
-                        this._field.value = date.toISOString().split('T')[0];
+            const dateFromPicker = new Pikaday({
+                field: document.getElementById('datefrom'),
+                format: 'YYYY-MM-DD',
+                showYearDropdown: true,
+                showMonthDropdown: true,
+                toString(date, format) {
+                    date.setHours(12, 0, 0, 0);
+                    return date ? date.toISOString().split('T')[0] : '';
+                },
+                parse(dateString, format) {
+                    const parts = dateString.split('-');
+                    return dateString ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
+                },
+                onSelect: function(date) {
+                    date.setHours(12, 0, 0, 0);
+                    this._field.value = date.toISOString().split('T')[0];
+
+                    // Get the selected course duration from the course selection component
+                    const courseComponent = document.querySelector('[x-data*="courseDuration"]').__x.$data;
+                    if (courseComponent.selectedId && courseComponent.courseDuration > 0) {
+                        // Calculate end date (duration - 1 days from start date)
+                        const endDate = new Date(date);
+                        endDate.setDate(endDate.getDate() + Math.floor(courseComponent.courseDuration) - 1);
+                        // Update the dateto field
+                        document.getElementById('dateto').value = endDate.toISOString().split('T')[0];
                     }
-                });
+                }
+            });
+
+            new Pikaday({
+                field: document.getElementById('dateto'),
+                format: 'YYYY-MM-DD',
+                showYearDropdown: true,
+                showMonthDropdown: true,
+                toString(date, format) {
+                    date.setHours(12, 0, 0, 0);
+                    return date ? date.toISOString().split('T')[0] : '';
+                },
+                parse(dateString, format) {
+                    const parts = dateString.split('-');
+                    return dateString ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
+                },
+                onSelect: function(date) {
+                    date.setHours(12, 0, 0, 0);
+                    this._field.value = date.toISOString().split('T')[0];
+                }
             });
         });
     </script>
