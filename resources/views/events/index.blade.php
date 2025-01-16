@@ -125,8 +125,8 @@
             </form>
         </div>
 
-        <!-- Wrapping the table inside a div to make it horizontally scrollable -->
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-white p-2">
+        <!-- Display courses in a table -->
+        <div class="overflow-x-auto">
             <table class="min-w-full table-auto border-collapse border border-gray-500">
                 <thead class="bg-gray-200">
                     <tr>
@@ -190,7 +190,7 @@
                         <th class="border border-gray-500 px-4 py-2 text-left text-blue-500 hover:underline">Remarks</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white">
                     @foreach ($events as $event)
                     <tr class="hover:bg-sky-200 cursor-pointer" onclick="window.location='{{ route('events.show', $event) }}'">
                         <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">
