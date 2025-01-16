@@ -13,6 +13,12 @@
             @endif
         </td>
     </tr>
+    <tr>
+        <th class="w-1/5 border px-4 py-2 text-left">Registration Date</th>
+        <td class="border px-4 py-2">
+            {{ $registration->created_at->format('F j, Y') }}
+        </td>
+    </tr>
     <tr class="bg-gray-100">
         <th class="w-1/5 border px-4 py-2 text-left">Remarks</th>
         <td class="border px-4 py-2">
