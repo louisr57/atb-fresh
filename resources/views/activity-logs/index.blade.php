@@ -362,6 +362,9 @@
                 }
             }
 
+            // Force pagination refresh by setting page=1
+            url.searchParams.set('page', '1');
+
             // Navigate to the filtered view
             window.location.href = url.toString();
             return false;
@@ -392,6 +395,9 @@
             url.searchParams.delete('user');
             url.searchParams.delete('from_date');
             url.searchParams.delete('to_date');
+
+            // Force pagination refresh
+            url.searchParams.set('page', '1');
 
             // Navigate to the filtered view
             window.location.href = url.toString();
