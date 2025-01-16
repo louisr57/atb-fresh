@@ -72,8 +72,16 @@
                     }">
                         <label class="block text-gray-700 font-bold mb-2">Facilitators</label>
                         <div class="relative">
+                            <!-- Dropdown trigger -->
+                            <button type="button"
+                                    @click="open = !open"
+                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
+                                           @error('facilitator_ids') border-red-500 @enderror">
+                                Select Facilitators
+                            </button>
+
                             <!-- Selected facilitators display -->
-                            <div class="mb-2 flex flex-wrap gap-2">
+                            <div class="mt-2 flex flex-wrap gap-2">
                                 <template x-for="facilitator in selectedFacilitators" :key="facilitator.id">
                                     <div class="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center">
                                         <span x-text="facilitator.name"></span>
@@ -82,14 +90,6 @@
                                     </div>
                                 </template>
                             </div>
-
-                            <!-- Dropdown trigger -->
-                            <button type="button"
-                                    @click="open = !open"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
-                                           @error('facilitator_ids') border-red-500 @enderror">
-                                Select Facilitators
-                            </button>
 
                             <!-- Hidden inputs for form submission -->
                             <template x-for="facilitator in selectedFacilitators" :key="facilitator.id">
