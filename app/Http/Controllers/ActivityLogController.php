@@ -27,11 +27,22 @@ class ActivityLogController extends Controller
 
         // Filter by model type and subject_id if provided
         if ($request->filled('model')) {
-            $query->where('log_name', $request->model);
+            $modelMap = [
+                'student' => \App\Models\Student::class,
+                'course' => \App\Models\Course::class,
+                'event' => \App\Models\Event::class,
+                'facilitator' => \App\Models\Facilitator::class,
+                'registration' => \App\Models\Registration::class,
+                'venue' => \App\Models\Venue::class,
+            ];
 
-            // If subject_id is provided, filter by that specific model instance
-            if ($request->filled('subject_id')) {
-                $query->where('subject_id', $request->subject_id);
+            if (isset($modelMap[$request->model])) {
+                $query->where('subject_type', $modelMap[$request->model]);
+
+                // If subject_id is provided, filter by that specific model instance
+                if ($request->filled('subject_id')) {
+                    $query->where('subject_id', $request->subject_id);
+                }
             }
         }
 
