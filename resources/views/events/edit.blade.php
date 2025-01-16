@@ -28,8 +28,8 @@
                         x-data="{ open: false, selectedId: '{{ $event->course_id }}', selectedText: '{{ $event->course->course_title }}', eventTitle: '{{ $event->title }}' }">
                         <label for="course_id" class="block text-gray-700 font-bold mb-2">Course Title</label>
                         <div class="relative">
-                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                            <input type="text" x-model="selectedText" @click="open = !open"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 cursor-pointer"
                                 readonly>
                             <input type="hidden" name="course_id" :value="selectedId">
                             <input type="hidden" name="title" :value="eventTitle">
@@ -119,12 +119,12 @@
                         x-data="{ open: false, selectedId: '{{ $event->venue_id }}', selectedText: '{{ $event->venue->venue_name }}' }">
                         <label for="venue_id" class="block text-gray-700 font-bold mb-2">Venue</label>
                         <div class="relative">
-                            <input type="text" x-model="selectedText" @click="open = true" @focus="open = true"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                            <input type="text" x-model="selectedText" @click="open = !open"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 cursor-pointer"
                                 readonly>
                             <input type="hidden" name="venue_id" :value="selectedId">
                             <div x-show="open" @click.away="open = false"
-                                class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                class="absolute z-[100] w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
                                 @foreach($venues as $venue)
                                 <div class="cursor-pointer p-2 hover:bg-gray-100" @click="selectedId = '{{ $venue->id }}';
                                             selectedText = '{{ $venue->venue_name }}';
@@ -162,8 +162,8 @@
                     <div class="mb-4" x-data="{ open: false, selectedTime: '{{ $event->timefrom }}' }">
                         <label for="timefrom" class="block text-gray-700 font-bold mb-2">Time From</label>
                         <div class="relative">
-                            <input type="text" x-model="selectedTime" @click="open = true"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                            <input type="text" x-model="selectedTime" @click="open = !open"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 cursor-pointer"
                                 name="timefrom" readonly>
                             <div x-show="open" @click.away="open = false"
                                 class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
@@ -182,8 +182,8 @@
                 <div class="mb-4" x-data="{ open: false, selectedTime: '{{ $event->timeto }}' }">
                     <label for="timeto" class="block text-gray-700 font-bold mb-2">Time To</label>
                     <div class="relative">
-                        <input type="text" x-model="selectedTime" @click="open = true"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
+                        <input type="text" x-model="selectedTime" @click="open = !open"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 cursor-pointer"
                             name="timeto" readonly>
                         <div x-show="open" @click.away="open = false"
                             class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
