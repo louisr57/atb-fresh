@@ -68,7 +68,12 @@
                     </thead>
                     <tbody class="bg-gray-50">
                         @foreach($activities as $activity)
-                            <tr class="hover:bg-sky-100">
+                            <tr
+                                class="hover:bg-sky-100 cursor-pointer"
+                                data-model="{{ strtolower(class_basename($activity->subject_type)) }}"
+                                data-subject-id="{{ $activity->subject_id }}"
+                                onclick="handleRowClick(this)"
+                            >
                                 <td class="border border-gray-500 px-4 py-2">
                                     {{ $activity->created_at->format('Y-m-d H:i:s') }}
                                 </td>
@@ -322,7 +327,7 @@
 
             <!-- Pagination -->
             <div class="mt-4">
-                {{ $activities->links() }}
+                {{ $activities->appends(request()->query())->links() }}
             </div>
         </div>
     </div>
@@ -333,6 +338,30 @@
             const diff = button.nextElementSibling;
             diff.classList.toggle('hidden');
             button.textContent = diff.classList.contains('hidden') ? 'Show Changes' : 'Hide Changes';
+        }
+
+        function handleRowClick(row) {
+            // Don't trigger if clicking a link or button
+            if (event.target.closest('a, button')) {
+                return;
+            }
+
+            const model = row.dataset.model;
+            const subjectId = row.dataset.subjectId;
+
+            // Build the URL with the model and subject_id parameters
+            const url = new URL(window.location.href);
+            url.searchParams.set('model', model);
+            url.searchParams.set('subject_id', subjectId);
+
+            // Clear other filters
+            url.searchParams.delete('action');
+            url.searchParams.delete('user');
+            url.searchParams.delete('from_date');
+            url.searchParams.delete('to_date');
+
+            // Navigate to the filtered view
+            window.location.href = url.toString();
         }
     </script>
     @endpush

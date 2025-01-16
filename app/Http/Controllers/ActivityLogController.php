@@ -25,9 +25,14 @@ class ActivityLogController extends Controller
     {
         $query = Activity::with(['causer', 'subject'])->latest();
 
-        // Filter by model type if provided
+        // Filter by model type and subject_id if provided
         if ($request->filled('model')) {
             $query->where('log_name', $request->model);
+
+            // If subject_id is provided, filter by that specific model instance
+            if ($request->filled('subject_id')) {
+                $query->where('subject_id', $request->subject_id);
+            }
         }
 
         // Filter by action type if provided
@@ -57,7 +62,7 @@ class ActivityLogController extends Controller
 
     public function studentLogs($studentId)
     {
-        $student = Student::findOrFail($studentId);
+        $student = (new Student)->findOrFail($studentId);
 
         $activities = Activity::with(['causer'])
             ->where('subject_type', Student::class)
@@ -70,7 +75,7 @@ class ActivityLogController extends Controller
 
     public function courseLogs($courseId)
     {
-        $course = Course::findOrFail($courseId);
+        $course = (new Course)->findOrFail($courseId);
 
         $activities = Activity::with(['causer'])
             ->where('subject_type', Course::class)
@@ -83,7 +88,7 @@ class ActivityLogController extends Controller
 
     public function facilitatorLogs($facilitatorId)
     {
-        $facilitator = Facilitator::findOrFail($facilitatorId);
+        $facilitator = (new Facilitator)->findOrFail($facilitatorId);
 
         $activities = Activity::with(['causer'])
             ->where('subject_type', Facilitator::class)
@@ -96,7 +101,7 @@ class ActivityLogController extends Controller
 
     public function eventLogs($eventId)
     {
-        $event = Event::findOrFail($eventId);
+        $event = (new Event)->findOrFail($eventId);
 
         $activities = Activity::with(['causer'])
             ->where('subject_type', Event::class)
@@ -109,7 +114,7 @@ class ActivityLogController extends Controller
 
     public function registrationLogs($registrationId)
     {
-        $registration = Registration::findOrFail($registrationId);
+        $registration = (new Registration)->findOrFail($registrationId);
 
         $activities = Activity::with(['causer'])
             ->where('subject_type', Registration::class)
@@ -122,7 +127,7 @@ class ActivityLogController extends Controller
 
     public function venueLogs($venueId)
     {
-        $venue = Venue::findOrFail($venueId);
+        $venue = (new Venue)->findOrFail($venueId);
 
         $activities = Activity::with(['causer'])
             ->where('subject_type', Venue::class)
