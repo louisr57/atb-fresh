@@ -6,9 +6,12 @@ use App\Models\Event;
 use App\Models\Registration;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ParticipantsList extends Component
 {
+    use WithPagination;
+
     public $event;
 
     public $isDeleting = false;
@@ -51,7 +54,7 @@ class ParticipantsList extends Component
         $this->isDeleting = true;
 
         try {
-            $registration = Registration::findOrFail($registrationId);
+            $registration = Registration::query()->findOrFail($registrationId);
             $studentName = $registration->student->first_name.' '.$registration->student->last_name;
 
             // Add a small delay to ensure proper handling
@@ -99,7 +102,7 @@ class ParticipantsList extends Component
                 ->select('registrations.*'); // Ensure we only get registration fields
         }
 
-        $registrations = $query->get();
+        $registrations = $query->paginate(20);
 
         return view('livewire.participants-list', [
             'registrations' => $registrations,

@@ -92,6 +92,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $registrations->links() }}
+        </div>
     </div>
     @else
     <p class="text-lg text-gray-600 mt-4">No participants registered yet.</p>
