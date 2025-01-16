@@ -32,7 +32,15 @@
                     </div>
                     <div>
                         <label class="block text-gray-700 font-bold mb-2">User</label>
-                        <livewire:user-search-dropdown />
+                        <select name="user" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="">All Users</option>
+                            <option value="System" {{ request('user') == 'System' ? 'selected' : '' }}>System</option>
+                            @foreach(\App\Models\User::orderBy('name')->get() as $user)
+                                <option value="{{ $user->name }}" {{ request('user') == $user->name ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
                         <label class="block text-gray-700 font-bold mb-2">From Date</label>
