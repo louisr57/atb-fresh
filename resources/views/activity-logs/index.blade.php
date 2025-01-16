@@ -399,6 +399,9 @@
             // Force pagination refresh
             url.searchParams.set('page', '1');
 
+            // Update model select to show "All Models"
+            document.querySelector('select[name="model"]').value = '';
+
             // Navigate to the filtered view
             window.location.href = url.toString();
         }
