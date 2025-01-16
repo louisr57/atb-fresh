@@ -37,10 +37,6 @@
                         <table class="min-w-full table-auto border-collapse border border-gray-500">
                             <thead class="bg-gray-200">
                                 <tr>
-                                    <!-- Action column -->
-                                    <th class="border border-gray-500 px-4 py-2 sticky left-0 text-blue-500 z-10">
-                                        Action
-                                    </th>
                                     <th class="border border-gray-500 px-4 py-2 text-left">
                                         <a href="{{ route('courses.index', ['sort_by' => 'id', 'direction' => $direction === 'asc' ? 'desc' : 'asc']) }}"
                                             class="text-blue-500 hover:underline">ID
@@ -74,15 +70,7 @@
                             </thead>
                             <tbody class="bg-gray-50">
                                 @foreach($courses as $course)
-                                <tr class="hover:bg-sky-100">
-                                    <!-- Action column with sticky left positioning -->
-                                    <td
-                                        class="text-center border border-gray-500 px-4 py-2 sticky left-0 z-10 bg-gray-50">
-                                        <a href="{{ route('courses.show', $course->id) }}"
-                                            class="text-blue-600 hover:underline">
-                                            View
-                                        </a>
-                                    </td>
+                                <tr class="hover:bg-sky-200 cursor-pointer" onclick="window.location='{{ route('courses.show', $course->id) }}'">
                                     <td class="border border-gray-500 px-4 py-2 text-left">{{ $course->id }}</td>
                                     <td
                                         class="border border-gray-500 px-4 py-2 text-left whitespace-normal break-words max-w-xs lg:max-w-md xl:max-w-lg">
