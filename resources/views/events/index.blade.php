@@ -216,7 +216,7 @@
                         <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $event->venue->city ?? 'N/A' }}</td>
                         <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $event->venue->state ?? 'N/A' }}</td>
                         <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $event->venue->country ?? 'N/A' }}</td>
-                        <td class="border border-gray-500 px-4 py-2 min-w-[200px] max-w-[300px] break-words">
+                        <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">
                             {{ $event->remarks ?? 'No remarks' }}
                         </td>
                     </tr>
