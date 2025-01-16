@@ -6,7 +6,7 @@
     <div class="container mx-auto p-4">
         <!-- Filters -->
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form action="{{ route('activity-logs.index') }}" method="GET" class="mb-6">
+            <form onsubmit="return handleFilterSubmit(event)" class="mb-6">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-gray-700 font-bold mb-2">Model Type</label>
@@ -342,6 +342,31 @@
 
     @push('scripts')
     <script>
+        function handleFilterSubmit(event) {
+            event.preventDefault();
+
+            // Build the URL with all form parameters
+            const form = event.target;
+            const url = new URL(window.location.href);
+
+            // Get all form inputs
+            const formData = new FormData(form);
+
+            // Clear existing parameters
+            url.search = '';
+
+            // Add non-empty form values to URL
+            for (const [key, value] of formData.entries()) {
+                if (value) {
+                    url.searchParams.set(key, value);
+                }
+            }
+
+            // Navigate to the filtered view
+            window.location.href = url.toString();
+            return false;
+        }
+
         function toggleDiff(button) {
             const diff = button.nextElementSibling;
             diff.classList.toggle('hidden');
