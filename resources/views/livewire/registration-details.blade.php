@@ -1,4 +1,11 @@
 <tbody wire:key="{{ $registration->id }}">
+
+    <tr>
+        <th class="w-1/5 border px-4 py-2 text-left">Registration Date</th>
+        <td class="border px-4 py-2">
+            {{ $registration->created_at->format('F j, Y') }}
+        </td>
+    </tr>
     <tr>
         <th class="w-1/5 border px-4 py-2 text-left">Registration Status</th>
         <td class="border px-4 py-2">
@@ -11,12 +18,6 @@
                     @endforeach
                 </select>
             @endif
-        </td>
-    </tr>
-    <tr>
-        <th class="w-1/5 border px-4 py-2 text-left">Registration Date</th>
-        <td class="border px-4 py-2">
-            {{ $registration->created_at->format('F j, Y') }}
         </td>
     </tr>
     <tr class="bg-gray-100">
