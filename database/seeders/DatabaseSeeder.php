@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
         $faker = Faker::create();
 
         // Create students first
-        $this->command->info('Creating students...');
-        Student::factory(50)->create();
+        // $this->command->info('Creating students...');
+        // Student::factory(10)->create();
 
         // Create users
         $this->command->info('Creating users...');
@@ -364,57 +364,57 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create venues first since events depend on them
-        Venue::factory(50)->create();
+        // Venue::factory(10)->create();
 
-        $this->command->info('Creating events...');
-        Event::factory(100)->create();
+        // $this->command->info('Creating events...');
+        // Event::factory(10)->create();
 
-        // Create registrations with better error handling and empty result handling
-        $this->command->info('Creating registrations...');
-        $targetRegistrations = 100;
-        $createdRegistrations = 0;
-        $maxAttempts = 200; // Increased max attempts since we expect some empty results
-        $attempts = 0;
+        // // Create registrations with better error handling and empty result handling
+        // $this->command->info('Creating registrations...');
+        // $targetRegistrations = 50;
+        // $createdRegistrations = 0;
+        // $maxAttempts = 200; // Increased max attempts since we expect some empty results
+        // $attempts = 0;
 
-        $bar = $this->command->getOutput()->createProgressBar($targetRegistrations);
-        $bar->start();
+        // $bar = $this->command->getOutput()->createProgressBar($targetRegistrations);
+        // $bar->start();
 
-        while ($createdRegistrations < $targetRegistrations && $attempts < $maxAttempts) {
-            try {
-                // Get the factory result without creating the model yet
-                $attributes = Registration::factory()->raw();
+        // while ($createdRegistrations < $targetRegistrations && $attempts < $maxAttempts) {
+        //     try {
+        //         // Get the factory result without creating the model yet
+        //         $attributes = Registration::factory()->raw();
 
-                // Only create if we got valid attributes (not empty array)
-                if (!empty($attributes)) {
-                    Registration::create($attributes);
-                    $createdRegistrations++;
-                    $bar->advance();
-                }
-            } catch (\Exception $e) {
-                $this->command->error("Error creating registration: ".$e->getMessage());
-            }
-            $attempts++;
-        }
+        //         // Only create if we got valid attributes (not empty array)
+        //         if (!empty($attributes)) {
+        //             Registration::create($attributes);
+        //             $createdRegistrations++;
+        //             $bar->advance();
+        //         }
+        //     } catch (\Exception $e) {
+        //         $this->command->error("Error creating registration: ".$e->getMessage());
+        //     }
+        //     $attempts++;
+        // }
 
-        $bar->finish();
+        // $bar->finish();
 
-        if ($createdRegistrations < $targetRegistrations) {
-            $this->command->warn("\nOnly created $createdRegistrations out of $targetRegistrations registrations after $attempts attempts");
-        } else {
-            $this->command->info("\nSuccessfully created $createdRegistrations registrations");
-        }
+        // if ($createdRegistrations < $targetRegistrations) {
+        //     $this->command->warn("\nOnly created $createdRegistrations out of $targetRegistrations registrations after $attempts attempts");
+        // } else {
+        //     $this->command->info("\nSuccessfully created $createdRegistrations registrations");
+        // }
 
-        // Update participant counts efficiently
-        $this->command->info('Updating participant counts...');
-        DB::statement('
-            UPDATE events e
-            SET participant_count = (
-                SELECT COUNT(*)
-                FROM registrations r
-                WHERE r.event_id = e.id
-            )
-        ');
+        // // Update participant counts efficiently
+        // $this->command->info('Updating participant counts...');
+        // DB::statement('
+        //     UPDATE events e
+        //     SET participant_count = (
+        //         SELECT COUNT(*)
+        //         FROM registrations r
+        //         WHERE r.event_id = e.id
+        //     )
+        // ');
 
-        $this->command->info('Database seeding completed successfully');
+        // $this->command->info('Database seeding completed successfully');
     }
 }
