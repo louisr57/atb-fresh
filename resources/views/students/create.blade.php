@@ -55,7 +55,7 @@
                         <label for="phone_number" class="block text-gray-700 font-bold mb-2">Phone Number</label>
                         <input type="text" id="phone_number" name="phone_number"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            value="{{ old('phone_number') }}" required>
+                            value="{{ old('phone_number') }}">
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
                         <input type="text" name="dob" id="dob"
                             value="{{ old('dob') }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 focus:outline-none focus:shadow-outline"
-                            required readonly autocomplete="off">
+                            readonly autocomplete="off">
                     </div>
 
                     <!-- Address -->
@@ -115,7 +115,7 @@
                         <label for="post_code" class="block text-gray-700 font-bold mb-2">Post Code</label>
                         <input type="text" id="post_code" name="post_code"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            value="{{ old('post_code') }}" required>
+                            value="{{ old('post_code') }}">
                     </div>
                 </div>
 

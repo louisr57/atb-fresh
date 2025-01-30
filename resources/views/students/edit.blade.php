@@ -56,7 +56,7 @@
                         <label for="phone_number" class="block text-gray-700 font-bold mb-2">Phone Number</label>
                         <input type="text" id="phone_number" name="phone_number"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
-                            value="{{ old('phone_number', $student->phone_number) }}" required>
+                            value="{{ old('phone_number', $student->phone_number) }}">
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@
                         <input type="text" name="dob" id="dob"
                             value="{{ old('dob', \Carbon\Carbon::parse($student->dob)->format('Y-m-d')) }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
-                            required readonly autocomplete="off">
+                            readonly autocomplete="off">
                     </div>
 
                     <!-- Address -->
@@ -119,7 +119,7 @@
                         <label for="post_code" class="block text-gray-700 font-bold mb-2">Post Code</label>
                         <input type="text" id="post_code" name="post_code"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
-                            value="{{ old('post_code', $student->post_code) }}" required>
+                            value="{{ old('post_code', $student->post_code) }}">
                     </div>
                 </div>
 
