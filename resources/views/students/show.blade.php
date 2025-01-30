@@ -129,7 +129,14 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Occupation -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2">Occupation</label>
+                    <p class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200">
+                        {{ $student->occupation ?? 'N/A' }}
+                    </p>
+                </div>
                 <!-- Website -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Website</label>

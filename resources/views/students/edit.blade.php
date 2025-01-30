@@ -123,7 +123,14 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Occupation -->
+                    <div class="mb-4">
+                        <label for="occupation" class="block text-gray-700 font-bold mb-2">Occupation</label>
+                        <input type="text" id="occupation" name="occupation"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
+                            value="{{ old('occupation', $student->occupation) }}">
+                    </div>
                     <!-- Website -->
                     <div class="mb-4">
                         <label for="website" class="block text-gray-700 font-bold mb-2">Website</label>
