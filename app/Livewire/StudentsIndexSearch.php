@@ -39,12 +39,13 @@ class StudentsIndexSearch extends Component
 
     public function getStudentsProperty()
     {
-        return Student::where(function ($query) {
-            if (strlen($this->search) >= 2) {
-                $query->where('first_name', 'like', "%{$this->search}%")
-                    ->orWhere('last_name', 'like', "%{$this->search}%");
-            }
-        })
+        return Student::withCount('registrations as reg_count')
+            ->where(function ($query) {
+                if (strlen($this->search) >= 2) {
+                    $query->where('first_name', 'like', "%{$this->search}%")
+                        ->orWhere('last_name', 'like', "%{$this->search}%");
+                }
+            })
             ->orderBy($this->sortBy, $this->direction)
             ->paginate(10);
     }
