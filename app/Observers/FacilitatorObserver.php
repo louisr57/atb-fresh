@@ -20,7 +20,7 @@ class FacilitatorObserver
         if (!$user) {
             // Create new user
             $user = (new User)->newQuery()->create([
-                'name' => $facilitator->first_name . ' ' . $facilitator->last_name,
+                'name' => $facilitator->first_name,
                 'email' => $facilitator->email,
                 'password' => Hash::make('password'),
             ]);
