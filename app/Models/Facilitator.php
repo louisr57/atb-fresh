@@ -14,6 +14,7 @@ class Facilitator extends Model
     const LOG_NAME = 'facilitator';
 
     protected $fillable = [
+        'user_id',
         'first_name',
         'last_name',
         'gender',
@@ -32,6 +33,7 @@ class Facilitator extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
+                'user_id',
                 'first_name',
                 'last_name',
                 'gender',
@@ -53,6 +55,11 @@ class Facilitator extends Model
     protected $casts = [
         'dob' => 'date:Y-m-d',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function events()
     {
