@@ -23,4 +23,5 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
+/.claude
 zDB_Table_Backups/ATB_Tables.sql
