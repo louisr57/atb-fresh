@@ -22,13 +22,17 @@ class RegistrationController extends Controller
             'course_name' => 'courses.course_title',
             'datefrom' => 'events.datefrom',
             'dateto' => 'events.dateto',
-            'facilitator_name' => 'facilitators.first_name',
+            'facilitator_name' => 'facilitator_sort_name',
             'end_status' => 'registrations.end_status',
         ];
 
         // Get the sort column from the mapping, or use default
         $sortColumn = $sortableColumns[$sort_by] ?? 'students.first_name';
 
+        // NOTE: facilitators are pulled in via a scalar subquery (rather than a direct
+        // join through the event_facilitator pivot) so that registrations are not
+        // duplicated when an event has more than one facilitator, and so the sort
+        // value can be safely used in ORDER BY alongside the other selected columns.
         $registrations = Registration::with(['student', 'event.course', 'event.facilitators'])
             ->join('students', 'registrations.student_id', '=', 'students.id')
             ->join('events', 'registrations.event_id', '=', 'events.id')
@@ -41,6 +45,12 @@ class RegistrationController extends Controller
                 'events.dateto',
                 'courses.course_title'
             )
+            ->selectSub(function ($subQuery) {
+                $subQuery->from('event_facilitator')
+                    ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
+                    ->whereColumn('event_facilitator.event_id', 'events.id')
+                    ->selectRaw("MIN(CONCAT(facilitators.first_name, ' ', facilitators.last_name))");
+            }, 'facilitator_sort_name')
             ->orderBy($sortColumn, $direction)
             ->when($sortColumn !== 'events.datefrom', function ($query) {
                 $query->orderBy('events.datefrom', 'asc');

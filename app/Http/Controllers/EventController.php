@@ -40,7 +40,7 @@ class EventController extends Controller
             'participant_count' => 'events.participant_count',
             'datefrom' => 'events.datefrom',
             'dateto' => 'events.dateto',
-            'facilitator_name' => 'facilitators.first_name',
+            'facilitator_name' => 'facilitator_sort_name',
             'venue_name' => 'venues.venue_name',
         ];
 
@@ -48,15 +48,21 @@ class EventController extends Controller
         $sortColumn = $sortableColumns[$sort_by] ?? 'courses.course_title';
 
         // Build the base query with all necessary joins
+        // NOTE: facilitators are joined via a scalar subquery (rather than a direct
+        // join) so that events with multiple facilitators are not duplicated in the
+        // result set, and so the sort value can be safely used with DISTINCT/ORDER BY.
         $query = Event::query()
             ->join('courses', 'events.course_id', '=', 'courses.id')
-            ->join('event_facilitator', 'events.id', '=', 'event_facilitator.event_id')
-            ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
             ->join('venues', 'events.venue_id', '=', 'venues.id')
             ->select('events.*', 'courses.course_title', 'venues.venue_name', 'venues.city', 'venues.state', 'venues.country')
+            ->selectSub(function ($subQuery) {
+                $subQuery->from('event_facilitator')
+                    ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
+                    ->whereColumn('event_facilitator.event_id', 'events.id')
+                    ->selectRaw("MIN(CONCAT(facilitators.first_name, ' ', facilitators.last_name))");
+            }, 'facilitator_sort_name')
             ->with(['course', 'facilitators', 'venue'])
-            ->withCount('registrations')
-            ->distinct();
+            ->withCount('registrations');
 
         // Apply search filters
         if ($request->filled('search_course')) {
@@ -65,7 +71,7 @@ class EventController extends Controller
 
         if ($request->filled('search_facilitator')) {
             $searchTerm = $request->search_facilitator;
-            $query->where(function ($q) use ($searchTerm) {
+            $query->whereHas('facilitators', function ($q) use ($searchTerm) {
                 $q->where(DB::raw("CONCAT(facilitators.first_name, ' ', facilitators.last_name)"), 'like', '%'.$searchTerm.'%')
                     ->orWhere(DB::raw("CONCAT(facilitators.last_name, ' ', facilitators.first_name)"), 'like', '%'.$searchTerm.'%');
             });

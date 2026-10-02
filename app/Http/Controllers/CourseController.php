@@ -42,12 +42,17 @@ class CourseController extends Controller
                 return $query->orderBy('participant_count', $direction);
             })
             ->when($sort_by === 'facilitator', function ($query) use ($direction) {
-                return $query->join('event_facilitator', 'events.id', '=', 'event_facilitator.event_id')
-                    ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
-                    ->orderBy('facilitators.first_name', $direction)
-                    ->orderBy('facilitators.last_name', $direction)
-                    ->select('events.*')
-                    ->distinct();
+                // NOTE: facilitators are pulled in via a scalar subquery (rather than a
+                // direct join through the event_facilitator pivot) so that events with
+                // more than one facilitator are not duplicated in the result set.
+                return $query->select('events.*')
+                    ->selectSub(function ($subQuery) {
+                        $subQuery->from('event_facilitator')
+                            ->join('facilitators', 'event_facilitator.facilitator_id', '=', 'facilitators.id')
+                            ->whereColumn('event_facilitator.event_id', 'events.id')
+                            ->selectRaw("MIN(CONCAT(facilitators.first_name, ' ', facilitators.last_name))");
+                    }, 'facilitator_sort_name')
+                    ->orderBy('facilitator_sort_name', $direction);
             })
             ->when($sort_by === 'venue', function ($query) use ($direction) {
                 return $query->join('venues', 'events.venue_id', '=', 'venues.id')
