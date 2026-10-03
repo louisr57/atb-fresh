@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     const LOG_NAME = 'event';
 
@@ -50,6 +51,20 @@ class Event extends Model
     {
         // Remove the updated event observer since we're handling counts in batch
         // This prevents potential race conditions during seeding
+
+        // The DB-level cascadeOnDelete foreign key only fires on a hard DELETE,
+        // so when an Event is soft-deleted we need to soft-delete its
+        // registrations ourselves to keep behavior consistent with the old
+        // cascade-delete expectations (and to make restore() meaningful).
+        static::deleting(function (Event $event) {
+            if (! $event->isForceDeleting()) {
+                $event->registrations()->get()->each->delete();
+            }
+        });
+
+        static::restoring(function (Event $event) {
+            $event->registrations()->onlyTrashed()->get()->each->restore();
+        });
     }
 
     // Define relationship with the Course model
