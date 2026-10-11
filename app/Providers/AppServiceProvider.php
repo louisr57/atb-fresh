@@ -38,12 +38,20 @@ class AppServiceProvider extends ServiceProvider
         Facilitator::observe(FacilitatorObserver::class);
 
         if ($this->app->environment('local')) {
-            $this->app['config']->set('cache.route', false);
+            config(['cache.route' => false]);
         }
 
         // Cache countries data for 24 hours
-        if (!Cache::has('countries')) {
-            Cache::put('countries', CountryLoader::countries(), now()->addHours(24));
+        if (!$this->app->runningInConsole() || $this->app->runningUnitTests()) {
+            try {
+                if (!Cache::has('countries')) {
+                    Cache::put('countries', CountryLoader::countries(), now()->addHours(24));
+                }
+            } catch (\Throwable $e) {
+                // Avoid breaking artisan commands (migrations, tooling, IDE helpers, etc.)
+                // when the cache store (e.g. database) is unavailable.
+                report($e);
+            }
         }
     }
 }
