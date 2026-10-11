@@ -87,3 +87,13 @@ test('deleting a registration directly soft deletes it only', function () {
     expect(Student::find($registration->student_id))->not->toBeNull();
     expect(Event::find($registration->event_id))->not->toBeNull();
 });
+
+test('per-student activity log page is viewable for a soft-deleted student', function () {
+    $student = Student::factory()->create();
+    $student->delete();
+
+    $this->actingAs(App\Models\User::factory()->create())
+        ->get(route('activity-logs.student', $student->id))
+        ->assertOk()
+        ->assertSee('This student has been deleted.');
+});

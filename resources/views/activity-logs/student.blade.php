@@ -5,9 +5,16 @@
 
     <div class="container mx-auto p-4">
         <div class="mb-4 flex justify-between items-center">
-            <a href="{{ route('students.show', $student) }}" class="text-blue-600 hover:underline">
-                ← Back to Student
-            </a>
+            @if ($student->trashed())
+                <span class="text-red-700">This student has been deleted.</span>
+                <a href="{{ route('activity-logs.index', ['model' => 'student', 'subject_id' => $student->id]) }}" class="text-blue-600 hover:underline">
+                    ← Back to Activity Logs
+                </a>
+            @else
+                <a href="{{ route('students.show', $student) }}" class="text-blue-600 hover:underline">
+                    ← Back to Student
+                </a>
+            @endif
         </div>
 
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">

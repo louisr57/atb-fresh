@@ -77,7 +77,8 @@ class ActivityLogController extends Controller
 
     public function studentLogs($studentId)
     {
-        $student = (new Student)->findOrFail($studentId);
+        // Include soft-deleted students so their history stays viewable
+        $student = Student::withTrashed()->findOrFail($studentId);
 
         $activities = Activity::with(['causer'])
             ->where('subject_type', Student::class)
