@@ -252,7 +252,7 @@ class ImportStudentsFromExcel extends Command
                     continue;
                 }
 
-                // Check for duplicate email
+                // Check for duplicate email among active (non-trashed) students
                 if (Student::where('email', $email)->exists()) {
                     $duplicates[] = [
                         'row' => $actualRowNumber,
@@ -262,6 +262,58 @@ class ImportStudentsFromExcel extends Command
                         'reason' => 'duplicate email'
                     ];
                     $this->warn("⚠ Row {$actualRowNumber}: Skipped duplicate email {$email}");
+                    continue;
+                }
+
+                // Check whether this email belongs to a soft-deleted (trashed) student.
+                // If so, restore the original record (and its cascaded-deleted
+                // registrations) instead of inserting a brand-new row, since the
+                // email column is still unique at the application level.
+                $trashedStudent = Student::onlyTrashed()->where('email', $email)->first();
+
+                if ($trashedStudent) {
+                    if (!$isDryRun) {
+                        $trashedStudent->restore();
+
+                        // Create activity log entry for the restore, attributing it
+                        // to the import user if one was specified. The 'restored'
+                        // event is logged automatically by the LogsActivity trait,
+                        // but we additionally tag an explicit import-related entry
+                        // for traceability, mirroring the "created" flow below.
+                        if ($user) {
+                            $latestActivity = Activity::where('subject_type', Student::class)
+                                ->where('subject_id', $trashedStudent->id)
+                                ->where('description', 'like', '%restored%')
+                                ->latest()
+                                ->first();
+
+                            if ($latestActivity) {
+                                $latestActivity->update([
+                                    'causer_type' => User::class,
+                                    'causer_id' => $user->id
+                                ]);
+                            }
+                        }
+
+                        $activityLogger = activity('student_import');
+
+                        if ($user) {
+                            $activityLogger->causedBy($user);
+                        }
+
+                        $activityLogger
+                            ->performedOn($trashedStudent)
+                            ->log("Student restored via Excel import (previously soft-deleted)");
+
+                        $userInfo = $user ? " by {$user->name}" : "";
+                        $this->info("↺ Row {$actualRowNumber}: Restored previously deleted student {$firstName} {$lastName} ({$email}){$userInfo}");
+                    } else {
+                        $userInfo = $user ? " (would be attributed to {$user->name})" : "";
+                        $this->info("↺ Row {$actualRowNumber}: Would restore previously deleted student {$firstName} {$lastName} ({$email}){$userInfo}");
+                    }
+
+                    $created++;
+
                     continue;
                 }
 

@@ -6,6 +6,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Rinvex\Country\CountryLoader;
 
 class StudentController extends Controller
@@ -38,7 +39,11 @@ class StudentController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:students',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('students')->whereNull('deleted_at'),
+            ],
             'phone_number' => 'nullable|string|max:20',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:100',
@@ -94,7 +99,13 @@ class StudentController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:students,email,'.$student->id,
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('students')->ignore($student->id)->whereNull('deleted_at'),
+            ],
             'phone_number' => 'nullable|string|max:20',
             'dob' => 'nullable|date',
             'address' => 'required|string|max:255',
