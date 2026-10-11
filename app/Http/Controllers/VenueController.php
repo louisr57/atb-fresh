@@ -70,20 +70,10 @@ class VenueController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'venue_name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
-            'country' => 'required|string|max:100',
-            'postcode' => 'required|string|max:20',
-            'location_geocode' => 'nullable|string|max:255',
-            'vcontact_person' => 'nullable|string|max:255',
-            'vcontact_phone' => 'nullable|string|max:255',
-            'vcontact_email' => 'nullable|string|max:255',
-            'remarks' => 'nullable|string|max:1000',
-        ]);
-        $validated['is_virtual'] = $request->boolean('is_virtual');
+        $validated = $this->normalizeVenueData(
+            $request->validate($this->venueRules()),
+            $request
+        );
 
         // Warn (once) about venues that look like the one being entered
         if ($warning = $this->similarVenueWarning($request, $validated)) {
@@ -128,19 +118,7 @@ class VenueController extends Controller
 
     public function update(Request $request, Venue $venue)
     {
-        $validator = Validator::make($request->all(), [
-            'venue_name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
-            'country' => 'required|string|max:100',
-            'postcode' => 'required|string|max:20',
-            'location_geocode' => 'nullable|string|max:255',
-            'vcontact_person' => 'nullable|string|max:255',
-            'vcontact_phone' => 'nullable|string|max:255',
-            'vcontact_email' => 'nullable|string|max:255',
-            'remarks' => 'nullable|string|max:1000',
-        ]);
+        $validator = Validator::make($request->all(), $this->venueRules());
 
         if ($validator->fails()) {
             return redirect()
@@ -149,8 +127,7 @@ class VenueController extends Controller
                 ->withInput();
         }
 
-        $validated = $validator->validated();
-        $validated['is_virtual'] = $request->boolean('is_virtual');
+        $validated = $this->normalizeVenueData($validator->validated(), $request);
 
         // Warn (once) about other venues that look like this one
         if ($warning = $this->similarVenueWarning($request, $validated, $venue->id)) {
@@ -178,6 +155,44 @@ class VenueController extends Controller
 
         return redirect()->route('venues.index')
             ->with('success', 'Venue deleted successfully.');
+    }
+
+    /**
+     * Validation rules shared by store() and update(). Online venues (is_virtual)
+     * have no physical location, so address, city, state and postcode are optional
+     * for them. Country stays required because reports filter by venue country.
+     */
+    private function venueRules(): array
+    {
+        return [
+            'venue_name' => 'required|string|max:255',
+            'is_virtual' => 'nullable|boolean',
+            'address' => 'required_unless:is_virtual,1|nullable|string|max:255',
+            'city' => 'required_unless:is_virtual,1|nullable|string|max:100',
+            'state' => 'required_unless:is_virtual,1|nullable|string|max:100',
+            'country' => 'required|string|max:100',
+            'postcode' => 'required_unless:is_virtual,1|nullable|string|max:20',
+            'location_geocode' => 'nullable|string|max:255',
+            'vcontact_person' => 'nullable|string|max:255',
+            'vcontact_phone' => 'nullable|string|max:255',
+            'vcontact_email' => 'nullable|string|max:255',
+            'remarks' => 'nullable|string|max:1000',
+        ];
+    }
+
+    /**
+     * Set the boolean virtual flag and store empty strings (not NULL) for blank
+     * location fields, because those database columns are NOT NULL.
+     */
+    private function normalizeVenueData(array $validated, Request $request): array
+    {
+        $validated['is_virtual'] = $request->boolean('is_virtual');
+
+        foreach (['address', 'city', 'state', 'postcode'] as $field) {
+            $validated[$field] = $validated[$field] ?? '';
+        }
+
+        return $validated;
     }
 
     /**

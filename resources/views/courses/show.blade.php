@@ -146,7 +146,7 @@
                                 No facilitator assigned
                             @endforelse
                         </td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->venue_name ?? 'N/A' }}</td>
+                        <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->display_name ?? 'N/A' }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->city ?? 'N/A' }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->state ?? 'N/A' }}</td>
                         <td class="border px-4 py-2 whitespace-nowrap">{{ $event->venue->country ?? 'N/A' }}</td>

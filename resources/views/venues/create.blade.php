@@ -20,7 +20,7 @@
         <x-similar-venues-warning form="venue-form" />
 
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form id="venue-form" action="{{ route('venues.store') }}" method="POST">
+            <form id="venue-form" x-data="{ online: @js((bool) old('is_virtual')) }" action="{{ route('venues.store') }}" method="POST">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -34,36 +34,36 @@
 
                     <!-- Address -->
                     <div class="mb-4">
-                        <label for="address" class="block text-gray-700 font-bold mb-2">Address</label>
+                        <label for="address" class="block text-gray-700 font-bold mb-2">Address <span x-show="online" style="display: none" class="font-normal text-sm">(optional for online)</span></label>
                         <input type="text" id="address" name="address"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            value="{{ old('address') }}" required>
+                            value="{{ old('address') }}" :required="!online">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- City -->
                     <div class="mb-4">
-                        <label for="city" class="block text-gray-700 font-bold mb-2">City</label>
+                        <label for="city" class="block text-gray-700 font-bold mb-2">City <span x-show="online" style="display: none" class="font-normal text-sm">(optional for online)</span></label>
                         <input type="text" id="city" name="city"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            value="{{ old('city') }}" required>
+                            value="{{ old('city') }}" :required="!online">
                     </div>
 
                     <!-- State -->
                     <div class="mb-4">
-                        <label for="state" class="block text-gray-700 font-bold mb-2">State</label>
+                        <label for="state" class="block text-gray-700 font-bold mb-2">State <span x-show="online" style="display: none" class="font-normal text-sm">(optional for online)</span></label>
                         <input type="text" id="state" name="state"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            value="{{ old('state') }}" required>
+                            value="{{ old('state') }}" :required="!online">
                     </div>
 
                     <!-- Post Code -->
                     <div class="mb-4">
-                        <label for="postcode" class="block text-gray-700 font-bold mb-2">Post Code</label>
+                        <label for="postcode" class="block text-gray-700 font-bold mb-2">Post Code <span x-show="online" style="display: none" class="font-normal text-sm">(optional for online)</span></label>
                         <input type="text" id="postcode" name="postcode"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
-                            value="{{ old('postcode') }}" required>
+                            value="{{ old('postcode') }}" :required="!online">
                     </div>
                 </div>
 
@@ -123,8 +123,8 @@
                 <!-- Virtual venue -->
                 <div class="mb-4">
                     <label class="flex items-start gap-2 text-gray-700">
-                        <input type="checkbox" name="is_virtual" value="1" class="mt-1" {{ old('is_virtual') ? 'checked' : '' }}>
-                        <span><span class="font-bold">Online / virtual venue</span> (e.g. Zoom). Several events may run here at the same time; facilitators still cannot be double-booked.</span>
+                        <input type="checkbox" name="is_virtual" value="1" class="mt-1" x-model="online" {{ old('is_virtual') ? 'checked' : '' }}>
+                        <span><span class="font-bold">Online / virtual venue</span> (e.g. Zoom). Several events may run here at the same time; facilitators still cannot be double-booked. Address, city, state and post code are optional for online venues.</span>
                     </label>
                 </div>
 

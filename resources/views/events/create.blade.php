@@ -120,7 +120,7 @@
                     </div>
 
                     <!-- Venue Selection -->
-                    <div class="mb-4" x-data="{ open: false, selectedId: @js((string) old('venue_id', '')), selectedText: @js($oldVenue?->venue_name ?? '') }">
+                    <div class="mb-4" x-data="{ open: false, selectedId: @js((string) old('venue_id', '')), selectedText: @js($oldVenue?->display_name ?? '') }">
                         <label for="venue_id" class="block text-gray-700 font-bold mb-2">Venue</label>
                         <div class="relative">
                             <input type="text" x-model="selectedText" @click="open = true" @focus="open = true" class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
@@ -133,9 +133,9 @@
                                 class="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
                                 @foreach($venues as $venue)
                                 <div class="cursor-pointer p-2 hover:bg-gray-100" @click="selectedId = '{{ $venue->id }}';
-                                           selectedText = '{{ $venue->venue_name }}';
+                                           selectedText = {{ \Illuminate\Support\Js::from($venue->display_name) }};
                                            open = false">
-                                    {{ $venue->venue_name }}
+                                    {{ $venue->venue_name }}@if($venue->is_virtual) <span class="text-sm text-blue-700">(online)</span>@endif
                                 </div>
                                 @endforeach
                             </div>

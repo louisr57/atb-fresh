@@ -38,6 +38,19 @@
             <p class="text-lg mb-2">
                 <strong>Date:</strong> {{ $event->datefrom }} to {{ $event->dateto ?? 'N/A' }}
             </p>
+            <p class="text-lg mb-2">
+                <strong>Venue:</strong>
+                @if($event->venue)
+                    <a href="{{ route('venues.show', $event->venue->id) }}" class="underline">{{ $event->venue->venue_name }}</a>
+                    @if($event->venue->is_virtual)
+                        <span class="text-blue-800">(online)</span>
+                    @elseif($event->venue->city)
+                        <span>({{ $event->venue->city }})</span>
+                    @endif
+                @else
+                    N/A
+                @endif
+            </p>
             <div class="text-lg mb-2">
                 <strong>Facilitators:</strong>
                 <ul class="list-disc ml-6">

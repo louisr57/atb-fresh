@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -53,7 +55,16 @@ class Venue extends Model
             ->setDescriptionForEvent(fn (string $venueName) => "Venue has been {$venueName}")
             ->useLogName(self::LOG_NAME);
     }
-    public function events()
+
+    /**
+     * Venue name with an "(online)" suffix for virtual venues, for use in lists and pickers.
+     */
+    protected function displayName(): Attribute
+    {
+        return Attribute::get(fn () => $this->venue_name.($this->is_virtual ? ' (online)' : ''));
+    }
+
+    public function events(): HasMany
     {
         return $this->hasMany(Event::class);
     }

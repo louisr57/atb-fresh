@@ -171,7 +171,7 @@
                 <tbody class="bg-gray-50">
                     @foreach($venues as $venue)
                     <tr class="hover:bg-sky-200 cursor-pointer" onclick="window.location='{{ route('venues.show', $venue->id) }}'">
-                        <td class="border border-gray-500 px-4 py-2">{{ $venue->venue_name }}</td>
+                        <td class="border border-gray-500 px-4 py-2">{{ $venue->display_name }}</td>
                         <td class="border border-gray-500 px-4 py-2">{{ $venue->city }}</td>
                         <td class="border border-gray-500 px-4 py-2">{{ $venue->country }}</td>
                         <td class="border border-gray-500 px-4 py-2">{{ $venue->address }}</td>
