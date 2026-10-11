@@ -1,0 +1,19 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+
+    # 0 = loosest, 10 = strictest. 5 is a sensible starting point for an existing app.
+    level: 5
+
+    excludePaths:
+        # Leftover laravel/ui controllers: not routed anywhere, and they use traits
+        # that are no longer installed (Breeze replaced them). Candidates for deletion.
+        - app/Http/Controllers/Auth/ConfirmPasswordController.php
+        - app/Http/Controllers/Auth/ForgotPasswordController.php
+        - app/Http/Controllers/Auth/LoginController.php
+        - app/Http/Controllers/Auth/RegisterController.php
+        - app/Http/Controllers/Auth/ResetPasswordController.php
+        - app/Http/Controllers/Auth/VerificationController.php

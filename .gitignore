@@ -25,3 +25,7 @@ yarn-error.log
 /.zed
 /.claude
 zDB_Table_Backups/ATB_Tables.sql
+# Laravel IDE Helper generated files (regenerate locally, see CLAUDE.md)
+/_ide_helper.php
+/_ide_helper_models.php
+/.phpstorm.meta.php
