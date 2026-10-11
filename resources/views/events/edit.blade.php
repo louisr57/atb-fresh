@@ -16,8 +16,22 @@
         </div>
         @endif
 
+        @php
+            // After a failed submission (e.g. a schedule clash) show what the user entered,
+            // otherwise show the saved event.
+            $selCourse = $courses->firstWhere('id', old('course_id', $event->course_id)) ?? $event->course;
+            $selVenue = $venues->firstWhere('id', old('venue_id', $event->venue_id)) ?? $event->venue;
+            $selFacilitators = old('facilitator_ids') !== null
+                ? $facilitators->whereIn('id', (array) old('facilitator_ids'))
+                : $event->facilitators;
+            $selFacilitators = $selFacilitators
+                ->map(fn ($f) => ['id' => (string) $f->id, 'name' => $f->first_name.' '.$f->last_name])
+                ->values();
+        @endphp
+
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form action="{{ route('events.update', $event->id) }}" method="POST">
+            <form action="{{ route('events.update', $event->id) }}" method="POST"
+                onsubmit="const b = this.querySelector('button[type=submit]'); b.disabled = true; b.innerText = 'Saving...';">
                 @csrf
                 @method('PUT')
 
@@ -25,7 +39,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Course Selection -->
                     <div class="mb-4"
-                        x-data="{ open: false, selectedId: '{{ $event->course_id }}', selectedText: '{{ $event->course->course_title }}', eventTitle: '{{ $event->title }}' }">
+                        x-data="{ open: false, selectedId: @js((string) $selCourse->id), selectedText: @js($selCourse->course_title), eventTitle: @js(old('title', $event->title)) }">
                         <label for="course_id" class="block text-gray-700 font-bold mb-2">Course Title</label>
                         <div class="relative">
                             <input type="text" x-model="selectedText" @click="open = !open"
@@ -50,14 +64,7 @@
                     <!-- Facilitator Selection -->
                     <div class="mb-4" x-data="{
                         open: false,
-                        selectedFacilitators: [
-                            @foreach($event->facilitators as $facilitator)
-                                {
-                                    id: '{{ $facilitator->id }}',
-                                    name: '{{ $facilitator->first_name }} {{ $facilitator->last_name }}'
-                                },
-                            @endforeach
-                        ],
+                        selectedFacilitators: @js($selFacilitators),
                         toggleFacilitator(id, name) {
                             const index = this.selectedFacilitators.findIndex(f => f.id === id);
                             if (index === -1) {
@@ -116,7 +123,7 @@
 
                     <!-- Venue Selection -->
                     <div class="mb-4"
-                        x-data="{ open: false, selectedId: '{{ $event->venue_id }}', selectedText: '{{ $event->venue->venue_name }}' }">
+                        x-data="{ open: false, selectedId: @js((string) $selVenue->id), selectedText: @js($selVenue->venue_name) }">
                         <label for="venue_id" class="block text-gray-700 font-bold mb-2">Venue</label>
                         <div class="relative">
                             <input type="text" x-model="selectedText" @click="open = !open"
@@ -142,7 +149,7 @@
                     <!-- Date From -->
                     <div class="mb-4">
                         <label for="datefrom" class="block text-gray-700 font-bold mb-2">Date From</label>
-                        <input type="text" id="datefrom" name="datefrom" value="{{ $event->datefrom }}"
+                        <input type="text" id="datefrom" name="datefrom" value="{{ old('datefrom', $event->datefrom) }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                             required readonly autocomplete="off">
                     </div>
@@ -150,7 +157,7 @@
                     <!-- Date To -->
                     <div class="mb-4">
                         <label for="dateto" class="block text-gray-700 font-bold mb-2">Date To</label>
-                        <input type="text" id="dateto" name="dateto" value="{{ $event->dateto }}"
+                        <input type="text" id="dateto" name="dateto" value="{{ old('dateto', $event->dateto) }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                             required readonly autocomplete="off">
                     </div>
@@ -159,7 +166,7 @@
                 <!-- Third row - Time fields -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Time From -->
-                    <div class="mb-4" x-data="{ open: false, selectedTime: '{{ $event->timefrom }}' }">
+                    <div class="mb-4" x-data="{ open: false, selectedTime: @js(old('timefrom', $event->timefrom)) }">
                         <label for="timefrom" class="block text-gray-700 font-bold mb-2">Time From</label>
                         <div class="relative">
                             <input type="text" x-model="selectedTime" @click="open = !open"
@@ -179,7 +186,7 @@
                 </div>
 
                 <!-- Time To -->
-                <div class="mb-4" x-data="{ open: false, selectedTime: '{{ $event->timeto }}' }">
+                <div class="mb-4" x-data="{ open: false, selectedTime: @js(old('timeto', $event->timeto)) }">
                     <label for="timeto" class="block text-gray-700 font-bold mb-2">Time To</label>
                     <div class="relative">
                         <input type="text" x-model="selectedTime" @click="open = !open"
@@ -203,7 +210,7 @@
     <div class="mb-4">
         <label for="remarks" class="block text-gray-700 font-bold mb-2">Remarks</label>
         <textarea id="remarks" name="remarks"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 h-32">{{ $event->remarks }}</textarea>
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200 h-32">{{ old('remarks', $event->remarks) }}</textarea>
     </div>
 
     <!-- Submit and Cancel buttons -->

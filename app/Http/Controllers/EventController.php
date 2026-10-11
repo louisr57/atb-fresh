@@ -6,9 +6,11 @@ use App\Models\Course;
 use App\Models\Event;
 use App\Models\Facilitator;
 use App\Models\Venue;
+use App\Services\EventConflictChecker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 // Following TODO extension terms are just for reminding me to use them in the future
 // I've seen many places in the codebase where other authors have used these.
@@ -155,6 +157,9 @@ class EventController extends Controller
         $facilitatorIds = $validatedData['facilitator_ids'];
         unset($validatedData['facilitator_ids']);
 
+        // Reject the event if a facilitator or the venue is already booked at that time
+        $this->rejectScheduleConflicts($validatedData, $facilitatorIds);
+
         // Create event and attach facilitators
         $event = Event::create($validatedData);
         $event->facilitators()->attach($facilitatorIds);
@@ -193,6 +198,9 @@ class EventController extends Controller
         $facilitatorIds = $validatedData['facilitator_ids'];
         unset($validatedData['facilitator_ids']);
 
+        // Reject the change if it would double-book a facilitator or the venue
+        $this->rejectScheduleConflicts($validatedData, $facilitatorIds, $event->id);
+
         // Update event and sync facilitators
         $event->update($validatedData);
         $event->facilitators()->sync($facilitatorIds);
@@ -214,5 +222,19 @@ class EventController extends Controller
 
         return redirect()->route('events.index')
             ->with('success', 'Event deleted successfully.');
+    }
+
+    /**
+     * Throw a validation error listing every clash with existing events.
+     *
+     * @throws ValidationException
+     */
+    private function rejectScheduleConflicts(array $data, array $facilitatorIds, ?int $ignoreEventId = null): void
+    {
+        $conflicts = app(EventConflictChecker::class)->conflictsFor($data, $facilitatorIds, $ignoreEventId);
+
+        if (! empty($conflicts)) {
+            throw ValidationException::withMessages(['schedule' => $conflicts]);
+        }
     }
 }

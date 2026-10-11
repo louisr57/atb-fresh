@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Venue;
+use App\Services\VenueSimilarityChecker;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -81,6 +83,12 @@ class VenueController extends Controller
             'vcontact_email' => 'nullable|string|max:255',
             'remarks' => 'nullable|string|max:1000',
         ]);
+        $validated['is_virtual'] = $request->boolean('is_virtual');
+
+        // Warn (once) about venues that look like the one being entered
+        if ($warning = $this->similarVenueWarning($request, $validated)) {
+            return $warning;
+        }
 
         $venue = new Venue();
         $venue->fill($validated);
@@ -141,7 +149,15 @@ class VenueController extends Controller
                 ->withInput();
         }
 
-        $venue->update($validator->validated());
+        $validated = $validator->validated();
+        $validated['is_virtual'] = $request->boolean('is_virtual');
+
+        // Warn (once) about other venues that look like this one
+        if ($warning = $this->similarVenueWarning($request, $validated, $venue->id)) {
+            return $warning;
+        }
+
+        $venue->update($validated);
 
         return redirect()
             ->route('venues.show', $venue->id)
@@ -162,5 +178,26 @@ class VenueController extends Controller
 
         return redirect()->route('venues.index')
             ->with('success', 'Venue deleted successfully.');
+    }
+
+    /**
+     * If similar venues exist and the user has not yet confirmed, send them back to
+     * the form with a warning. Returns null when it is fine to save.
+     */
+    private function similarVenueWarning(Request $request, array $attributes, ?int $ignoreVenueId = null): ?RedirectResponse
+    {
+        if ($request->boolean('confirm_not_duplicate')) {
+            return null;
+        }
+
+        $similar = app(VenueSimilarityChecker::class)->similarTo($attributes, $ignoreVenueId);
+
+        if (empty($similar)) {
+            return null;
+        }
+
+        return redirect()->back()
+            ->withInput()
+            ->with('similar_venues', $similar);
     }
 }

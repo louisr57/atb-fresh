@@ -5,7 +5,7 @@
 
     <div class="container mx-auto p-4">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold">{{ $venue->venue_name }}</h1>
+            <h1 class="text-3xl font-bold">{{ $venue->venue_name }}@if($venue->is_virtual) <span class="text-lg font-semibold">(online / virtual)</span>@endif</h1>
             @if($venue->events->isEmpty())
             <form action="{{ route('venues.destroy', $venue->id) }}" method="POST" class="inline">
                 @csrf

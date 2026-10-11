@@ -16,14 +16,24 @@
         </div>
         @endif
 
+        @php
+            // Re-populate the Alpine-driven fields after a failed submission (e.g. a schedule clash)
+            $oldCourse = $courses->firstWhere('id', old('course_id'));
+            $oldVenue = $venues->firstWhere('id', old('venue_id'));
+            $oldFacilitators = $facilitators->whereIn('id', (array) old('facilitator_ids', []))
+                ->map(fn ($f) => ['id' => (string) $f->id, 'name' => $f->first_name.' '.$f->last_name])
+                ->values();
+        @endphp
+
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form action="{{ route('events.store') }}" method="POST">
+            <form action="{{ route('events.store') }}" method="POST"
+                onsubmit="const b = this.querySelector('button[type=submit]'); b.disabled = true; b.innerText = 'Saving...';">
                 @csrf
 
                 <!-- First row - Course, Facilitator, Venue selections -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Course Selection -->
-                    <div class="mb-4" x-data="{ open: false, selectedId: '', selectedText: '', eventTitle: '', courseDuration: 0 }">
+                    <div class="mb-4" x-data="{ open: false, selectedId: @js((string) old('course_id', '')), selectedText: @js($oldCourse?->course_title ?? ''), eventTitle: @js(old('title', '')), courseDuration: @js((float) ($oldCourse?->duration ?? 0)) }">
                         <label for="course_id" class="block text-gray-700 font-bold mb-2">Course Title</label>
                         <div class="relative">
                             <input type="text" x-model="selectedText" @click="open = true" @focus="open = true" class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
@@ -52,7 +62,7 @@
                     <!-- Facilitator Selection -->
                     <div class="mb-4" x-data="{
                         open: false,
-                        selectedFacilitators: [],
+                        selectedFacilitators: @js($oldFacilitators),
                         toggleFacilitator(id, name) {
                             const index = this.selectedFacilitators.findIndex(f => f.id === id);
                             if (index === -1) {
@@ -110,7 +120,7 @@
                     </div>
 
                     <!-- Venue Selection -->
-                    <div class="mb-4" x-data="{ open: false, selectedId: '', selectedText: '' }">
+                    <div class="mb-4" x-data="{ open: false, selectedId: @js((string) old('venue_id', '')), selectedText: @js($oldVenue?->venue_name ?? '') }">
                         <label for="venue_id" class="block text-gray-700 font-bold mb-2">Venue</label>
                         <div class="relative">
                             <input type="text" x-model="selectedText" @click="open = true" @focus="open = true" class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200
@@ -138,7 +148,7 @@
                     <!-- Date From -->
                     <div class="mb-4">
                         <label for="datefrom" class="block text-gray-700 font-bold mb-2">Date From</label>
-                        <input type="text" id="datefrom" name="datefrom"
+                        <input type="text" id="datefrom" name="datefrom" value="{{ old('datefrom') }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                             required readonly autocomplete="off">
                     </div>
@@ -146,7 +156,7 @@
                     <!-- Date To -->
                     <div class="mb-4">
                         <label for="dateto" class="block text-gray-700 font-bold mb-2">Date To</label>
-                        <input type="text" id="dateto" name="dateto"
+                        <input type="text" id="dateto" name="dateto" value="{{ old('dateto') }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                             required readonly autocomplete="off">
                     </div>
@@ -155,7 +165,7 @@
                 <!-- Third row - Time fields -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Time From -->
-                    <div class="mb-4" x-data="{ open: false, selectedTime: '' }">
+                    <div class="mb-4" x-data="{ open: false, selectedTime: @js(old('timefrom', '')) }">
                         <label for="timefrom" class="block text-gray-700 font-bold mb-2">Time From</label>
                         <div class="relative">
                             <input type="text" x-model="selectedTime" @click="open = true"
@@ -172,7 +182,7 @@
                 </div>
 
                     <!-- Time To -->
-                    <div class="mb-4" x-data="{ open: false, selectedTime: '' }">
+                    <div class="mb-4" x-data="{ open: false, selectedTime: @js(old('timeto', '')) }">
                         <label for="timeto" class="block text-gray-700 font-bold mb-2">Time To</label>
                         <div class="relative">
                             <input type="text" x-model="selectedTime" @click="open = true"

@@ -17,8 +17,10 @@
         </div>
         @endif
 
+        <x-similar-venues-warning form="venue-form" />
+
         <div class="bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form action="{{ route('venues.update', $venue->id) }}" method="POST">
+            <form id="venue-form" action="{{ route('venues.update', $venue->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -118,6 +120,14 @@
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-800 bg-gray-200"
                             value="{{ old('vcontact_email', $venue->vcontact_email) }}">
                     </div>
+                </div>
+
+                <!-- Virtual venue -->
+                <div class="mb-4">
+                    <label class="flex items-start gap-2 text-gray-700">
+                        <input type="checkbox" name="is_virtual" value="1" class="mt-1" {{ old('is_virtual', $venue->is_virtual) ? 'checked' : '' }}>
+                        <span><span class="font-bold">Online / virtual venue</span> (e.g. Zoom). Several events may run here at the same time; facilitators still cannot be double-booked.</span>
+                    </label>
                 </div>
 
                 <!-- Remarks -->

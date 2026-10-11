@@ -15,6 +15,7 @@ class Venue extends Model
 
     protected $fillable = [
         'venue_name',
+        'is_virtual',
         'address',
         'city',
         'state',
@@ -27,13 +28,16 @@ class Venue extends Model
         'remarks',
     ];
 
-    // Define relationship with the Event model
+    protected $casts = [
+        'is_virtual' => 'boolean',
+    ];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly([
                 'venue_name',
+                'is_virtual',
                 'address',
                 'city',
                 'state',
