@@ -19,7 +19,7 @@ class DeleteStudentsByDate extends Command
     protected $description = 'Delete all students created on a specific date (cascade deletes will apply to related records)';
 
     /**
-     * Execute the console command.
+     * Execute the console command and make it so!
      */
     public function handle()
     {
