@@ -160,6 +160,12 @@ class ActivityJournalExporter
 
     private function serialize(object $row): string
     {
+        return self::serializeRow($row);
+    }
+
+    /** The exact JSON line written to the journal; its sha256 is the manifest's last_row_sha256. */
+    public static function serializeRow(object $row): string
+    {
         $json = json_encode((array) $row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
 
         if ($json === false) {

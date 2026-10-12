@@ -39,4 +39,10 @@ return [
      * appended when the export fails or an integrity ALERT is raised.
      */
     'ping_url' => env('ACTIVITY_JOURNAL_PING_URL'),
+
+    /*
+     * Bearer token for GET /monitoring/state (used by the off-droplet checker).
+     * Leave empty to disable the endpoint (it then returns 404).
+     */
+    'state_token' => env('ACTIVITY_JOURNAL_STATE_TOKEN'),
 ];

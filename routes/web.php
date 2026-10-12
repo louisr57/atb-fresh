@@ -5,6 +5,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FacilitatorController;
+use App\Http\Controllers\MonitoringStateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StudentController;
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 
 // Breeze Authentication Routes
 require __DIR__.'/auth.php';
+
+// Read-only state for the off-droplet rollback checker (bearer token, 404 until configured)
+Route::get('/monitoring/state', MonitoringStateController::class)
+    ->middleware('throttle:30,1')
+    ->name('monitoring.state');
 
 // Protected routes (require authentication)
 Route::middleware(['auth'])->group(function () {
