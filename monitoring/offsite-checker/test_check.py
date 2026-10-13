@@ -42,6 +42,9 @@ class FakeSource:
     def names(self):
         return list(self.files)
 
+    def version_names(self):
+        return self.names() + list(getattr(self, 'old_versions', []))
+
     def read(self, name):
         return self.files[name]
 
@@ -175,6 +178,53 @@ class ChainAndDataTest(unittest.TestCase):
         _, manifests = journal((1, 3))
         manifest = dict(manifests[0], data_file='../../etc/passwd')
         self.assertTrue(check.verify_data(parsed(manifest), b''))
+
+
+class VisibilityTest(unittest.TestCase):
+    OLD_MANIFEST = 'activity_0000000004-0000000009.manifest-v2026-10-13-162435-000.json'
+    OLD_DATA = 'activity_0000000004-0000000009.jsonl-v2026-10-13-162435-000.gz'
+
+    def test_untouched_journal_is_fine(self):
+        source, _ = journal((1, 3), (4, 9))
+        self.assertEqual(check.verify_visibility(source.names(), source.version_names()), [])
+
+    def test_hidden_manifest_alerts(self):
+        source, _ = journal((1, 3), (4, 9))
+        visible = [n for n in source.names() if n != 'activity_0000000004-0000000009.manifest.json']
+        problems = check.verify_visibility(visible, visible + [self.OLD_MANIFEST])
+        self.assertEqual(len(problems), 1)
+        self.assertIn('hidden or deleted', problems[0])
+        self.assertIn('activity_0000000004-0000000009.manifest.json', problems[0])
+
+    def test_hidden_data_file_alerts(self):
+        source, _ = journal((1, 3), (4, 9))
+        visible = [n for n in source.names() if n != 'activity_0000000004-0000000009.jsonl.gz']
+        problems = check.verify_visibility(visible, visible + [self.OLD_DATA])
+        self.assertTrue(any('hidden or deleted' in p for p in problems))
+
+    def test_hide_marker_listed_under_its_plain_name_alerts(self):
+        # With --b2-versions the hide marker keeps the plain name, the upload gets the time stamp.
+        source, _ = journal((1, 3))
+        problems = check.verify_visibility([], source.names() + [self.OLD_MANIFEST])
+        self.assertTrue(any('hidden or deleted' in p for p in problems))
+
+    def test_replaced_file_alerts(self):
+        source, _ = journal((1, 3), (4, 9))
+        problems = check.verify_visibility(source.names(), source.names() + [self.OLD_MANIFEST])
+        self.assertEqual(len(problems), 1)
+        self.assertIn('replaced', problems[0])
+
+    def test_unrelated_files_are_ignored(self):
+        source, _ = journal((1, 3))
+        visible = source.names()
+        self.assertEqual(check.verify_visibility(visible, visible + ['other-v2026-10-13-162435-000.txt', 'notes.txt']), [])
+
+    def test_run_check_reports_hidden_file(self):
+        source, manifests = journal((1, 3), (4, 6))
+        source.old_versions = ['activity_0000000001-0000000003.manifest-v2026-10-13-162435-000.json']
+        del source.files['activity_0000000001-0000000003.manifest.json']
+        problems, _, _ = check.run_check(source, lambda row_id: live_state(manifests[-1]), {}, NOW, 3, full=False)
+        self.assertTrue(any('hidden or deleted' in p for p in problems))
 
 
 class ManifestParsingTest(unittest.TestCase):

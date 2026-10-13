@@ -34,6 +34,9 @@ from datetime import datetime, timezone
 GENESIS = '0' * 64
 MANIFEST_RE = re.compile(r'^activity_(\d{10})-(\d{10})\.manifest\.json$')
 DATA_RE = re.compile(r'^activity_(\d{10})-(\d{10})\.jsonl\.gz$')
+# `rclone lsf --b2-versions` shows older versions with a time stamp before the extension,
+# e.g. activity_0000000001-0000000003.manifest-v2026-10-13-162435-000.json
+VERSION_SUFFIX_RE = re.compile(r'-v\d{4}-\d{2}-\d{2}-\d{6}-\d{3}(?=\.|$)')
 REQUIRED_KEYS = (
     'first_id', 'last_id', 'rows', 'content_sha256', 'last_row_sha256',
     'previous_chain_hash', 'chain_hash', 'exported_at', 'data_file',
@@ -69,6 +72,10 @@ class RcloneSource:
     def names(self):
         return self._run('lsf', '--files-only', self.remote).decode('utf-8').split()
 
+    def version_names(self):
+        """Visible files plus older versions (a hidden file only survives as an old version)."""
+        return self._run('lsf', '--files-only', '--b2-versions', self.remote).decode('utf-8').split()
+
     def read(self, name):
         return self._run('cat', self.remote + name)
 
@@ -81,6 +88,9 @@ class LocalDirSource:
 
     def names(self):
         return sorted(os.listdir(self.directory))
+
+    def version_names(self):
+        return self.names()
 
     def read(self, name):
         with open(os.path.join(self.directory, name), 'rb') as handle:
@@ -234,6 +244,31 @@ def evaluate(manifest, state, saved, now, max_lag_hours):
     return problems, new_saved
 
 
+def verify_visibility(visible, with_versions):
+    """Journal files that were hidden (or replaced) rather than left alone.
+
+    A key with only writeFiles can "delete" a file in B2 by hiding it: the data stays
+    but normal listings no longer show it. `with_versions` is the listing that also
+    includes older versions, so a hidden file still appears there.
+    """
+    problems = []
+    visible = set(visible)
+    counts = {}
+
+    for name in with_versions:
+        base = VERSION_SUFFIX_RE.sub('', name, count=1)
+        if MANIFEST_RE.match(base) or DATA_RE.match(base):
+            counts[base] = counts.get(base, 0) + 1
+
+    for base in sorted(counts):
+        if base not in visible:
+            problems.append('ALERT: journal file %s is hidden or deleted (older versions still exist in B2).' % base)
+        elif counts[base] > 1:
+            problems.append('ALERT: journal file %s has been replaced (%d versions exist in B2).' % (base, counts[base]))
+
+    return problems
+
+
 def verify_journal_full(source, names):
     manifests = [parse_manifest(source.read(name), name) for name in manifest_names(names)]
     problems = verify_chain(manifests)
@@ -329,6 +364,7 @@ def ping(url, ok, message=''):
 def run_check(source, state_fetcher, saved, now, max_lag_hours, full):
     """Returns (problems, notes, new_saved)."""
     names = source.names()
+    visibility = verify_visibility(names, source.version_names())
     manifests = manifest_names(names)
     if not manifests:
         raise CheckerError('the journal holds no manifests at all')
@@ -336,6 +372,7 @@ def run_check(source, state_fetcher, saved, now, max_lag_hours, full):
     newest = parse_manifest(source.read(manifests[-1]), manifests[-1])
     state = state_fetcher(newest['last_id'])
     problems, new_saved = evaluate(newest, state, saved, now, max_lag_hours)
+    problems.extend(visibility)
     notes = ['journal ends at #%d, live highest id #%s' % (newest['last_id'], (state.get('activity_log') or {}).get('max_id'))]
 
     if full:

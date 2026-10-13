@@ -4,6 +4,8 @@
 
 It alerts when: the live highest id is lower than the journal's or than any value seen before; the newest journaled row is missing or different live; journal files are missing, altered or out of order (`--full`); the endpoint is unreachable or rejects the token; or the checker itself stops running (Healthchecks sees no ping).
 
+It also lists all B2 versions (`rclone lsf --b2-versions`) on every run and alerts if a journal file was hidden (a `writeFiles`-only key can do that with `rclone delete`; the data stays, but normal listings no longer show it) or replaced by a newer version. To fix a hidden file, remove the hide marker with an admin key: `b2 file unhide b2://atb-fresh-activity-journal/<file name>`.
+
 Standard library only (Python 3.8+) plus `rclone`. Tests: `python -m unittest -v test_check` in this directory.
 
 ## Setup on the new Linode (Ubuntu 24.04)
