@@ -17,7 +17,7 @@ class ImportStudentsFromExcel extends Command
      *
      * @var string
      */
-    protected $signature = 'students:import {filename} {--user= : User name to attribute the import to} {--dryrun : Run without making database changes}';
+    protected $signature = 'students:import {filename} {--user= : User name to attribute the import to} {--country=unknown : Country to set on newly created students} {--dryrun : Run without making database changes}';
 
     /**
      * The console command description.
@@ -43,6 +43,12 @@ class ImportStudentsFromExcel extends Command
         $filename = $this->argument('filename');
         $isDryRun = $this->option('dryrun');
         $userName = $this->option('user');
+        $country = trim((string) $this->option('country'));
+
+        if ($country === '') {
+            $this->error('The --country option cannot be empty.');
+            return 1;
+        }
 
         // Resolve the user if provided
         $user = null;
@@ -62,6 +68,9 @@ class ImportStudentsFromExcel extends Command
             $this->info("Import will be attributed to user: {$user->name}");
             $this->newLine();
         }
+
+        $this->info("New students will get country: {$country}");
+        $this->newLine();
 
         $filePath = storage_path('app/imports/' . $filename);
 
@@ -109,7 +118,7 @@ class ImportStudentsFromExcel extends Command
 
             // Process data rows (skip header)
             $dataRows = array_slice($rows, 1);
-            $results = $this->processRows($dataRows, $columnIndices, $isDryRun, $user);
+            $results = $this->processRows($dataRows, $columnIndices, $isDryRun, $user, $country);
 
             // Generate duplicates file
             if (!empty($results['duplicates'])) {
@@ -216,7 +225,7 @@ class ImportStudentsFromExcel extends Command
     /**
      * Process data rows
      */
-    private function processRows(array $rows, array $columnIndices, bool $isDryRun, ?User $user = null): array
+    private function processRows(array $rows, array $columnIndices, bool $isDryRun, ?User $user = null, string $country = 'unknown'): array
     {
         $created = 0;
         $duplicates = [];
@@ -326,7 +335,7 @@ class ImportStudentsFromExcel extends Command
                         'address' => 'unknown',
                         'city' => 'unknown',
                         'state' => 'unknown',
-                        'country' => 'unknown',
+                        'country' => $country,
                         'post_code' => 'unknown',
                     ]);
 
