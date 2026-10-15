@@ -230,17 +230,28 @@ def evaluate(manifest, state, saved, now, max_lag_hours):
     elif requested.get('row_sha256') != manifest['last_row_sha256']:
         problems.append('ALERT: live activity_log row #%d differs from the journal copy (restore with reused ids, or edited row).' % last_id)
 
-    exported_at = parse_time(manifest['exported_at'])
-    if live_max > last_id and exported_at is not None:
-        age_hours = (now - exported_at).total_seconds() / 3600
-        if age_hours > max_lag_hours:
-            problems.append('PROBLEM: the live database has rows after #%d but the newest journal export is %.1f hours old (export stalled?).' % (last_id, age_hours))
+    # Rows the journal does not hold yet are only a problem if they stay unexported.
+    # The exporter writes nothing while there is nothing new, so the age of the newest
+    # journal file says nothing: after a quiet night the first new row would look like a
+    # stalled export. Time the wait from when THIS checker first saw rows after the
+    # journal's last id; the timer restarts whenever the journal moves forward.
+    pending_since = None
+    if live_max > last_id:
+        pending_since = parse_time(saved.get('pending_since')) if saved.get('pending_journal_id') == last_id else None
+        if pending_since is None or pending_since > now:
+            pending_since = now
+        waited_hours = (now - pending_since).total_seconds() / 3600
+        if waited_hours > max_lag_hours:
+            problems.append('PROBLEM: the live database has rows after #%d that have waited %.1f hours without being exported (export stalled?).' % (last_id, waited_hours))
 
     new_saved = {
         'max_live_id': max(int(saved.get('max_live_id', 0)), live_max),
         'max_journal_id': max(int(saved.get('max_journal_id', 0)), last_id),
         'updated_at': now.strftime('%Y-%m-%dT%H:%M:%SZ'),
     }
+    if pending_since is not None:
+        new_saved['pending_journal_id'] = last_id
+        new_saved['pending_since'] = pending_since.strftime('%Y-%m-%dT%H:%M:%SZ')
     return problems, new_saved
 
 

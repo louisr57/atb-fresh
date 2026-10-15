@@ -122,10 +122,60 @@ class EvaluateTest(unittest.TestCase):
         problems, _ = self.run_eval({'activity_log': {'max_id': None}, 'requested': {'id': 3, 'exists': False}})
         self.assertTrue(any('gone BACK' in p for p in problems))
 
+    def pending_saved(self, hours_ago, journal_id=None):
+        return {
+            'pending_journal_id': self.manifest['last_id'] if journal_id is None else journal_id,
+            'pending_since': (NOW - timedelta(hours=hours_ago)).strftime('%Y-%m-%dT%H:%M:%SZ'),
+        }
+
     def test_stalled_export_with_pending_rows(self):
-        old = dict(self.manifest, exported_at=(NOW - timedelta(hours=5)).isoformat())
-        problems, _ = self.run_eval(live_state(self.manifest, max_id=7), manifest=old)
+        problems, _ = self.run_eval(live_state(self.manifest, max_id=7), saved=self.pending_saved(5))
         self.assertTrue(any('export stalled' in p for p in problems))
+
+    def test_first_new_rows_after_a_quiet_spell_are_not_a_stall(self):
+        # The newest journal file is 38 hours old because nothing was written, not because the
+        # export broke. This is the false alarm seen on 2026-10-14.
+        old = dict(self.manifest, exported_at=(NOW - timedelta(hours=38)).isoformat())
+        problems, saved = self.run_eval(live_state(self.manifest, max_id=7), manifest=old)
+        self.assertEqual(problems, [])
+        self.assertEqual(saved['pending_journal_id'], 3)
+        self.assertEqual(saved['pending_since'], NOW.strftime('%Y-%m-%dT%H:%M:%SZ'))
+
+    def test_pending_rows_within_the_limit_are_fine_and_keep_their_start_time(self):
+        before = self.pending_saved(1)
+        problems, saved = self.run_eval(live_state(self.manifest, max_id=7), saved=before)
+        self.assertEqual(problems, [])
+        self.assertEqual(saved['pending_since'], before['pending_since'])
+
+    def test_pending_exactly_at_the_limit_is_fine(self):
+        problems, _ = self.run_eval(live_state(self.manifest, max_id=7), saved=self.pending_saved(3))
+        self.assertEqual(problems, [])
+
+    def test_pending_timer_restarts_when_the_journal_moves_forward(self):
+        # Rows were waiting for 5 hours behind an older journal id, but the journal has since
+        # advanced to #3 and new rows have appeared, so the clock starts again now.
+        problems, saved = self.run_eval(live_state(self.manifest, max_id=7), saved=self.pending_saved(5, journal_id=2))
+        self.assertEqual(problems, [])
+        self.assertEqual(saved['pending_since'], NOW.strftime('%Y-%m-%dT%H:%M:%SZ'))
+
+    def test_pending_marker_is_cleared_once_the_journal_catches_up(self):
+        problems, saved = self.run_eval(live_state(self.manifest), saved=self.pending_saved(5))
+        self.assertEqual(problems, [])
+        self.assertNotIn('pending_since', saved)
+        self.assertNotIn('pending_journal_id', saved)
+
+    def test_corrupt_or_future_pending_time_restarts_the_clock(self):
+        for bad in ('not a time', (NOW + timedelta(hours=2)).strftime('%Y-%m-%dT%H:%M:%SZ')):
+            saved = {'pending_journal_id': 3, 'pending_since': bad}
+            problems, new_saved = self.run_eval(live_state(self.manifest, max_id=7), saved=saved)
+            self.assertEqual(problems, [])
+            self.assertEqual(new_saved['pending_since'], NOW.strftime('%Y-%m-%dT%H:%M:%SZ'))
+
+    def test_state_file_from_the_older_checker_still_works(self):
+        saved = {'max_live_id': 3, 'max_journal_id': 3, 'updated_at': '2026-10-13T16:20:01Z'}
+        problems, new_saved = self.run_eval(live_state(self.manifest, max_id=7), saved=saved)
+        self.assertEqual(problems, [])
+        self.assertEqual(new_saved['pending_since'], NOW.strftime('%Y-%m-%dT%H:%M:%SZ'))
 
     def test_old_manifest_without_pending_rows_is_fine(self):
         old = dict(self.manifest, exported_at=(NOW - timedelta(hours=30)).isoformat())
