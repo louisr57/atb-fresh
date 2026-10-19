@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -24,7 +25,7 @@ class Event extends Model
         'course_id',
         'facilitator_id',
         'remarks',
-        'participant_count'
+        'participant_count',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -40,7 +41,7 @@ class Event extends Model
                 'course_id',
                 'facilitator_id',
                 'remarks',
-                'participant_count'
+                'participant_count',
             ])
             ->logOnlyDirty()
             ->setDescriptionForEvent(fn (string $eventName) => "Event has been {$eventName}")
@@ -68,7 +69,8 @@ class Event extends Model
     }
 
     // Define relationship with the Course model
-    public function course()
+    /** @return BelongsTo<Course, $this> */
+    public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
     }
@@ -79,7 +81,8 @@ class Event extends Model
             ->withTimestamps();
     }
 
-    public function venue()
+    /** @return BelongsTo<Venue, $this> */
+    public function venue(): BelongsTo
     {
         return $this->belongsTo(Venue::class);
     }
