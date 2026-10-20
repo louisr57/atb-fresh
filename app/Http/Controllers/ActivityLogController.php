@@ -2,12 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\Event;
-use App\Models\Facilitator;
-use App\Models\Registration;
 use App\Models\Student;
-use App\Models\Venue;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 
@@ -87,70 +82,5 @@ class ActivityLogController extends Controller
             ->paginate(20);
 
         return view('activity-logs.student', compact('activities', 'student'));
-    }
-
-    public function courseLogs($courseId)
-    {
-        $course = (new Course)->findOrFail($courseId);
-
-        $activities = Activity::with(['causer'])
-            ->where('subject_type', Course::class)
-            ->where('subject_id', $courseId)
-            ->latest()
-            ->paginate(20);
-
-        return view('activity-logs.course', compact('activities', 'course'));
-    }
-
-    public function facilitatorLogs($facilitatorId)
-    {
-        $facilitator = (new Facilitator)->findOrFail($facilitatorId);
-
-        $activities = Activity::with(['causer'])
-            ->where('subject_type', Facilitator::class)
-            ->where('subject_id', $facilitatorId)
-            ->latest()
-            ->paginate(20);
-
-        return view('activity-logs.facilitator', compact('activities', 'facilitator'));
-    }
-
-    public function eventLogs($eventId)
-    {
-        $event = (new Event)->findOrFail($eventId);
-
-        $activities = Activity::with(['causer'])
-            ->where('subject_type', Event::class)
-            ->where('subject_id', $eventId)
-            ->latest()
-            ->paginate(20);
-
-        return view('activity-logs.event', compact('activities', 'event'));
-    }
-
-    public function registrationLogs($registrationId)
-    {
-        $registration = (new Registration)->findOrFail($registrationId);
-
-        $activities = Activity::with(['causer'])
-            ->where('subject_type', Registration::class)
-            ->where('subject_id', $registrationId)
-            ->latest()
-            ->paginate(20);
-
-        return view('activity-logs.registration', compact('activities', 'registration'));
-    }
-
-    public function venueLogs($venueId)
-    {
-        $venue = (new Venue)->findOrFail($venueId);
-
-        $activities = Activity::with(['causer'])
-            ->where('subject_type', Venue::class)
-            ->where('subject_id', $venueId)
-            ->latest()
-            ->paginate(20);
-
-        return view('activity-logs.venue', compact('activities', 'venue'));
     }
 }
