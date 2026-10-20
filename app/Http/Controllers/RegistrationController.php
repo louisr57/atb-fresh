@@ -107,13 +107,13 @@ class RegistrationController extends Controller
             'request_data' => $request->all(),
             'registration_id' => $registration->id,
             'is_ajax' => $request->ajax(),
-            'content_type' => $request->header('Content-Type')
+            'content_type' => $request->header('Content-Type'),
         ]);
 
         try {
             $validatedData = $request->validate([
                 'end_status' => 'required|in:Registered,Withdrawn,Completed,Incomplete',
-                'comments' => 'nullable|string'
+                'comments' => 'nullable|string',
             ]);
 
             \Log::info('Validated data', ['data' => $validatedData]);
@@ -123,10 +123,10 @@ class RegistrationController extends Controller
 
             \Log::info('Save attempt result', [
                 'saved' => $saved,
-                'registration' => $registration->toArray()
+                'registration' => $registration->toArray(),
             ]);
 
-            if (!$saved) {
+            if (! $saved) {
                 throw new \Exception('Failed to save registration');
             }
 
@@ -136,9 +136,10 @@ class RegistrationController extends Controller
                 $response = [
                     'success' => true,
                     'message' => 'Registration updated successfully',
-                    'registration' => $registration->toArray()
+                    'registration' => $registration->toArray(),
                 ];
                 \Log::info('Sending JSON response', $response);
+
                 return response()->json($response);
             }
 
@@ -147,13 +148,13 @@ class RegistrationController extends Controller
             \Log::error('Error updating registration', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'registration_id' => $registration->id
+                'registration_id' => $registration->id,
             ]);
 
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error updating registration: ' . $e->getMessage()
+                    'message' => 'Error updating registration: '.$e->getMessage(),
                 ], 500);
             }
 

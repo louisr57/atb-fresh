@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Facilitator;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Rinvex\Country\CountryLoader; // If you're using the Laravel package for countries
+use Rinvex\Country\CountryLoader;
+
+ // If you're using the Laravel package for countries
 
 class FacilitatorController extends Controller
 {
@@ -107,7 +110,7 @@ class FacilitatorController extends Controller
                 'date',
                 function ($attribute, $value, $fail) use ($minBirthYear, $maxBirthYear) {
                     if ($value) {
-                        $dob = \Carbon\Carbon::parse($value);
+                        $dob = Carbon::parse($value);
                         if ($dob->year < $minBirthYear || $dob->year > $maxBirthYear) {
                             $fail("The date of birth must be between {$minBirthYear} and {$maxBirthYear}.");
                         }
@@ -154,7 +157,7 @@ class FacilitatorController extends Controller
                 'date',
                 function ($attribute, $value, $fail) use ($minBirthYear, $maxBirthYear) {
                     if ($value) {
-                        $dob = \Carbon\Carbon::parse($value);
+                        $dob = Carbon::parse($value);
                         if ($dob->year < $minBirthYear || $dob->year > $maxBirthYear) {
                             $fail("The date of birth must be between {$minBirthYear} and {$maxBirthYear}.");
                         }

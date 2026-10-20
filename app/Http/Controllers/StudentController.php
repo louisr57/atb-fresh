@@ -60,7 +60,7 @@ class StudentController extends Controller
         ]);
 
         $student = Student::create($validated);
-        //The warning "Non static method 'create' should not be called statically" is a false positive from the IDE.
+        // The warning "Non static method 'create' should not be called statically" is a false positive from the IDE.
         // In Laravel, the create() method is inherited from the Eloquent Model class and is designed to be called statically.
         // The current usage Student::create($validated) is the correct way to create new model instances in Laravel.
         // This is a common pattern in Laravel's Eloquent ORM, and you can safely ignore this IDE warning. The code is working as intended.

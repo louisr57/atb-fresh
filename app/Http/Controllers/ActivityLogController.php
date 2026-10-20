@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\Event;
+use App\Models\Facilitator;
+use App\Models\Registration;
 use App\Models\Student;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 
@@ -23,12 +28,12 @@ class ActivityLogController extends Controller
         // Filter by model type and subject_id if provided
         if ($request->filled('model')) {
             $modelMap = [
-                'student' => \App\Models\Student::class,
-                'course' => \App\Models\Course::class,
-                'event' => \App\Models\Event::class,
-                'facilitator' => \App\Models\Facilitator::class,
-                'registration' => \App\Models\Registration::class,
-                'venue' => \App\Models\Venue::class,
+                'student' => Student::class,
+                'course' => Course::class,
+                'event' => Event::class,
+                'facilitator' => Facilitator::class,
+                'registration' => Registration::class,
+                'venue' => Venue::class,
             ];
 
             if (isset($modelMap[$request->model])) {

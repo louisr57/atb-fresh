@@ -4,6 +4,7 @@ use App\Models\Course;
 use App\Models\Event;
 use App\Models\Registration;
 use App\Models\Student;
+use App\Models\User;
 use App\Models\Venue;
 
 function makeRegistrationForSoftDeleteTest(): Registration
@@ -92,7 +93,7 @@ test('per-student activity log page is viewable for a soft-deleted student', fun
     $student = Student::factory()->create();
     $student->delete();
 
-    $this->actingAs(App\Models\User::factory()->create())
+    $this->actingAs(User::factory()->create())
         ->get(route('activity-logs.student', $student->id))
         ->assertOk()
         ->assertSee('This student has been deleted.');

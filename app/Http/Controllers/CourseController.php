@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request; // Assuming your model is named 'Course'
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 // Following TODO extension terms are just for reminding me to use them in the future
 // I've seen many places in the codebase where other authors have used these.
@@ -74,7 +74,7 @@ class CourseController extends Controller
                     ->orderBy('venues.country', $direction)
                     ->select('events.*');
             })
-            ->when(!in_array($sort_by, ['participant_count', 'facilitator', 'venue', 'city', 'state', 'country']), function ($query) use ($sort_by, $direction) {
+            ->when(! in_array($sort_by, ['participant_count', 'facilitator', 'venue', 'city', 'state', 'country']), function ($query) use ($sort_by, $direction) {
                 return $query->orderBy($sort_by, $direction);
             })
             ->paginate(10);

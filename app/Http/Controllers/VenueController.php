@@ -6,9 +6,9 @@ use App\Models\Venue;
 use App\Services\VenueSimilarityChecker;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
 
 class VenueController extends Controller
 {
@@ -80,7 +80,7 @@ class VenueController extends Controller
             return $warning;
         }
 
-        $venue = new Venue();
+        $venue = new Venue;
         $venue->fill($validated);
         $venue->save();
 

@@ -211,7 +211,7 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
-        if (!$event->isEmpty()) {
+        if (! $event->isEmpty()) {
             return redirect()->route('events.show', $event->id)
                 ->with('error', 'Cannot delete event with existing registered participants.');
         }

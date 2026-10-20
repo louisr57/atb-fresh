@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FacilitatorController;
 use App\Http\Controllers\MonitoringStateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\VenueController;
 use Illuminate\Support\Facades\Route;
