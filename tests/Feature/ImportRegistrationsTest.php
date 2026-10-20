@@ -16,8 +16,9 @@ use Spatie\Activitylog\Models\Activity;
  * Dates given as Y-m-d strings are stored as real Excel date serials.
  *
  * @param  array<int, array<int, string|null>>  $rows  [course, Y-m-d, venue, first, last, email]
+ * @param  array<int, string>|null  $headers  Header row; defaults to the first/last name layout
  */
-function makeRegistrationSheet(array $rows): string
+function makeRegistrationSheet(array $rows, ?array $headers = null): string
 {
     $dir = storage_path('app/imports');
     if (! is_dir($dir)) {
@@ -27,7 +28,7 @@ function makeRegistrationSheet(array $rows): string
     $name = 'test_registrations_'.uniqid().'.xlsx';
     $spreadsheet = new Spreadsheet;
     $sheet = $spreadsheet->getActiveSheet();
-    $sheet->fromArray(['Course Title', 'Start Date', 'Venue', 'First name', 'Last Name', 'Email Adress']);
+    $sheet->fromArray($headers ?? ['Course Title', 'Start Date', 'Venue', 'First name', 'Last Name', 'Email Adress']);
 
     foreach ($rows as $i => $row) {
         $line = $i + 2;
@@ -172,6 +173,52 @@ test('a name that differs from the database does not block an email match', func
     $this->artisan('registrations:import', ['filename' => $file])->assertExitCode(0);
 
     expect(Registration::where('student_id', $s->id)->where('event_id', $event->id)->exists())->toBeTrue();
+});
+
+test('accepts a single Full Name column and matches by email', function () {
+    $event = makeTestEvent();
+    $s = Student::factory()->create(['email' => 'fn@example.com', 'first_name' => 'Ana', 'last_name' => 'Lopez']);
+    $file = makeRegistrationSheet(
+        [['ATB 1', '2019-06-22', 'Auromira', 'Totally Different Name', 'fn@example.com']],
+        ['Course Title', 'Start Date', 'Venue', 'Full Name', 'Email Adress'],
+    );
+
+    $this->artisan('registrations:import', ['filename' => $file])
+        ->expectsOutputToContain('Warnings: 1')
+        ->assertExitCode(0);
+
+    expect(Registration::where('student_id', $s->id)->where('event_id', $event->id)->exists())->toBeTrue();
+});
+
+test('full name comparison ignores word order, accents and the first/last split', function () {
+    makeTestEvent();
+    Student::factory()->create(['email' => 'a@example.com', 'first_name' => 'Claudia', 'last_name' => 'Medina']);
+    Student::factory()->create(['email' => 'b@example.com', 'first_name' => 'Martha Lucia', 'last_name' => 'Velasco Morales']);
+    Student::factory()->create(['email' => 'c@example.com', 'first_name' => 'Gretha', 'last_name' => 'Tobón']);
+    $file = makeRegistrationSheet(
+        [
+            ['ATB 1', '2019-06-22', 'Auromira', 'Medina Claudia', 'a@example.com'],
+            ['ATB 1', '2019-06-22', 'Auromira', 'Martha Lucia Velasco Morales', 'b@example.com'],
+            ['ATB 1', '2019-06-22', 'Auromira', 'Gretha Tobon', 'c@example.com'],
+        ],
+        ['Course Title', 'Start Date', 'Venue', 'Full Name', 'Email Adress'],
+    );
+
+    $this->artisan('registrations:import', ['filename' => $file])
+        ->expectsOutputToContain('Warnings: 0')
+        ->assertExitCode(0);
+
+    expect(Registration::count())->toBe(3);
+});
+
+test('fails when neither a full name nor both first and last name columns exist', function () {
+    makeTestEvent();
+    $file = makeRegistrationSheet(
+        [['ATB 1', '2019-06-22', 'Auromira', 'x@example.com']],
+        ['Course Title', 'Start Date', 'Venue', 'Email Adress'],
+    );
+
+    $this->artisan('registrations:import', ['filename' => $file])->assertExitCode(1);
 });
 
 test('--user attributes the activity entries to that user', function () {

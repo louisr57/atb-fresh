@@ -40,9 +40,17 @@ class ImportRegistrationsFromExcel extends Command
         'course_title' => ['course title', 'course_title', 'course', 'course name', 'event'],
         'start_date' => ['start date', 'start_date', 'startdate', 'date from', 'datefrom', 'date'],
         'venue' => ['venue', 'venue name', 'venue_name'],
+        'email' => ['email', 'email_address', 'email address', 'email adress', 'e-mail', 'e_mail'],
+    ];
+
+    /**
+     * Name columns: the sheet needs either a single full name column or both first and last name.
+     * The name is only used for a non-blocking warning; the email is the match key.
+     */
+    private $nameMappings = [
+        'full_name' => ['full name', 'full_name', 'fullname', 'name', 'student name', 'student'],
         'first_name' => ['first_name', 'firstname', 'first name', 'first-name', 'fname'],
         'last_name' => ['last_name', 'lastname', 'last name', 'last-name', 'lname', 'surname'],
-        'email' => ['email', 'email_address', 'email address', 'email adress', 'e-mail', 'e_mail'],
     ];
 
     /** Rows that were not registered: each is [row, email, event label, reason]. */
@@ -142,7 +150,24 @@ class ImportRegistrationsFromExcel extends Command
             }
         }
 
-        return $indices;
+        $names = [];
+        foreach ($this->nameMappings as $field => $variations) {
+            foreach ($variations as $variation) {
+                $index = array_search($variation, $headers, true);
+                if ($index !== false) {
+                    $names[$field] = $index;
+                    break;
+                }
+            }
+        }
+
+        if (! isset($names['full_name']) && ! (isset($names['first_name']) && isset($names['last_name']))) {
+            $this->error("Name column not found. Provide either a 'Full Name' column or both 'First name' and 'Last name' columns.");
+
+            return null;
+        }
+
+        return $indices + $names;
     }
 
     /**
@@ -170,9 +195,16 @@ class ImportRegistrationsFromExcel extends Command
         return Str::lower(trim(preg_replace('/\s+/u', ' ', (string) $value)));
     }
 
-    private function nameKey(?string $first, ?string $last): string
+    /**
+     * Order-insensitive, accent-insensitive key for comparing names, so the same words split
+     * differently between first/last (or in another order) do not trigger a warning.
+     */
+    private function nameKey(?string $name): string
     {
-        return Str::lower(Str::ascii(trim(preg_replace('/\s+/u', ' ', trim((string) $first).' '.trim((string) $last)))));
+        $words = preg_split('/\s+/u', Str::lower(Str::ascii(trim((string) $name))), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        sort($words);
+
+        return implode(' ', $words);
     }
 
     /**
@@ -204,8 +236,9 @@ class ImportRegistrationsFromExcel extends Command
             $groups[$key]['raw_date'] = trim((string) $rawDate);
             $groups[$key]['rows'][] = [
                 'row' => $rowNumber,
-                'first_name' => $cell('first_name'),
-                'last_name' => $cell('last_name'),
+                'name' => isset($columns['full_name'])
+                    ? $cell('full_name')
+                    : trim($cell('first_name').' '.$cell('last_name')),
                 'email' => Str::lower($cell('email')),
             ];
         }
@@ -351,8 +384,8 @@ class ImportRegistrationsFromExcel extends Command
                 continue;
             }
 
-            if ($this->nameKey($r['first_name'], $r['last_name']) !== $this->nameKey($student->first_name, $student->last_name)) {
-                $this->warnings[] = "Row {$row}: sheet name \"".trim($r['first_name'].' '.$r['last_name']).'" differs from database name "'.trim($student->first_name.' '.$student->last_name)."\" for student #{$student->id} ({$email}); matched by email";
+            if ($this->nameKey($r['name']) !== $this->nameKey($student->first_name.' '.$student->last_name)) {
+                $this->warnings[] = "Row {$row}: sheet name \"".$r['name'].'" differs from database name "'.trim($student->first_name.' '.$student->last_name)."\" for student #{$student->id} ({$email}); matched by email";
             }
 
             $plan[] = ['row' => $row, 'student' => $student];
