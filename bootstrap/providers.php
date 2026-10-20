@@ -1,7 +1,10 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use Barryvdh\Debugbar\ServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
+    AppServiceProvider::class,
     // App\Providers\TelescopeServiceProvider::class, // Temporarily disabled until fixed
-    Barryvdh\Debugbar\ServiceProvider::class,
+    ServiceProvider::class,
 ];

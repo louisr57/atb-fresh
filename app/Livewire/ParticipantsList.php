@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Event;
 use App\Models\Registration;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -70,7 +71,7 @@ class ParticipantsList extends Component
 
             $this->dispatch('registration-deleted');
             $this->event->refresh();
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->dispatch(
                 'flash-message',
                 message: 'Registration not found. It may have been already deleted.',

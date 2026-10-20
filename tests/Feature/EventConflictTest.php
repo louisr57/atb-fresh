@@ -196,4 +196,3 @@ test('the conflicts command can also report similar venues', function () {
         ->expectsOutputToContain('No scheduling clashes found.')
         ->assertSuccessful();
 });
-

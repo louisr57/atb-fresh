@@ -2,16 +2,20 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Registration;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class RegistrationEdit extends Component
 {
     public Registration $registration;
+
     public $isEditing = false;
+
     public $end_status;
+
     public $comments;
+
     public $statuses = ['Registered', 'Withdrawn', 'Completed', 'Incomplete'];
 
     public function mount(Registration $registration)
@@ -39,10 +43,9 @@ class RegistrationEdit extends Component
     public function saveChanges($id)
     {
         $validated = $this->validate([
-            'end_status' => 'required|in:' . implode(',', $this->statuses),
-            'comments' => 'nullable|string'
+            'end_status' => 'required|in:'.implode(',', $this->statuses),
+            'comments' => 'nullable|string',
         ]);
-
 
         $this->registration->update($validated);
         $this->registration->refresh();

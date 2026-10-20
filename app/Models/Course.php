@@ -18,7 +18,7 @@ class Course extends Model
         'course_title',
         'description',
         'prerequisites',
-        'duration'
+        'duration',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -29,7 +29,7 @@ class Course extends Model
                 'course_title',
                 'description',
                 'prerequisites',
-                'duration'
+                'duration',
             ])
             ->logOnlyDirty()
             ->setDescriptionForEvent(fn (string $eventName) => "Course has been {$eventName}")

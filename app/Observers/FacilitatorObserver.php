@@ -5,7 +5,6 @@ namespace App\Observers;
 use App\Models\Facilitator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class FacilitatorObserver
 {
@@ -17,7 +16,7 @@ class FacilitatorObserver
         // Check if a user with this email already exists
         $user = (new User)->newQuery()->where('email', $facilitator->email)->first();
 
-        if (!$user) {
+        if (! $user) {
             // Create new user
             $user = (new User)->newQuery()->create([
                 'name' => $facilitator->first_name,

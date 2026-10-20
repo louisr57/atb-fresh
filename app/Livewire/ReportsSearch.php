@@ -2,11 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Course;
 use App\Models\Registration;
-use App\Models\Event;
-use App\Models\Student;
-use App\Models\Venue;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,16 +11,27 @@ class ReportsSearch extends Component
     use WithPagination;
 
     public $showSearch = true;
+
     public $search_course;
+
     public $search_status;
+
     public $search_date_operator = '=';
+
     public $search_date;
+
     public $search_student_city;
+
     public $search_student_country;
+
     public $search_venue_name;
+
     public $search_venue_address;
+
     public $search_venue_city;
+
     public $search_venue_state;
+
     public $search_venue_country;
 
     protected $queryString = [
@@ -37,12 +44,12 @@ class ReportsSearch extends Component
         'search_venue_address' => ['except' => ''],
         'search_venue_city' => ['except' => ''],
         'search_venue_state' => ['except' => ''],
-        'search_venue_country' => ['except' => '']
+        'search_venue_country' => ['except' => ''],
     ];
 
     public function toggleSearch()
     {
-        $this->showSearch = !$this->showSearch;
+        $this->showSearch = ! $this->showSearch;
     }
 
     public $emailList = '';
@@ -123,7 +130,7 @@ class ReportsSearch extends Component
             'search_venue_city',
             'search_venue_state',
             'search_venue_country',
-            'emailList' // Clear the email list
+            'emailList', // Clear the email list
         ]);
         $this->resetPage();
     }
@@ -200,15 +207,33 @@ class ReportsSearch extends Component
         $venueCountriesQuery = clone $baseQuery;
 
         // Remove each field's own filter when getting its options
-        if ($this->search_course) $coursesQuery->where('courses.course_title', '=', $this->search_course);
-        if ($this->search_status) $statusesQuery->where('registrations.end_status', '=', $this->search_status);
-        if ($this->search_date) $datesQuery->where('events.datefrom', $this->search_date_operator, $this->search_date);
-        if ($this->search_student_city) $studentCitiesQuery->where('students.city', '=', $this->search_student_city);
-        if ($this->search_student_country) $studentCountriesQuery->where('students.country', '=', $this->search_student_country);
-        if ($this->search_venue_name) $venueNamesQuery->where('venues.venue_name', '=', $this->search_venue_name);
-        if ($this->search_venue_city) $venueCitiesQuery->where('venues.city', '=', $this->search_venue_city);
-        if ($this->search_venue_state) $venueStatesQuery->where('venues.state', '=', $this->search_venue_state);
-        if ($this->search_venue_country) $venueCountriesQuery->where('venues.country', '=', $this->search_venue_country);
+        if ($this->search_course) {
+            $coursesQuery->where('courses.course_title', '=', $this->search_course);
+        }
+        if ($this->search_status) {
+            $statusesQuery->where('registrations.end_status', '=', $this->search_status);
+        }
+        if ($this->search_date) {
+            $datesQuery->where('events.datefrom', $this->search_date_operator, $this->search_date);
+        }
+        if ($this->search_student_city) {
+            $studentCitiesQuery->where('students.city', '=', $this->search_student_city);
+        }
+        if ($this->search_student_country) {
+            $studentCountriesQuery->where('students.country', '=', $this->search_student_country);
+        }
+        if ($this->search_venue_name) {
+            $venueNamesQuery->where('venues.venue_name', '=', $this->search_venue_name);
+        }
+        if ($this->search_venue_city) {
+            $venueCitiesQuery->where('venues.city', '=', $this->search_venue_city);
+        }
+        if ($this->search_venue_state) {
+            $venueStatesQuery->where('venues.state', '=', $this->search_venue_state);
+        }
+        if ($this->search_venue_country) {
+            $venueCountriesQuery->where('venues.country', '=', $this->search_venue_country);
+        }
 
         return view('livewire.reports-search', [
             'results' => $results,
@@ -221,7 +246,7 @@ class ReportsSearch extends Component
             'venueCities' => $venueCitiesQuery->select('venues.city')->whereNotNull('venues.city')->distinct()->orderBy('venues.city')->pluck('city'),
             'venueStates' => $venueStatesQuery->select('venues.state')->whereNotNull('venues.state')->distinct()->orderBy('venues.state')->pluck('state'),
             'venueCountries' => $venueCountriesQuery->select('venues.country')->whereNotNull('venues.country')->distinct()->orderBy('venues.country')->pluck('country'),
-            'dates' => $datesQuery->select('events.datefrom')->distinct()->orderBy('events.datefrom', 'asc')->pluck('datefrom')
+            'dates' => $datesQuery->select('events.datefrom')->distinct()->orderBy('events.datefrom', 'asc')->pluck('datefrom'),
         ]);
     }
 }

@@ -28,7 +28,7 @@ class Facilitator extends Model
         'country',
         'post_code',
         'website',
-        'dob'
+        'dob',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -47,7 +47,7 @@ class Facilitator extends Model
                 'country',
                 'post_code',
                 'website',
-                'dob'
+                'dob',
             ])
             ->logOnlyDirty()
             ->setDescriptionForEvent(fn (string $facilitatorName) => "Facilitator has been {$facilitatorName}")

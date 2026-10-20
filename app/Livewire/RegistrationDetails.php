@@ -2,14 +2,17 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Registration;
+use Livewire\Component;
 
 class RegistrationDetails extends Component
 {
     public Registration $registration;
+
     public $isEditing = false;
+
     public $end_status;
+
     public $comments;
 
     public function mount(Registration $registration)
@@ -35,7 +38,7 @@ class RegistrationDetails extends Component
     {
         $this->registration->update([
             'end_status' => $this->end_status,
-            'comments' => $this->comments
+            'comments' => $this->comments,
         ]);
 
         $this->isEditing = false;
@@ -44,7 +47,7 @@ class RegistrationDetails extends Component
     public function render()
     {
         return view('livewire.registration-details', [
-            'statuses' => ['Registered', 'Withdrawn', 'Completed', 'Incomplete']
+            'statuses' => ['Registered', 'Withdrawn', 'Completed', 'Incomplete'],
         ]);
     }
 }

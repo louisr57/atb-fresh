@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Student;
-use Illuminate\Console\Command;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class DeleteStudentsByDate extends Command
 {
@@ -31,6 +31,7 @@ class DeleteStudentsByDate extends Command
             $date = Carbon::createFromFormat('Y-m-d', $dateInput);
         } catch (\Exception $e) {
             $this->error('Invalid date format. Please use YYYY-MM-DD format (e.g., 2024-01-15)');
+
             return 1;
         }
 
@@ -39,6 +40,7 @@ class DeleteStudentsByDate extends Command
 
         if ($students->isEmpty()) {
             $this->info("No students found created on {$date->format('Y-m-d')}");
+
             return 0;
         }
 
@@ -49,9 +51,9 @@ class DeleteStudentsByDate extends Command
             $students->map(function ($student) {
                 return [
                     $student->id,
-                    $student->first_name . ' ' . $student->last_name,
+                    $student->first_name.' '.$student->last_name,
                     $student->email,
-                    $student->created_at->format('Y-m-d H:i:s')
+                    $student->created_at->format('Y-m-d H:i:s'),
                 ];
             })
         );
@@ -67,9 +69,10 @@ class DeleteStudentsByDate extends Command
         }
 
         // Confirmation prompt (unless --confirm flag is used)
-        if (!$skipConfirmation) {
-            if (!$this->confirm('Are you sure you want to delete these students and their related records?')) {
+        if (! $skipConfirmation) {
+            if (! $this->confirm('Are you sure you want to delete these students and their related records?')) {
                 $this->info('Operation cancelled.');
+
                 return 0;
             }
         }
@@ -84,14 +87,14 @@ class DeleteStudentsByDate extends Command
                 $deletedCount++;
                 $this->line("Deleted: {$student->first_name} {$student->last_name} (ID: {$student->id})");
             } catch (\Exception $e) {
-                $this->error("Failed to delete student ID {$student->id}: " . $e->getMessage());
+                $this->error("Failed to delete student ID {$student->id}: ".$e->getMessage());
             }
         }
 
         $this->info("Successfully deleted {$deletedCount} student(s) created on {$date->format('Y-m-d')}");
 
         if ($totalRegistrations > 0) {
-            $this->info("Related registrations were automatically cascade deleted");
+            $this->info('Related registrations were automatically cascade deleted');
         }
 
         return 0;

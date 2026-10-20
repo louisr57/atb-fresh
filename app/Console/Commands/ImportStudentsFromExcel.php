@@ -4,11 +4,11 @@ namespace App\Console\Commands;
 
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Console\Command;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Concerns\ToArray;
-use Spatie\Activitylog\Models\Activity;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Maatwebsite\Excel\Concerns\ToArray;
+use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Activitylog\Models\Activity;
 
 class ImportStudentsFromExcel extends Command
 {
@@ -47,6 +47,7 @@ class ImportStudentsFromExcel extends Command
 
         if ($country === '') {
             $this->error('The --country option cannot be empty.');
+
             return 1;
         }
 
@@ -54,7 +55,7 @@ class ImportStudentsFromExcel extends Command
         $user = null;
         if ($userName) {
             $user = $this->resolveUser($userName);
-            if (!$user) {
+            if (! $user) {
                 return 1; // Error already displayed in resolveUser method
             }
         }
@@ -72,19 +73,21 @@ class ImportStudentsFromExcel extends Command
         $this->info("New students will get country: {$country}");
         $this->newLine();
 
-        $filePath = storage_path('app/imports/' . $filename);
+        $filePath = storage_path('app/imports/'.$filename);
 
         // Check if file exists
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             $this->error("File not found: {$filePath}");
-            $this->info("Please place your Excel file in the storage/app/imports/ directory");
+            $this->info('Please place your Excel file in the storage/app/imports/ directory');
+
             return 1;
         }
 
         try {
             // Read Excel file
             $this->info("Processing {$filename}...");
-            $data = Excel::toArray(new class implements ToArray {
+            $data = Excel::toArray(new class implements ToArray
+            {
                 public function array(array $array): array
                 {
                     return $array;
@@ -93,6 +96,7 @@ class ImportStudentsFromExcel extends Command
 
             if (empty($data) || empty($data[0])) {
                 $this->error('Excel file is empty or invalid');
+
                 return 1;
             }
 
@@ -102,14 +106,14 @@ class ImportStudentsFromExcel extends Command
             $headers = array_map('strtolower', array_map('trim', $rows[0]));
             $columnIndices = $this->detectColumns($headers);
 
-            if (!$columnIndices) {
+            if (! $columnIndices) {
                 return 1;
             }
 
-            $this->info("✓ Found columns: " . implode(', ', [
+            $this->info('✓ Found columns: '.implode(', ', [
                 $rows[0][$columnIndices['first_name']],
                 $rows[0][$columnIndices['last_name']],
-                $rows[0][$columnIndices['email']]
+                $rows[0][$columnIndices['email']],
             ]));
 
             // Process data rows (skip header)
@@ -117,7 +121,7 @@ class ImportStudentsFromExcel extends Command
             $results = $this->processRows($dataRows, $columnIndices, $isDryRun, $user, $country);
 
             // Generate duplicates file
-            if (!empty($results['duplicates'])) {
+            if (! empty($results['duplicates'])) {
                 $this->generateDuplicatesFile($results['duplicates'], $isDryRun);
             }
 
@@ -127,7 +131,8 @@ class ImportStudentsFromExcel extends Command
             return 0;
 
         } catch (\Exception $e) {
-            $this->error("Error processing file: " . $e->getMessage());
+            $this->error('Error processing file: '.$e->getMessage());
+
             return 1;
         }
     }
@@ -150,8 +155,9 @@ class ImportStudentsFromExcel extends Command
                 }
             }
 
-            if (!$found) {
-                $this->error("Required column '{$field}' not found. Looking for variations: " . implode(', ', $variations));
+            if (! $found) {
+                $this->error("Required column '{$field}' not found. Looking for variations: ".implode(', ', $variations));
+
                 return null;
             }
         }
@@ -165,7 +171,7 @@ class ImportStudentsFromExcel extends Command
     private function isValidEmail(string $email): bool
     {
         // Use PHP's built-in email validation which follows RFC standards
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
@@ -205,13 +211,14 @@ class ImportStudentsFromExcel extends Command
     {
         $user = User::where('name', $userName)->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error("User '{$userName}' not found in the database.");
-            $this->info("Available users:");
+            $this->info('Available users:');
             $availableUsers = User::orderBy('name')->pluck('name')->toArray();
             foreach ($availableUsers as $availableUser) {
                 $this->line("  - {$availableUser}");
             }
+
             return null;
         }
 
@@ -240,20 +247,22 @@ class ImportStudentsFromExcel extends Command
                 if (empty($firstName) || empty($lastName) || empty($email)) {
                     $this->warn("⚠ Row {$actualRowNumber}: Skipped - missing required data");
                     $errors++;
+
                     continue;
                 }
 
                 // Validate email format - add to duplicates file if invalid
-                if (!$this->isValidEmail($email)) {
+                if (! $this->isValidEmail($email)) {
                     $duplicates[] = [
                         'row' => $actualRowNumber,
                         'first_name' => $firstName,
                         'last_name' => $lastName,
                         'email' => $email,
-                        'reason' => 'bad email'
+                        'reason' => 'bad email',
                     ];
                     $this->warn("⚠ Row {$actualRowNumber}: Skipped - invalid email format: {$email}");
                     $errors++;
+
                     continue;
                 }
 
@@ -264,9 +273,10 @@ class ImportStudentsFromExcel extends Command
                         'first_name' => $firstName,
                         'last_name' => $lastName,
                         'email' => $email,
-                        'reason' => 'duplicate email'
+                        'reason' => 'duplicate email',
                     ];
                     $this->warn("⚠ Row {$actualRowNumber}: Skipped duplicate email {$email}");
+
                     continue;
                 }
 
@@ -277,7 +287,7 @@ class ImportStudentsFromExcel extends Command
                 $trashedStudent = Student::onlyTrashed()->where('email', $email)->first();
 
                 if ($trashedStudent) {
-                    if (!$isDryRun) {
+                    if (! $isDryRun) {
                         $trashedStudent->restore();
 
                         // Create activity log entry for the restore, attributing it
@@ -295,7 +305,7 @@ class ImportStudentsFromExcel extends Command
                             if ($latestActivity) {
                                 $latestActivity->update([
                                     'causer_type' => User::class,
-                                    'causer_id' => $user->id
+                                    'causer_id' => $user->id,
                                 ]);
                             }
                         }
@@ -308,12 +318,12 @@ class ImportStudentsFromExcel extends Command
 
                         $activityLogger
                             ->performedOn($trashedStudent)
-                            ->log("Student restored via Excel import (previously soft-deleted)");
+                            ->log('Student restored via Excel import (previously soft-deleted)');
 
-                        $userInfo = $user ? " by {$user->name}" : "";
+                        $userInfo = $user ? " by {$user->name}" : '';
                         $this->info("↺ Row {$actualRowNumber}: Restored previously deleted student {$firstName} {$lastName} ({$email}){$userInfo}");
                     } else {
-                        $userInfo = $user ? " (would be attributed to {$user->name})" : "";
+                        $userInfo = $user ? " (would be attributed to {$user->name})" : '';
                         $this->info("↺ Row {$actualRowNumber}: Would restore previously deleted student {$firstName} {$lastName} ({$email}){$userInfo}");
                     }
 
@@ -323,7 +333,7 @@ class ImportStudentsFromExcel extends Command
                 }
 
                 // Create student (if not dry run)
-                if (!$isDryRun) {
+                if (! $isDryRun) {
                     $student = Student::create([
                         'first_name' => $firstName,
                         'last_name' => $lastName,
@@ -348,7 +358,7 @@ class ImportStudentsFromExcel extends Command
                         if ($latestActivity) {
                             $latestActivity->update([
                                 'causer_type' => User::class,
-                                'causer_id' => $user->id
+                                'causer_id' => $user->id,
                             ]);
                         }
                     }
@@ -362,19 +372,19 @@ class ImportStudentsFromExcel extends Command
 
                     $activityLogger
                         ->performedOn($student)
-                        ->log("Student imported from Excel file");
+                        ->log('Student imported from Excel file');
 
-                    $userInfo = $user ? " by {$user->name}" : "";
+                    $userInfo = $user ? " by {$user->name}" : '';
                     $this->info("✓ Row {$actualRowNumber}: Created student {$firstName} {$lastName} ({$email}){$userInfo}");
                 } else {
-                    $userInfo = $user ? " (would be attributed to {$user->name})" : "";
+                    $userInfo = $user ? " (would be attributed to {$user->name})" : '';
                     $this->info("✓ Row {$actualRowNumber}: Would create student {$firstName} {$lastName} ({$email}){$userInfo}");
                 }
 
                 $created++;
 
             } catch (\Exception $e) {
-                $this->error("✗ Row {$actualRowNumber}: Error - " . $e->getMessage());
+                $this->error("✗ Row {$actualRowNumber}: Error - ".$e->getMessage());
                 $errors++;
             }
         }
@@ -383,7 +393,7 @@ class ImportStudentsFromExcel extends Command
             'total' => count($rows),
             'created' => $created,
             'duplicates' => $duplicates,
-            'errors' => $errors
+            'errors' => $errors,
         ];
     }
 
@@ -394,32 +404,32 @@ class ImportStudentsFromExcel extends Command
     {
         $timestamp = Carbon::now()->format('Ymd_His');
         $filename = "duplicates_{$timestamp}.txt";
-        $filePath = storage_path('app/imports/' . $filename);
+        $filePath = storage_path('app/imports/'.$filename);
 
         $content = "Duplicate Email Records and Rejects Found\n";
-        $content .= "Generated: " . Carbon::now()->format('Y-m-d H:i:s') . "\n";
-        $content .= str_repeat("=", 60) . "\n\n";
+        $content .= 'Generated: '.Carbon::now()->format('Y-m-d H:i:s')."\n";
+        $content .= str_repeat('=', 60)."\n\n";
 
         foreach ($duplicates as $duplicate) {
-            $reason = isset($duplicate['reason']) ? " ({$duplicate['reason']})" : "";
+            $reason = isset($duplicate['reason']) ? " ({$duplicate['reason']})" : '';
             $content .= "Row {$duplicate['row']}: {$duplicate['first_name']}, {$duplicate['last_name']}, {$duplicate['email']}{$reason}\n";
         }
 
-        if (!$isDryRun) {
+        if (! $isDryRun) {
             file_put_contents($filePath, $content);
             $this->info("Duplicates/Rejects file created: storage/app/imports/{$filename}");
         } else {
             $this->info("Duplicates/Rejects file would be created at: storage/app/imports/{$filename}");
             $this->newLine();
-            $this->info("Preview of duplicates/rejects content:");
+            $this->info('Preview of duplicates/rejects content:');
             $previewLines = array_slice(explode("\n", $content), 0, 10);
             foreach ($previewLines as $line) {
-                if (!empty(trim($line))) {
+                if (! empty(trim($line))) {
                     $this->line($line);
                 }
             }
             if (count($duplicates) > 7) { // Account for header lines
-                $this->line("... and " . (count($duplicates) - 7) . " more duplicates/rejects");
+                $this->line('... and '.(count($duplicates) - 7).' more duplicates/rejects');
             }
         }
 
@@ -440,13 +450,13 @@ class ImportStudentsFromExcel extends Command
 
         $this->line("- Total rows processed: {$results['total']}");
         $this->line("- {$createdText}: {$results['created']}");
-        $this->line("- {$duplicatesText}: " . count($results['duplicates']));
+        $this->line("- {$duplicatesText}: ".count($results['duplicates']));
 
         if ($results['errors'] > 0) {
             $this->line("- Errors/Skipped: {$results['errors']}");
         }
 
-        if (!empty($results['duplicates']) && !$isDryRun) {
+        if (! empty($results['duplicates']) && ! $isDryRun) {
             $timestamp = Carbon::now()->format('Ymd_His');
             $this->line("- Duplicates/Rejects file: storage/app/imports/duplicates_{$timestamp}.txt");
         }

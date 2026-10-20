@@ -22,7 +22,7 @@ class Registration extends Model
                 'student_id',
                 'event_id',
                 'end_status',
-                'comments'
+                'comments',
             ])
             ->logOnlyDirty()
             ->setDescriptionForEvent(fn (string $registrationName) => "Registration has been {$registrationName}")
@@ -33,7 +33,7 @@ class Registration extends Model
         'student_id',
         'event_id',
         'end_status',
-        'comments'
+        'comments',
     ];
 
     // Define relationship with the Student model
@@ -54,14 +54,14 @@ class Registration extends Model
     {
         return $this->join('students', 'registrations.student_id', '=', 'students.id')
             ->where('registrations.event_id', $this->event_id)
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->whereRaw("CONCAT(students.first_name, ' ', students.last_name) > ?",
-                    [$this->student->first_name . ' ' . $this->student->last_name])
-                ->orWhere(function($q) {
-                    $q->whereRaw("CONCAT(students.first_name, ' ', students.last_name) = ?",
-                        [$this->student->first_name . ' ' . $this->student->last_name])
-                    ->where('registrations.id', '>', $this->id);
-                });
+                    [$this->student->first_name.' '.$this->student->last_name])
+                    ->orWhere(function ($q) {
+                        $q->whereRaw("CONCAT(students.first_name, ' ', students.last_name) = ?",
+                            [$this->student->first_name.' '.$this->student->last_name])
+                            ->where('registrations.id', '>', $this->id);
+                    });
             })
             ->orderByRaw("CONCAT(students.first_name, ' ', students.last_name) ASC")
             ->orderBy('registrations.id', 'asc')
@@ -73,14 +73,14 @@ class Registration extends Model
     {
         return $this->join('students', 'registrations.student_id', '=', 'students.id')
             ->where('registrations.event_id', $this->event_id)
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->whereRaw("CONCAT(students.first_name, ' ', students.last_name) < ?",
-                    [$this->student->first_name . ' ' . $this->student->last_name])
-                ->orWhere(function($q) {
-                    $q->whereRaw("CONCAT(students.first_name, ' ', students.last_name) = ?",
-                        [$this->student->first_name . ' ' . $this->student->last_name])
-                    ->where('registrations.id', '<', $this->id);
-                });
+                    [$this->student->first_name.' '.$this->student->last_name])
+                    ->orWhere(function ($q) {
+                        $q->whereRaw("CONCAT(students.first_name, ' ', students.last_name) = ?",
+                            [$this->student->first_name.' '.$this->student->last_name])
+                            ->where('registrations.id', '<', $this->id);
+                    });
             })
             ->orderByRaw("CONCAT(students.first_name, ' ', students.last_name) DESC")
             ->orderBy('registrations.id', 'desc')
@@ -99,13 +99,13 @@ class Registration extends Model
             ->get();
 
         // Find position of current registration (1-based index)
-        $position = $orderedRegistrations->search(function($item) {
+        $position = $orderedRegistrations->search(function ($item) {
             return $item->id === $this->id;
         }) + 1;
 
         return [
             'current' => $position,
-            'total' => $orderedRegistrations->count()
+            'total' => $orderedRegistrations->count(),
         ];
     }
 }

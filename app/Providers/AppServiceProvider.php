@@ -8,9 +8,9 @@ use App\Models\Registration;
 use App\Observers\FacilitatorObserver;
 use App\Observers\RegistrationObserver;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
-use Illuminate\Support\Facades\Cache;
 use Rinvex\Country\CountryLoader;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,9 +42,9 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Cache countries data for 24 hours
-        if (!$this->app->runningInConsole() || $this->app->runningUnitTests()) {
+        if (! $this->app->runningInConsole() || $this->app->runningUnitTests()) {
             try {
-                if (!Cache::has('countries')) {
+                if (! Cache::has('countries')) {
                     Cache::put('countries', CountryLoader::countries(), now()->addHours(24));
                 }
             } catch (\Throwable $e) {
