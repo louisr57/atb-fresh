@@ -6,6 +6,9 @@ use App\Models\Student;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
+/**
+ * @property-read \Illuminate\Support\Collection<int, Student> $students
+ */
 class StudentSearch extends Component
 {
     public $event;

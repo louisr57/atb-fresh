@@ -6,6 +6,9 @@ use App\Models\Student;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+/**
+ * @property-read \Illuminate\Pagination\LengthAwarePaginator<int, Student> $students
+ */
 class StudentsIndexSearch extends Component
 {
     use WithPagination;

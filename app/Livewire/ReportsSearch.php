@@ -89,7 +89,7 @@ class ReportsSearch extends Component
         $this->emailList = $baseQuery->select('students.first_name', 'students.last_name', 'students.email')
             ->get()
             ->map(function ($student) {
-                return "{$student->first_name} {$student->last_name} <{$student->email}>";
+                return "{$student->getAttribute('first_name')} {$student->getAttribute('last_name')} <{$student->getAttribute('email')}>";
             })
             ->join(', ');
 

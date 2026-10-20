@@ -96,11 +96,7 @@ class ImportStudentsFromExcel extends Command
                 return 1;
             }
 
-            $rows = $data[0]; // Get first sheet
-            if (empty($rows)) {
-                $this->error('No data found in Excel file');
-                return 1;
-            }
+            $rows = $data[0]; // Get first sheet (already checked as non-empty above)
 
             // Detect column indices
             $headers = array_map('strtolower', array_map('trim', $rows[0]));

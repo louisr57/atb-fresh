@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -36,13 +37,15 @@ class Registration extends Model
     ];
 
     // Define relationship with the Student model
-    public function student()
+    /** @return BelongsTo<Student, $this> */
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
     }
 
     // Define relationship with the Event model
-    public function event()
+    /** @return BelongsTo<Event, $this> */
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -75,7 +77,8 @@ class Event extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function facilitators()
+    /** @return BelongsToMany<Facilitator, $this> */
+    public function facilitators(): BelongsToMany
     {
         return $this->belongsToMany(Facilitator::class)
             ->withTimestamps();
@@ -87,12 +90,14 @@ class Event extends Model
         return $this->belongsTo(Venue::class);
     }
 
-    public function registrations()
+    /** @return HasMany<Registration, $this> */
+    public function registrations(): HasMany
     {
         return $this->hasMany(Registration::class, 'event_id');
     }
 
-    public function students()
+    /** @return BelongsToMany<Student, $this> */
+    public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class, 'registrations', 'event_id', 'student_id')->withTimestamps();
     }

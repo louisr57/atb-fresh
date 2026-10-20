@@ -43,7 +43,7 @@ class EventConflictChecker
     /**
      * Return the conflicting events together with the reasons they clash.
      *
-     * @return Collection<int, array{event: Event, messages: array<int, string>}>
+     * @return Collection<int, array{event: Event, messages: list<string>}>
      */
     public function conflictingEvents(array $data, array $facilitatorIds, ?int $ignoreEventId = null): Collection
     {

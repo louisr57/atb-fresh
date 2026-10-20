@@ -40,7 +40,7 @@ class PasswordResetLinkController extends Controller
         // Verify reCAPTCHA in non-local environments
         if (app()->environment() !== 'local') {
             $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'secret' => config('services.recaptcha.secret'),
                 'response' => $request->input('g-recaptcha-response'),
                 'remoteip' => $request->ip(),
             ]);
