@@ -3,11 +3,12 @@
 namespace App\Livewire;
 
 use App\Models\Student;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 /**
- * @property-read \Illuminate\Pagination\LengthAwarePaginator<int, Student> $students
+ * @property-read LengthAwarePaginator<int, Student> $students
  */
 class StudentsIndexSearch extends Component
 {

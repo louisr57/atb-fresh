@@ -3,11 +3,12 @@
 namespace App\Livewire;
 
 use App\Models\Student;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 /**
- * @property-read \Illuminate\Support\Collection<int, Student> $students
+ * @property-read Collection<int, Student> $students
  */
 class StudentSearch extends Component
 {
